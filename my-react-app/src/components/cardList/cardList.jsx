@@ -1,31 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Card from '../card/Card';
 import './CardList.css';
 import watchMore from '../../assets/arrow-watchMore.svg';
 
-// const cardsData = [
-//   { title: 'Saved List' },
-//   {
-//     image: 'https://via.placeholder.com/160x120',
-//     label: 'Restaurants',
-//   },
-//   {
-//     image: 'https://via.placeholder.com/160x120',
-//     label: 'Activities',
-//   },
-//   {
-//     image: 'https://via.placeholder.com/160x120',
-//     label: 'Destinations',
-//   },
-//   {
-//     image: 'https://via.placeholder.com/160x120',
-//     label: 'Cities of Europe',
-//   },
-// ];
-
-const CardList = ({ title, cardsData }) => {
+const CardList = ({ title, cardsData, variant = 'default' }) => {
 	return (
-		<div className='card-list-container'>
+		<div className={`card-list-container ${variant}`}>
 			<div className='header-buttons'>
 				<h2 className='title'>{title}</h2>
 				<button className='circle-btn'>+</button>
@@ -38,7 +18,7 @@ const CardList = ({ title, cardsData }) => {
 
 				<div className='watch-more'>
 					<button className='arrow-btn'>
-						<img src={watchMore} className='arrow-image' />
+						<img src={watchMore} className='arrow-image' alt='Watch more' />
 					</button>
 				</div>
 			</div>
@@ -47,6 +27,56 @@ const CardList = ({ title, cardsData }) => {
 };
 
 export default CardList;
+
+// import React, { useState } from 'react';
+// import Card from '../card/Card';
+// import './CardList.css';
+// import watchMore from '../../assets/arrow-watchMore.svg';
+
+// // const cardsData = [
+// //   { title: 'Saved List' },
+// //   {
+// //     image: 'https://via.placeholder.com/160x120',
+// //     label: 'Restaurants',
+// //   },
+// //   {
+// //     image: 'https://via.placeholder.com/160x120',
+// //     label: 'Activities',
+// //   },
+// //   {
+// //     image: 'https://via.placeholder.com/160x120',
+// //     label: 'Destinations',
+// //   },
+// //   {
+// //     image: 'https://via.placeholder.com/160x120',
+// //     label: 'Cities of Europe',
+// //   },
+// // ];
+
+// const CardList = ({ title, cardsData }) => {
+// 	return (
+// 		<div className='card-list-container'>
+// 			<div className='header-buttons'>
+// 				<h2 className='title'>{title}</h2>
+// 				<button className='circle-btn'>+</button>
+// 			</div>
+
+// 			<div className='cards-section'>
+// 				{cardsData.map((card, index) => (
+// 					<Card key={index} image={card.image} label={card.label} />
+// 				))}
+
+// 				<div className='watch-more'>
+// 					<button className='arrow-btn'>
+// 						<img src={watchMore} className='arrow-image' />
+// 					</button>
+// 				</div>
+// 			</div>
+// 		</div>
+// 	);
+// };
+
+// export default CardList;
 
 // const CardList = () => {
 // 	const cardsData = [
