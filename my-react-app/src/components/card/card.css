@@ -1,0 +1,29 @@
+/* src/components/Card.css */
+.custom-card {
+	width: 160px;
+	border-radius: 20px;
+	overflow: hidden;
+	background-color: #fff;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	cursor: pointer;
+	transition: transform 0.2s ease;
+}
+
+.custom-card:hover {
+	transform: scale(1.03);
+}
+
+.card-img {
+	width: 100%;
+	height: 120px;
+	object-fit: cover;
+}
+
+.card-label {
+	background-color: #1b83b8; /* azul personalizado */
+	padding: 10px 0;
+	text-align: center;
+	color: white;
+	font-weight: bold;
+	font-size: 14px;
+}
