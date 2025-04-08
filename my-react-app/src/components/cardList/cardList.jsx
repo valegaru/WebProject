@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from '../card/Card';
 import './CardList.css';
-import watchMore from '../../assets/arrow-watchMore.svg';
+// import { ReactComponent as WatchMoreIcon } from '../../assets/arrow-watchMore.svg?react';
 
 const CardList = ({ title, cardsData, variant = 'default' }) => {
 	return (
@@ -13,14 +13,19 @@ const CardList = ({ title, cardsData, variant = 'default' }) => {
 
 			<div className='cards-section'>
 				{cardsData.map((card, index) => (
-					<Card key={index} image={card.image} label={card.label} />
+					<Card key={index} image={card.image} label={card.label} variant={variant} />
 				))}
-
-				<div className='watch-more'>
+				{/* <div className='watch-more'>
 					<button className='arrow-btn'>
-						<img src={watchMore} className='arrow-image' alt='Watch more' />
+						<WatchMoreIcon className='arrow-icon' />
 					</button>
-				</div>
+				</div> */}
+
+				{/* <div className='watch-more'>
+					<button className={`arrow-btn ${variant}`}>
+						<img src={WatchMore} className='arrow-icon' />
+					</button>
+				</div> */}
 			</div>
 		</div>
 	);

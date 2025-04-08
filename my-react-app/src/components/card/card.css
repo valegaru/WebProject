@@ -1,5 +1,54 @@
-/* src/components/Card.css */
 .custom-card {
+	width: 244px;
+	border-radius: 0px 32px 0px 0px;
+	overflow: hidden;
+	cursor: pointer;
+	transition: transform 0.2s;
+}
+
+.custom-card:hover {
+	transform: scale(1.03);
+}
+
+.card-img {
+	width: 100%;
+	height: 198px;
+	object-fit: cover;
+	/* border-top-left-radius: 20px;
+	border-top-right-radius: 20px; */
+}
+
+/* Etiqueta inferior */
+.card-label {
+	background-color: var(--card-color);
+	color: white;
+	text-align: center;
+	padding: 0.6rem;
+	font-weight: 600;
+	border-bottom-left-radius: 20px;
+	border-bottom-right-radius: 20px;
+  margin-top: -4px;
+}
+
+.arrow-icon {
+	/* width: 40px;
+	height: 40px; */
+	fill: var(--main-color); /* o el color que corresponda */
+}
+/* Colores por variante */
+.custom-card.saved {
+	--card-color: #0077b6;
+}
+
+.custom-card.trips {
+	--card-color: #f4c300;
+}
+
+.custom-card.matches {
+	--card-color: #8d4f3f;
+}
+
+/* .custom-card {
 	width: 160px;
 	border-radius: 20px;
 	overflow: hidden;
@@ -20,10 +69,25 @@
 }
 
 .card-label {
-	background-color: #1b83b8; /* azul personalizado */
+	background-color: #1b83b8;
 	padding: 10px 0;
 	text-align: center;
 	color: white;
 	font-weight: bold;
 	font-size: 14px;
 }
+
+.card-list-container.saved {
+	--main-color: #0077b6;
+	--main-color-hover: #005f91;
+}
+
+.card-list-container.trips {
+	--main-color: #f4c300;
+	--main-color-hover: #e5b400;
+}
+
+.card-list-container.matches {
+	--main-color: #8d4f3f;
+	--main-color-hover: #763f33;
+} */

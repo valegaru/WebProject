@@ -14,28 +14,28 @@
 }
 
 .title {
-	font-size: 1.4rem;
+	font-size: 32px;
 	font-weight: 700;
 	color: var(--main-color);
 	background-color: var(--main-color);
 	color: white;
-	padding: 0.4rem 1rem;
-	border-radius: 999px 0px 0px 999px;
+	padding: 18px;
+	border-radius: 0px 32px 0px 0px;
 }
 
 /* Botón + */
 .circle-btn {
-	width: 40px;
-	height: 40px;
+	width: 80px;
+	height: 80px;
 	border-radius: 50%;
 	background-color: var(--main-color);
 	color: #fff;
 	border: none;
-	font-size: 1.4rem;
+	font-size: 32px;
 	font-weight: 600;
 	cursor: pointer;
 	transition: background-color 0.2s;
-  margin-left: 20px;
+	margin-left: 20px;
 }
 
 .circle-btn:hover {
@@ -46,27 +46,28 @@
 .cards-section {
 	display: flex;
 	flex-direction: row;
-	gap: 1rem;
+	gap: 2rem;
 	align-items: center;
 }
 
 /* Botón de Watch more */
 .watch-more {
 	display: flex;
-	flex-direction: column;
+
 	align-items: center;
 	justify-content: center;
 	gap: 0.5rem;
 	min-width: 100px;
 	min-height: 120px;
 	cursor: pointer;
+	margin-left: 18px;
 }
 
-.arrow-btn {
+/* .arrow-btn {
 	background: none;
 	border: none;
 	cursor: pointer;
-}
+} */
 
 /* .arrow-image {
 	width: 48px;
@@ -94,6 +95,15 @@
 	--main-color: #8d4f3f;
 	--main-color-hover: #763f33;
 }
+.arrow-icon {
+  width: 40px;
+  height: 40px;
+  color: var(--primary-color); /* Puedes usar esta variable para cambiar color */
+}
+
+
+
+
 
 
 

@@ -8,6 +8,9 @@ import restaurants from '../../assets/restaurants.png';
 import activities from '../../assets/activities.png';
 import destinations from '../../assets/destinations.png';
 import citiesEurope from '../../assets/citiesEurope.png';
+import latamTour from '../../assets/latamGroup.png';
+import paris from '../../assets/paris.png';
+import newYork from '../../assets/newYork.png';
 
 const Home = () => {
 	const savedList = [
@@ -18,17 +21,17 @@ const Home = () => {
 	];
 
 	const trips = [
-		{ image: 'https://via.placeholder.com/160x120', label: 'Latam Tour' },
-		{ image: 'https://via.placeholder.com/160x120', label: 'Rio Janeiro' },
-		{ image: 'https://via.placeholder.com/160x120', label: 'Paris Voyage' },
-		{ image: 'https://via.placeholder.com/160x120', label: 'New York' },
+		{ image: latamTour, label: 'Latam Tour' },
+		{ image: destinations, label: 'Rio Janeiro' },
+		{ image: paris, label: 'Paris Voyage' },
+		{ image: newYork, label: 'New York' },
 	];
 
 	const matches = [
 		{ image: 'https://via.placeholder.com/160x120', label: 'Thailand' },
-		{ image: 'https://via.placeholder.com/160x120', label: 'Rio Janeiro' },
-		{ image: 'https://via.placeholder.com/160x120', label: 'Paris' },
-		{ image: 'https://via.placeholder.com/160x120', label: 'New York' },
+		{ image: destinations, label: 'Rio Janeiro' },
+		{ image: paris, label: 'Paris' },
+		{ image: newYork, label: 'New York' },
 	];
 
 	return (
