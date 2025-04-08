@@ -1,0 +1,217 @@
+/* Contenedor general */
+.home-container {
+	padding: 0 2rem;
+	font-family: '', sans-serif;
+}
+
+/* Título "Hi, Juan!" */
+.home-title {
+	font-size: 46px;
+	font-weight: 700;
+	margin-top: 1rem;
+	color: #0e2451;
+}
+
+/* Sección de listas */
+.section {
+	margin: 2rem 0;
+}
+
+.section-title {
+	display: inline-flex;
+	align-items: center;
+	font-size: 1.2rem;
+	font-weight: 600;
+	padding: 0.4rem 1rem;
+	border-radius: 20px;
+	color: white;
+	margin-bottom: 1rem;
+}
+
+.section-title.saved {
+	background-color: #0077b6;
+}
+
+.section-title.trips {
+	background-color: #f4c300;
+	color: #0e2451;
+}
+
+.section-title.matches {
+	background-color: #8d4f3f;
+}
+
+/* "+" botón al lado de cada título */
+.add-button {
+	margin-left: 10px;
+	background-color: white;
+	color: black;
+	border-radius: 50%;
+	width: 30px;
+	height: 30px;
+	font-size: 1.2rem;
+	font-weight: bold;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* Grid de tarjetas */
+.card-list {
+	display: flex;
+	gap: 1rem;
+	flex-wrap: wrap;
+}
+
+/* Tarjetas */
+.card {
+	border-radius: 16px;
+	overflow: hidden;
+	width: 140px;
+	height: 160px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+	background-size: cover;
+	background-position: center;
+}
+
+.card.saved {
+	background-color: #0077b6;
+}
+
+.card.trips {
+	background-color: #f4c300;
+	color: #0e2451;
+}
+
+.card.matches {
+	background-color: #8d4f3f;
+	color: white;
+}
+
+/* Imagen */
+.card img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 0;
+}
+
+/* Texto dentro de tarjeta */
+.card-title {
+	z-index: 1;
+	padding: 0.5rem;
+	font-weight: 600;
+	font-size: 0.9rem;
+	text-align: center;
+	background-color: rgba(0, 0, 0, 0.4);
+	color: white;
+}
+
+/* "Watch more" botón al lado derecho */
+.watch-more {
+	display: flex;
+	align-items: center;
+	margin-left: auto;
+	margin-top: 1rem;
+	color: #333;
+	font-size: 0.8rem;
+}
+
+.search-bar {
+	position: absolute;
+	top: 20px;
+	left: 15%;
+	transform: translateX(-50%);
+	width: 200px;
+	padding: 10px 16px;
+	border: none;
+	border-radius: 20px;
+	font-size: 14px;
+	background-color: white;
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.map-section {
+	position: relative;
+	width: 100%;
+	height: 600px;
+	overflow: hidden;
+}
+
+.map-image {
+	width: 100vw;
+	height: 100%;
+	object-fit: cover;
+}
+
+
+
+
+
+
+/*
+
+.home-container {
+	display: flex;
+	flex-direction: column;
+	font-family: 'Inter', sans-serif;
+	background-color: #fff7e8;
+	color: #001858;
+	padding-bottom: 3rem;
+  width: 100vw;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+
+.map-section {
+	position: relative;
+	width: 100%;
+	height: 300px;
+	overflow: hidden;
+}
+
+.map-image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+
+.search-bar {
+	position: absolute;
+	top: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 300px;
+	padding: 10px 16px;
+	border: none;
+	border-radius: 20px;
+	font-size: 14px;
+	background-color: white;
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.greeting {
+	margin: 2rem 1.5rem 1rem;
+	font-size: 24px;
+	font-weight: 600;
+}
+
+@media (max-width: 768px) {
+	.search-bar {
+		width: 80%;
+	}
+
+	.greeting {
+		font-size: 20px;
+		margin-left: 1rem;
+	}
+} */
