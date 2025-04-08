@@ -2,8 +2,23 @@ import React from 'react';
 import Card from '../card/Card';
 import './CardList.css';
 // import { ReactComponent as WatchMoreIcon } from '../../assets/arrow-watchMore.svg?react';
+import arrowBlue from '../../assets/arrow-watchMore-blue.svg';
+import arrowYellow from '../../assets/arrow-watchMore-yellow.svg';
+import arrowTerra from '../../assets/arrow-watchMore-red.svg';
 
 const CardList = ({ title, cardsData, variant = 'default' }) => {
+	let arrowIcon;
+
+	switch (variant) {
+		case 'trips':
+			arrowIcon = arrowYellow;
+			break;
+		case 'matches':
+			arrowIcon = arrowTerra;
+			break;
+		default:
+			arrowIcon = arrowBlue;
+	}
 	return (
 		<div className={`card-list-container ${variant}`}>
 			<div className='header-buttons'>
@@ -15,6 +30,13 @@ const CardList = ({ title, cardsData, variant = 'default' }) => {
 				{cardsData.map((card, index) => (
 					<Card key={index} image={card.image} label={card.label} variant={variant} />
 				))}
+
+				<div className='watch-more'>
+					<button className='arrow-btn'>
+						<img src={arrowIcon} alt='watch more' className='arrow-image' />
+					</button>
+				</div>
+
 				{/* <div className='watch-more'>
 					<button className='arrow-btn'>
 						<WatchMoreIcon className='arrow-icon' />

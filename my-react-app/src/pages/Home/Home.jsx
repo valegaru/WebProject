@@ -11,6 +11,7 @@ import citiesEurope from '../../assets/citiesEurope.png';
 import latamTour from '../../assets/latamGroup.png';
 import paris from '../../assets/paris.png';
 import newYork from '../../assets/newYork.png';
+import thailand from '../../assets/thailand.png';
 
 const Home = () => {
 	const savedList = [
@@ -28,7 +29,7 @@ const Home = () => {
 	];
 
 	const matches = [
-		{ image: 'https://via.placeholder.com/160x120', label: 'Thailand' },
+		{ image: thailand, label: 'Thailand' },
 		{ image: destinations, label: 'Rio Janeiro' },
 		{ image: paris, label: 'Paris' },
 		{ image: newYork, label: 'New York' },
