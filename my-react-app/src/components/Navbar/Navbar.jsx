@@ -16,9 +16,9 @@ import AdbIcon from '@mui/icons-material/Adb';
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-const NavBar = () => {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+const Navbar = () => {
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -157,4 +157,4 @@ const NavBar = () => {
     </AppBar>
   );
 }
-export default NavBar;
+export default Navbar;
