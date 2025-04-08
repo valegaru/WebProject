@@ -10,7 +10,7 @@ import './Navbar.css';
 
 const Navbar = () => {
   return (
-    <AppBar position="static" elevation={0} sx={{ backgroundColor: '#f4e4c5', px: 4, py: 1 }} className="navbar" >
+    <AppBar elevation={0} sx={{ backgroundColor: '#f4e4c5', px: 4, py: 1 }} className="navbar" >
 
       <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
 

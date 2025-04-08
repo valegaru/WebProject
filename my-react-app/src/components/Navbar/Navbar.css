@@ -2,6 +2,10 @@
 .navbar {
   background-color: #f4e4c5;
   border: 1px solid #647e37;
+  display: flex;
+  position: sticky;
+  top: 0;
+  z-index: 1
 }
 
 .logo-container {
