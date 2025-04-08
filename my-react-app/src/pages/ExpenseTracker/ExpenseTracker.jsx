@@ -1,4 +1,9 @@
-const ExpenseTracker = () => {
-    return(<>
-    </>)
-}
+function ExpenseTracker() {
+
+    return (
+      <></>
+    )
+  }
+  
+  export default ExpenseTracker
+  

@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home/Home'
+import Matchmaker from './pages/Matchmaker/Matchmaker'
+import ExpenseTracker from './pages/ExpenseTracker/ExpenseTracker'
+import TripPlanner from './pages/TripPlanner/TripPlanner'
 
 function App() {
   const [count, setCount] = useState(0)
