@@ -1,9 +1,8 @@
 function ExpenseTracker() {
+ 
+  return (
+    <></>
+  )
+}
 
-    return (
-      <></>
-    )
-  }
-  
-  export default ExpenseTracker
-  
+export default ExpenseTracker

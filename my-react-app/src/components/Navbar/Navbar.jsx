@@ -10,7 +10,7 @@ import './Navbar.css';
 
 const Navbar = () => {
   return (
-    <AppBar position="static" elevation={0} sx={{ px: 4, py: 1 }} className="navbar">
+    <AppBar position="static" elevation={0} sx={{ backgroundColor: '#f4e4c5', px: 4, py: 1 }} className="navbar" >
 
       <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
 
@@ -21,8 +21,8 @@ const Navbar = () => {
 
 
         <Stack direction="row" spacing={5} alignItems="center">
-          <Typography className="nav-link active">Home</Typography>
-          <Typography className="nav-link bold">Trips</Typography>
+          <Typography className="nav-link active bold">Home</Typography>
+          <Typography className="nav-link">Trips</Typography>
           <Typography className="nav-link">Destination Matchmaker</Typography>
         </Stack>
 
