@@ -8,6 +8,8 @@ import starburst from '../../assets/starburst.svg';
 import airplaneBadge from '../../assets/airplane-badge.svg';
 import planewindow from '../../assets/planewindow.png';
 import ItineraryHighlight from '../../components/ItineraryHighlight/ItineraryHighlight';
+import TestimonialSection from '../../components/TestimonialSection/TestimonialSection';
+
 const Landing = () => {
 	return (
 		<>
@@ -40,7 +42,7 @@ const Landing = () => {
 			/>
 
 			<ItineraryHighlight title='LOUVRE' price='250,000' peopleCount={5} boostPercentage={150} isPrimary={false} />
-
+			<TestimonialSection></TestimonialSection>
 			<p>LandingPage</p>
 		</>
 	);

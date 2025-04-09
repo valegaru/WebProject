@@ -13,6 +13,13 @@ const testimonialsData = [
 		message: 'I love how everything is in one place. Super intuitive!',
 		image: '/assets/carlos.jpg',
 	},
+
+	{
+		name: 'Emily L.',
+		message: 'My friends and I finally agreed on a destination thanks to this tool!',
+		image: '/assets/emily.jpg',
+	},
+
 	{
 		name: 'Emily L.',
 		message: 'My friends and I finally agreed on a destination thanks to this tool!',
