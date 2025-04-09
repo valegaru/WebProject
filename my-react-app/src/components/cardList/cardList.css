@@ -84,16 +84,19 @@
 .card-list-container.saved {
 	--main-color: #0077b6;
 	--main-color-hover: #005f91;
+  --color:#FFFFFF;
 }
 
 .card-list-container.trips {
 	--main-color: #f4c300;
 	--main-color-hover: #e5b400;
+  --color:#000000;
 }
 
 .card-list-container.matches {
 	--main-color: #8d4f3f;
 	--main-color-hover: #763f33;
+  --color:#FFFFFF;
 }
 .arrow-icon {
   width: 40px;

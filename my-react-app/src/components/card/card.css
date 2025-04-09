@@ -14,11 +14,8 @@
 	width: 100%;
 	height: 198px;
 	object-fit: cover;
-	/* border-top-left-radius: 20px;
-	border-top-right-radius: 20px; */
 }
 
-/* Etiqueta inferior */
 .card-label {
 	background-color: var(--card-color);
 	color: white;
@@ -27,17 +24,43 @@
 	font-weight: 600;
 	border-bottom-left-radius: 20px;
 	border-bottom-right-radius: 20px;
-  margin-top: -4px;
+	margin-top: -4px;
+}
+.trip-info {
+	background-color: var(--card-color);
+	color: #000000;
+	/* text-align: center; */
+	padding: 0.6rem;
+	/* font-weight: 600; */
+	border-bottom-left-radius: 20px;
+	border-bottom-right-radius: 20px;
+	margin-top: -4px;
+	display: flex;
+	flex-direction: row;
+}
+.text-info {
+	text-align: left;
+	align-items: start;
+}
+.members {
+	text-align: right;
+	align-items: end;
 }
 
-.arrow-icon {
-	/* width: 40px;
-	height: 40px; */
-	fill: var(--main-color); /* o el color que corresponda */
+.trip-icon {
+  width: 30px;
 }
-/* Colores por variante */
+
+.trip-label {
+	font-weight: 600;
+}
+.arrow-icon {
+	fill: var(--main-color);
+}
+
 .custom-card.saved {
 	--card-color: #0077b6;
+	--color: #ffffff;
 }
 
 .custom-card.trips {
@@ -46,6 +69,7 @@
 
 .custom-card.matches {
 	--card-color: #8d4f3f;
+	--color: #ffffff;
 }
 
 /* .custom-card {

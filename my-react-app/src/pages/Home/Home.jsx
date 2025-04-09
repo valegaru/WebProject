@@ -22,10 +22,10 @@ const Home = () => {
 	];
 
 	const trips = [
-		{ image: latamTour, label: 'Latam Tour' },
-		{ image: destinations, label: 'Rio Janeiro' },
-		{ image: paris, label: 'Paris Voyage' },
-		{ image: newYork, label: 'New York' },
+		{ image: latamTour, label: 'Latam Tour', date:'Jan 16 - May 24/25', numberMembers:'hola' },
+		{ image: destinations, label: 'Rio Janeiro', date:'Jan 16 - May 24/25', numberMembers:'hi' },
+		{ image: paris, label: 'Paris Voyage', date:'Jan 16 - May 24/25', numberMembers:'hi' },
+		{ image: newYork, label: 'New York', date:'Jan 16 - May 24/25', numberMembers:'hi' },
 	];
 
 	const matches = [
@@ -48,17 +48,20 @@ const Home = () => {
 
 			{/* Saved List */}
 			<div className='section'>
-				<CardList title='Saved list' cardsData={savedList} variant='saved' />
+      <CardList title='Saved list' cardsData={savedList} variantColor='saved' />
+
 			</div>
 
 			{/* Trips */}
 			<div className='section'>
-				<CardList title='Trips' cardsData={trips} variant='trips' />
+      <CardList title='Trips' cardsData={trips} variantColor='trips' />
+
 			</div>
 
 			{/* Destination Matches */}
 			<div className='section'>
-				<CardList title='Destination Matches' cardsData={matches} variant='matches' />
+      <CardList title='Saved list' cardsData={matches} variantColor='matches' />
+
 			</div>
 		</div>
 	);
