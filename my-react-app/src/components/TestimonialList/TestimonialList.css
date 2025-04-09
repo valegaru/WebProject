@@ -1,0 +1,7 @@
+.testimonials-list {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	margin: 2rem auto;
+	max-width: 600px;
+}
