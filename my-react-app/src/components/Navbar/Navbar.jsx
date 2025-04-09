@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,6 +10,12 @@ import Stack from '@mui/material/Stack';
 import './Navbar.css';
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
+  const handleCreateTrip = () => {
+    navigate('/tripPlanner');
+  };
+
   return (
     <AppBar elevation={0} sx={{ backgroundColor: '#f4e4c5', px: 4, py: 1 }} className="navbar">
       <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
@@ -41,7 +47,11 @@ const Navbar = () => {
 
         <Stack direction="row" spacing={2} alignItems="center">
           <Avatar src="https://placehold.co/53x53" sx={{ width: 53, height: 53 }} />
-          <Button variant="contained" className="cta-button">
+          <Button
+            variant="contained"
+            className="cta-button"
+            onClick={handleCreateTrip}
+          >
             Create New Trip
           </Button>
         </Stack>
