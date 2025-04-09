@@ -1,6 +1,6 @@
 .card-list-container {
 	margin-top: 2rem;
-	background-color: #fff4e6; /* fondo crema */
+	/* background-color: #fff4e6; fondo crema */
 	padding: 1rem 1.2rem;
 	border-radius: 1rem;
 }
@@ -97,6 +97,12 @@
 	--main-color: #8d4f3f;
 	--main-color-hover: #763f33;
   --color:#FFFFFF;
+}
+
+.card-list-container.green {
+	--main-color: #647E37;
+	--main-color-hover: #4c6029;
+  --color:#000000;
 }
 .arrow-icon {
   width: 40px;

@@ -20,7 +20,7 @@ import  expense  from '../../assets/expense.png';
 					<img src={image} alt={label} className='card-img' />
 					<div className='trip-info'>
 						<div className='text-info'>
-						<p className='trip-label'>{label}</p>
+						<p className='text-label'>{label}</p>
 						<p className='trip-dates'>{date}</p>
 						</div>
 						<div className='members'>
@@ -33,12 +33,14 @@ import  expense  from '../../assets/expense.png';
 				<div className='info-card'>
 					<img
 						src={variant === 'expenses' ? expense : itinerary}
-						className='trip-icon'
+						// className='trip-icon'
 						alt='info icon'
 					/>
 					<div className='info-label'>
-						<p>{label}</p>
+					<div className='text-info'>
+						<p className='text-label'>{label}</p>
 						<p className='info-date'>{date}</p>
+						</div>
 					</div>
 				</div>
 			)}

@@ -60,7 +60,7 @@ const Home = () => {
 
 			{/* Destination Matches */}
 			<div className='section'>
-      <CardList title='Saved list' cardsData={matches} variantColor='matches' />
+      <CardList title='Destination Matches' cardsData={matches} variantColor='matches' />
 
 			</div>
 		</div>

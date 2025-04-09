@@ -33,12 +33,12 @@ const CardList = ({ title, cardsData, variantColor = 'default' }) => {
 			<div className='cards-section'>
 				{cardsData.map((card, index) => (
 					<Card
-          key={index}
-          image={card.image}
-          label={card.label}
-          date={card.date}
-          variant={variantColor}
-          onClick={card.onClick} // opcional
+						key={index}
+						image={card.image}
+						label={card.label}
+						date={card.date}
+						variant={variantColor}
+						onClick={card.onClick} // opcional
 					/>
 				))}
 

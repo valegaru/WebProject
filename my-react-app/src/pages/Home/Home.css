@@ -40,6 +40,9 @@
 .section-title.matches {
 	background-color: #8d4f3f;
 }
+.section-title.expenses {
+	background-color: #8d4f3f;
+}
 
 /* "+" botón al lado de cada título */
 .add-button {
