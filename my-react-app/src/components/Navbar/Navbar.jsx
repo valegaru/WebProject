@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { NavLink } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -6,24 +7,36 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
-import './Navbar.css'; 
+import './Navbar.css';
 
 const Navbar = () => {
   return (
-    <AppBar elevation={0} sx={{ backgroundColor: '#f4e4c5', px: 4, py: 1 }} className="navbar" >
-
+    <AppBar elevation={0} sx={{ backgroundColor: '#f4e4c5', px: 4, py: 1 }} className="navbar">
       <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
-
         <Box className="logo-container">
           <Box className="logo-circle" />
           <Typography className="nav-title">Postal Trip</Typography>
         </Box>
 
-
         <Stack direction="row" spacing={5} alignItems="center">
-          <Typography className="nav-link active bold">Home</Typography>
-          <Typography className="nav-link">Trips</Typography>
-          <Typography className="nav-link">Destination Matchmaker</Typography>
+          <NavLink
+            to="/"
+            className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+          >
+            Home
+          </NavLink>
+          <NavLink
+            to="/tripPlanner"
+            className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+          >
+            Trips
+          </NavLink>
+          <NavLink
+            to="/matchmaker"
+            className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+          >
+            Destination Matchmaker
+          </NavLink>
         </Stack>
 
         <Stack direction="row" spacing={2} alignItems="center">
@@ -32,9 +45,7 @@ const Navbar = () => {
             Create New Trip
           </Button>
         </Stack>
-
       </Toolbar>
-
     </AppBar>
   );
 };

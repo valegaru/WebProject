@@ -1,11 +1,10 @@
-
 .navbar {
   background-color: #f4e4c5;
   border: 1px solid #647e37;
   display: flex;
   position: sticky;
   top: 0;
-  z-index: 1
+  z-index: 1;
 }
 
 .logo-container {
@@ -39,15 +38,19 @@
   letter-spacing: 0.6px;
   cursor: pointer;
   opacity: 0.9;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
 }
 
-.nav-link.bold {
+.nav-link:hover {
+  opacity: 1;
   color: #2d2e27;
-  font-weight: 800;
 }
 
 .nav-link.active {
   opacity: 1;
+  font-weight: 800;
+  color: #2d2e27;
 }
 
 .cta-button {
