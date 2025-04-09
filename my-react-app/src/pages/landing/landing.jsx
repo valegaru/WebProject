@@ -7,6 +7,7 @@ import FeatureCard from '../../components/FeatureCard/FeatureCard';
 import starburst from '../../assets/starburst.svg';
 import airplaneBadge from '../../assets/airplane-badge.svg';
 import planewindow from '../../assets/planewindow.png';
+import ItineraryHighlight from '../../components/ItineraryHighlight/ItineraryHighlight';
 const Landing = () => {
 	return (
 		<>
@@ -30,6 +31,16 @@ const Landing = () => {
 				reverse
 				decorationLeft={<img src={starburst} alt='Plus icon' style={{ width: 80 }} />}
 			/>
+			<ItineraryHighlight
+				title='TRAIN SAINT DENNIS → ROCHARD'
+				price='100,000'
+				missing='20,000'
+				peopleCount={5}
+				isPrimary={true}
+			/>
+
+			<ItineraryHighlight title='LOUVRE' price='250,000' peopleCount={5} boostPercentage={150} isPrimary={false} />
+
 			<p>LandingPage</p>
 		</>
 	);
