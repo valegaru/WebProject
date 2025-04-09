@@ -1,14 +1,14 @@
 import Navbar from "../../components/Navbar/Navbar"
 
-function TripPlanner() {
+function Matchmaker() {
 
     return (
       <>
         <Navbar></Navbar>
-        <p>tri planer</p>
+        <p>matchito</p>
       </>
     )
   }
   
-  export default TripPlanner
+  export default Matchmaker
   

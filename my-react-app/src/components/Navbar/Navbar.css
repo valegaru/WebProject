@@ -1,0 +1,71 @@
+.navbar {
+  background-color: #f4e4c5;
+  border: 1px solid #647e37;
+  display: flex;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo-circle {
+  width: 35.85px;
+  height: 35.85px;
+  border-radius: 9999px;
+  border: 1.65px solid #647e37;
+}
+
+.nav-title {
+  color: #647e37;
+  font-size: 29.5px;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 800;
+  line-height: 35.4px;
+  letter-spacing: 0.55px;
+}
+
+.nav-link {
+  color: #647e37;
+  font-size: 20px;
+  font-family: 'Darker Grotesque', sans-serif;
+  font-weight: 600;
+  line-height: 20.2px;
+  letter-spacing: 0.6px;
+  cursor: pointer;
+  opacity: 0.9;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.nav-link:hover {
+  opacity: 1;
+  color: #2d2e27;
+}
+
+.nav-link.active {
+  opacity: 1;
+  font-weight: 800;
+  color: #2d2e27;
+}
+
+.cta-button {
+  background-color: #647e37 !important;
+  color: #fff7e8 !important;
+  font-size: 24px;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 700;
+  line-height: 26.4px;
+  letter-spacing: 0.6px;
+  border-radius: 12px;
+  padding: 8px 24px;
+  text-transform: none;
+}
+
+.cta-button:hover {
+  background-color: #586f2f !important;
+}

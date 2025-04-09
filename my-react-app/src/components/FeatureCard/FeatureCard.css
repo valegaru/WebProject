@@ -1,0 +1,61 @@
+.feature-card {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 3rem 2rem;
+	position: relative;
+	gap: 3rem;
+	background-color: #fdf7ed; /* como en el fondo del ejemplo */
+}
+
+.feature-card.reverse {
+	flex-direction: row-reverse;
+}
+
+.feature-image img {
+	width: 100%;
+	max-width: 400px;
+	border-radius: 1.5rem;
+	object-fit: cover;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.feature-text {
+	max-width: 500px;
+}
+
+.feature-text h2 {
+	font-size: 1.5rem;
+	font-weight: 700;
+	margin-bottom: 0.5rem;
+	color: #1a1a1a;
+}
+
+.feature-text h4 {
+	font-size: 1rem;
+	font-weight: 600;
+	color: #444;
+	margin-bottom: 1rem;
+}
+
+.feature-text p {
+	font-size: 0.95rem;
+	color: #666;
+	line-height: 1.6;
+}
+
+.decoration {
+	position: absolute;
+}
+
+.decoration.left {
+	left: -40px;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.decoration.right {
+	right: -40px;
+	top: 50%;
+	transform: translateY(-50%);
+}
