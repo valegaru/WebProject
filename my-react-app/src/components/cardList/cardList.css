@@ -82,27 +82,18 @@
 
 /* Temas */
 .card-list-container.saved {
-	--main-color: #127EB0;
+	--main-color: #0077b6;
 	--main-color-hover: #005f91;
-  --color:#FFFFFF;
 }
 
 .card-list-container.trips {
-	--main-color: #ECBE15;
+	--main-color: #f4c300;
 	--main-color-hover: #e5b400;
-  --color:#000000;
 }
 
 .card-list-container.matches {
-	--main-color: #A44819;
+	--main-color: #8d4f3f;
 	--main-color-hover: #763f33;
-  --color:#FFFFFF;
-}
-
-.card-list-container.green {
-	--main-color: #647E37;
-	--main-color-hover: #495d27;
-  --color:#FFFFFF;
 }
 .arrow-icon {
   width: 40px;
@@ -112,34 +103,73 @@
 
 
 
-@media screen and (max-width: 768px) {
-	.cards-section {
-		display: flex;
-		overflow-x: auto;
-		flex-wrap: nowrap;
-		gap: 1rem;
-		padding-bottom: 1rem;
-		scroll-snap-type: x mandatory;
-		scroll-padding: 1rem;
-		-webkit-overflow-scrolling: touch;
-	}
 
-	.cards-section > * {
-		flex: 0 0 calc(50% - 1rem); /* 2 tarjetas visibles */
-		scroll-snap-align: start;
-	}
 
-	/* .watch-more {
-		min-width: 50%;
-		min-height: 120px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		margin-left: 0;
-	} */
 
-	/* .arrow-btn .arrow-image {
-		width: 40px;
-		height: 40px;
-	} */
+
+
+
+/* .card-list-container {
+	margin-top: 2rem;
 }
+
+.header-buttons {
+	display: flex;
+	align-items: center;
+
+	margin-bottom: 1rem;
+}
+
+.title {
+	font-size: 1.4rem;
+	font-weight: 600;
+	color: #001f54;
+}
+
+.circle-btn {
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	background-color: #0047ab;
+	color: #fff;
+	border: none;
+	font-size: 1.2rem;
+	cursor: pointer;
+	transition: background-color 0.2s;
+	margin-left: 20px;
+}
+
+.circle-btn:hover {
+	background-color: #001f54;
+}
+
+.cards-section {
+	display: flex;
+	flex-direction: row;
+	gap: 1rem;
+}
+
+.watch-more {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin-top: 1rem;
+	cursor: pointer;
+}
+
+.arrow-btn {
+	background: none;
+	border: none;
+	padding: 0;
+}
+
+.arrow-icon {
+	width: 20px;
+	height: 20px;
+}
+
+.watch-more p {
+	font-size: 0.95rem;
+	font-weight: 500;
+	color: #0047ab;
+} */
