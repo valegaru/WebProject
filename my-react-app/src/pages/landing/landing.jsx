@@ -11,6 +11,7 @@ import ItineraryHighlight from '../../components/ItineraryHighlight/ItineraryHig
 import TestimonialSection from '../../components/TestimonialSection/TestimonialSection';
 import './landing.css';
 import bannerimage from '../../assets/bannerimage.png';
+import itinerarymap from '../../assets/itinerarymap.png';
 
 const Landing = () => {
 	return (
@@ -34,7 +35,7 @@ const Landing = () => {
 				title='Collaborative Itineraries'
 				subtitle='Plan every detail of your trip, day by day, with your group.'
 				description='Effortlessly create shared travel schedules where everyone can add places, activities, and restaurants. Say goodbye to endless group chats and last-minute confusion!'
-				image='/assets/itinerary-map.jpg'
+				image={itinerarymap}
 				reverse
 				decorationLeft={<img src={starburst} alt='Plus icon' style={{ width: 80 }} />}
 			/>
