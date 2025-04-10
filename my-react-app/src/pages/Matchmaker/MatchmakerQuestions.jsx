@@ -4,6 +4,7 @@ function MatchmakerQuestions() {
 	return (
 		<>
 			<Navbar></Navbar>
+			<h1>MatchmakerQuestions</h1>
 		</>
 	);
 }

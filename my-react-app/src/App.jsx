@@ -4,6 +4,7 @@ import Matchmaker from './pages/Matchmaker/Matchmaker';
 import ExpenseTracker from './pages/ExpenseTracker/ExpenseTracker';
 import TripPlanner from './pages/TripPlanner/TripPlanner';
 import Landing from './pages/landing/landing';
+import MatchmakerQuestions from './pages/Matchmaker/MatchmakerQuestions';
 
 const App = () => {
 	return (
@@ -11,6 +12,7 @@ const App = () => {
 			<Routes>
 				<Route path='/' element={<Home />} />
 				<Route path='/matchmaker' element={<Matchmaker />} />
+				<Route path='/questions' element={<MatchmakerQuestions />} />
 				<Route path='/expenseTracker' element={<ExpenseTracker />} />
 				<Route path='/tripPlanner' element={<TripPlanner />} />
 				<Route path='/landing' element={<Landing />} />
