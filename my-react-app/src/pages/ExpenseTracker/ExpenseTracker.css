@@ -8,10 +8,12 @@
 .upper-expense{
     padding-top: 30px;
     padding-bottom: 30px;
+    margin-left: 28px;
+
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: 60vw;
+    width: 90vw;
     justify-content: space-between  ;
 }
 

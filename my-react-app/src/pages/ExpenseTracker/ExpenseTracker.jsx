@@ -7,6 +7,7 @@ import BudgetRange from "../../components/Expenses/BudgetRange/BudgetRange";
 import Calendar from "../../components/Calendar/Calendar";
 import CurrencyToggleButton from "../../components/CurrencyToggleButton/CurrencyToggleButton";
 import { events } from "../../data/events"; 
+import { Typography } from "@mui/material";
 
 
 function ExpenseTracker() {
@@ -36,7 +37,15 @@ function ExpenseTracker() {
       <div className="upper-expense">
 
           <div className="trip-name-and-toggle">
-            <p>Paris Voyage Expenses</p>
+          <Typography
+           sx={{
+              fontWeight: "bold",
+              textTransform: "uppercase",
+              fontSize: "1.5rem", 
+              color: "#3F4C1C",
+              }}
+              >Paris Voyage Expense</Typography>
+
             <CurrencyToggleButton currency={currency} setCurrency={setCurrency}/>
           </div>
 
