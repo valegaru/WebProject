@@ -176,3 +176,113 @@
 	border-top-left-radius: 20px;
 	z-index: 1;
 }
+
+@media (max-width: 768px) {
+	.trip-planner-container {
+		padding: 16px;
+	}
+
+	.trip-banner {
+		height: 300px;
+	}
+
+	.container {
+		display: flex;
+	flex-direction: column;
+	gap: 10px;
+	position: relative;
+	margin-top: -30px;
+	margin-left: 14px;
+	width: 600px;
+	align-items: start;
+	}
+
+	.textContent {
+		display: flex;
+		flex-direction: column;
+		width: 300px;
+	}
+
+	.trip-header h1 {
+		font-size: 22px;
+		margin: 0;
+	}
+
+	.nameDate p {
+		margin-top: -10px;
+	}
+
+	.nameDate p {
+		font-size: 14px;
+		margin: 0;
+	}
+
+	.edit-icon img {
+		width: 24px;
+		height: 24px;
+	}
+
+	.trip-description h3 {
+		font-size: 14px;
+	}
+
+	.trip-description p {
+		font-size: 13px;
+	}
+
+	/* .trip-members {
+		margin-top: 8px;
+	} */
+
+	.trip-members h4 {
+		font-size: 13px;
+		margin-top: -300px;
+	}
+
+	.avatars img {
+		width: 32px;
+		height: 32px;
+	}
+
+	.cardlist-header h2 {
+		font-size: 16px;
+		padding: 6px 12px;
+	}
+
+	.cardlist-header button {
+		width: 26px;
+		height: 26px;
+		font-size: 18px;
+	}
+
+	.cardlist-grid {
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	.card {
+		width: 100%;
+		max-width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.card-icon {
+		font-size: 24px;
+		margin-bottom: 0;
+	}
+
+	.card-label {
+		font-size: 14px;
+	}
+
+	.card-date {
+		font-size: 12px;
+	}
+
+	.card::after {
+		width: 50px;
+		height: 30px;
+	}
+}

@@ -26,7 +26,7 @@
 	border-bottom-right-radius: 20px;
 	margin-top: -4px;
 }
-.trip-info, .info-label {
+.trip-info {
 	background-color: var(--card-color);
 	color: #000000;
 	/* text-align: center; */
@@ -38,6 +38,19 @@
 	display: flex;
 	flex-direction: row;
 }
+
+.info-label {
+	background-color: var(--card-color);
+	color: #000000;
+	/* text-align: center; */
+	padding: 0.6rem;
+	/* font-weight: 600; */
+	border-bottom-left-radius: 20px;
+	border-bottom-right-radius: 20px;
+	margin-top: -4px;
+	display: flex;
+	flex-direction: column;
+}
 .text-info {
 	text-align: left;
 	align-items: start;
@@ -48,10 +61,10 @@
 }
 
 .trip-icon {
-  width: 30px;
+	width: 30px;
 }
 
-.text-label {
+.trip-label {
 	font-weight: 600;
 }
 .arrow-icon {
@@ -59,63 +72,64 @@
 }
 
 .custom-card.saved {
-	--card-color: #0077b6;
+	--card-color: #127eb0;
 	--color: #ffffff;
 }
 
 .custom-card.trips {
-	--card-color: #f4c300;
+	--card-color: #ecbe15;
 }
 
 .custom-card.green {
-	--card-color: #F4E4C5;
+	--card-color: #f4e4c5;
 }
 
 .custom-card.matches {
-	--card-color: #8d4f3f;
+	--card-color: #a44819;
 	--color: #ffffff;
 }
 
-/* .custom-card {
-	width: 160px;
-	border-radius: 20px;
-	overflow: hidden;
-	background-color: #fff;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	cursor: pointer;
-	transition: transform 0.2s ease;
-}
+@media screen and (max-width: 768px) {
+	.custom-card {
+		width: 100%; /* que se adapte al ancho del contenedor */
+		border-radius: 0 16px 16px 16px;
+		margin-bottom: 1rem;
+	}
 
-.custom-card:hover {
-	transform: scale(1.03);
-}
+	.card-img {
+		height: 160px;
 
-.card-img {
-	width: 100%;
-	height: 120px;
-	object-fit: cover;
-}
+		border-top-right-radius: 16px;
+	}
 
-.card-label {
-	background-color: #1b83b8;
-	padding: 10px 0;
-	text-align: center;
-	color: white;
-	font-weight: bold;
-	font-size: 14px;
-}
+	.card-label,
+	.trip-info,
+	.info-label {
+		padding: 0.8rem;
+		font-size: 0.9rem;
+		border-radius: 0 0 16px 16px;
+	}
 
-.card-list-container.saved {
-	--main-color: #0077b6;
-	--main-color-hover: #005f91;
-}
+	.trip-info,
+	.info-label {
+		flex-direction: column;
+		gap: 0.4rem;
+		text-align: left;
+	}
 
-.card-list-container.trips {
-	--main-color: #f4c300;
-	--main-color-hover: #e5b400;
-}
+	.text-info,
+	.members {
+		align-items: flex-start;
+		text-align: left;
+	}
 
-.card-list-container.matches {
-	--main-color: #8d4f3f;
-	--main-color-hover: #763f33;
-} */
+	.members {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.trip-icon {
+		width: 24px;
+	}
+}
