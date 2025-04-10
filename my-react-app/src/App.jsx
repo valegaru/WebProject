@@ -6,6 +6,7 @@ import TripPlanner from './pages/TripPlanner/TripPlanner';
 import Landing from './pages/landing/landing';
 import MatchmakerQuestions from './pages/Matchmaker/MatchmakerQuestions.jsx';
 import MatchmakerRoom from './pages/Matchmaker/MatchmakerRoom.jsx';
+import MatchmakerSelection from './pages/Matchmaker/MatchmakerSelection.jsx';
 
 const App = () => {
 	return (
@@ -14,6 +15,7 @@ const App = () => {
 				<Route path='/' element={<Home />} />
 				<Route path='/matchmaker' element={<Matchmaker />} />
 				<Route path='/room' element={<MatchmakerRoom />} />
+				<Route path='/matchselection' element={<MatchmakerSelection />} />
 				<Route path='/questions' element={<MatchmakerQuestions />} />
 				<Route path='/expenseTracker' element={<ExpenseTracker />} />
 				<Route path='/tripPlanner' element={<TripPlanner />} />
