@@ -6,7 +6,7 @@ const WinnerDestination = ({ city }) => {
 	const navigate = useNavigate();
 
 	const handleCreateTrip = () => {
-		navigate('/create-trip'); // Reemplazar ruta
+		navigate('/landing'); // Reemplazar ruta
 	};
 
 	return (
