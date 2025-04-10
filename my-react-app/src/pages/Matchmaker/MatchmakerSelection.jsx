@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 import CardCity from '../../components/CardCity/CardCity';
 
 function MatchmakerSelection() {
+	const navigate = useNavigate();
+	
 	const cities = [
 		{
 			name: 'Barcelona',
@@ -61,7 +64,7 @@ function MatchmakerSelection() {
 				{ image: '/assets/golden.jpg', label: 'Kinkaku-ji (Golden Pavilion)' },
 			],
 		},
-		
+
 	];
 
 	const [currentIndex, setCurrentIndex] = useState(0);
@@ -80,8 +83,7 @@ function MatchmakerSelection() {
 		if (currentIndex < cities.length - 1) {
 			setCurrentIndex(currentIndex + 1);
 		} else {
-			alert('🏁 ¡Has visto todos los destinos!');
-			// Aquí podrías redirigir o mostrar una pantalla de resumen
+			navigate('/results'); // 👈 cambiar a la ruta que vos quieras
 		}
 	};
 
