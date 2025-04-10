@@ -4,7 +4,7 @@ import Matchmaker from './pages/Matchmaker/Matchmaker';
 import ExpenseTracker from './pages/ExpenseTracker/ExpenseTracker';
 import TripPlanner from './pages/TripPlanner/TripPlanner';
 import Landing from './pages/landing/landing';
-import MatchmakerQuestions from './pages/Matchmaker/MatchmakerRoom.jsx';
+import MatchmakerQuestions from './pages/Matchmaker/MatchmakerQuestions.jsx';
 import MatchmakerRoom from './pages/Matchmaker/MatchmakerRoom.jsx';
 
 const App = () => {
