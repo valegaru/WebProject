@@ -1,5 +1,5 @@
 .question-card {
-	background-color: #f0f0f0;
+	background-color: #faf8f4;
 	border-radius: 16px;
 	padding: 1.2rem 1.5rem;
 	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
@@ -19,7 +19,7 @@
 }
 
 .option-button {
-	background-color: white;
+	background-color: #fdf7ed ;
 	border: 2px solid #ccc;
 	border-radius: 20px;
 	padding: 0.5rem 1rem;
@@ -35,6 +35,6 @@
 
 .option-button.selected {
 	background-color: #4a7c2f;
-	color: white;
+	color: #fdf7ed;
 	border-color: #4a7c2f;
 }

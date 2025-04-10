@@ -6,8 +6,10 @@ function MatchmakerQuestions() {
 	return (
 		<>
 			<Navbar></Navbar>
-			<StepsProgressBar currentStep={2} />
-			<QuestionList></QuestionList>
+			<div style={{ marginTop: '1000px' }}>
+	<StepsProgressBar currentStep={2} />
+	<QuestionList />
+</div>
 		</>
 	);
 }
