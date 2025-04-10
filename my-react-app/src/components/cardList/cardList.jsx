@@ -1,5 +1,5 @@
 import React from 'react';
-import Card from '../card/Card';
+import Card from '../Card/Card';
 import './CardList.css';
 import arrowBlue from '../../assets/arrow-watchMore-blue.svg';
 import arrowYellow from '../../assets/arrow-watchMore-yellow.svg';
