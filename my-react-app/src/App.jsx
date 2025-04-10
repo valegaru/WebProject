@@ -18,7 +18,6 @@ const App = () => {
 		<BrowserRouter>
 			<Routes>
 				<Route path='/' element={<Home />} />
-				D
 				<Route path='/matchmaker' element={<Matchmaker />} />
 				<Route path='/room' element={<MatchmakerRoom />} />
 				<Route path='/matchselection' element={<MatchmakerSelection />} />
