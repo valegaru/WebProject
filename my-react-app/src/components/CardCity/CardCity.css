@@ -1,0 +1,103 @@
+.card-city {
+  margin-top: 5%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: transparent;
+	border-radius: 32px;
+	padding: 1rem;
+	margin: 2rem auto;
+	width: 95%;
+	max-width: 90%;
+	overflow: hidden;
+	position: relative;
+}
+
+.city-image-container {
+	position: relative;
+	width: 100%;
+	border-radius: 32px 32px 0 0;
+	overflow: hidden;
+}
+
+.city-image {
+	width: 100%;
+	max-height: 320px;
+	object-fit: cover;
+	display: block;
+}
+
+.image-gradient {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 100%;
+	background: linear-gradient(to top,#41542f, transparent);
+	pointer-events: none;
+}
+
+.city-name-overlay {
+	position: absolute;
+	bottom: 1.5rem;
+	left: 2rem;
+	color: white;
+	font-size: 2rem;
+	font-weight: bold;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	z-index: 1;
+}
+
+.flag-icon {
+	width: 28px;
+	height: auto;
+	border-radius: 4px;
+	box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Fondo verde que contiene el contenido */
+.card-city-content {
+	background-color: #41542f;
+	color: white;
+	width: 100%;
+	padding: 2rem;
+	border-radius: 0 0 32px 32px;
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+/* Fila de secciones */
+.city-sections-row {
+	display: flex;
+	justify-content: space-between;
+	gap: 2rem;
+}
+
+.city-sections-row > * {
+	flex: 1;
+}
+
+.description-section {
+	max-width: 300px;
+}
+
+.section h3 {
+	color: #fbc02d;
+	font-size: 1.3rem;
+	margin-bottom: 0.5rem;
+}
+
+.section p {
+	margin: 0.3rem 0;
+	line-height: 1.4;
+}
+
+.card-actions {
+	display: flex;
+	justify-content: center;
+	gap: 3rem;
+	margin-top: 2rem;
+}

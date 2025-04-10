@@ -11,7 +11,10 @@ import ItineraryHighlight from '../../components/ItineraryHighlight/ItineraryHig
 import TestimonialSection from '../../components/TestimonialSection/TestimonialSection';
 import './landing.css';
 import bannerimage from '../../assets/bannerimage.png';
-
+import itinerarymap from '../../assets/itinerarymap.png';
+import FeatureCardWithHighlights from '../../components/FeatureCard2/FeatureCardWithHigh';
+import greenstar from '../../assets/greenstar.svg';
+import star3 from '../../assets/star3.svg';
 const Landing = () => {
 	return (
 		<>
@@ -23,8 +26,6 @@ const Landing = () => {
 				buttonText='Start planning your trip'
 				backgroundImage={bannerimage}
 			/>
-			<TestimonialsList></TestimonialsList>
-			<CallToActionFooter></CallToActionFooter>
 			<FeatureCard
 				title='Create Your Trip'
 				subtitle='Start by setting up your trip'
@@ -36,20 +37,37 @@ const Landing = () => {
 				title='Collaborative Itineraries'
 				subtitle='Plan every detail of your trip, day by day, with your group.'
 				description='Effortlessly create shared travel schedules where everyone can add places, activities, and restaurants. Say goodbye to endless group chats and last-minute confusion!'
-				image='/assets/itinerary-map.jpg'
+				image={itinerarymap}
 				reverse
 				decorationLeft={<img src={starburst} alt='Plus icon' style={{ width: 80 }} />}
 			/>
-			<ItineraryHighlight
-				title='TRAIN SAINT DENNIS → ROCHARD'
-				price='100,000'
-				missing='20,000'
-				peopleCount={5}
-				isPrimary={true}
+			<FeatureCardWithHighlights
+				title='Smart Expense Tracking'
+				subtitle='Automatically split costs and keep budgets clear.'
+				description='Keep track of all shared and individual expenses in real-time. The app calculates who owes what, ensuring fair and hassle-free cost sharing. No more awkward money conversations!'
+				highlights={[
+					<ItineraryHighlight
+						title='TRAIN SAINT DENNIS → ROCHARD'
+						price='100,000'
+						missing='20,000'
+						peopleCount={5}
+						isPrimary={true}
+					/>,
+					<ItineraryHighlight title='LOUVRE' price='250,000' peopleCount={5} boostPercentage={150} isPrimary={false} />,
+				]}
+				reverse={true}
+				decorationRights={<img src={greenstar} alt='Plus icon' style={{ width: 80 }} />}
 			/>
-			<ItineraryHighlight title='LOUVRE' price='250,000' peopleCount={5} boostPercentage={150} isPrimary={false} />
+			<FeatureCard
+				title='Destination Matchmaker'
+				subtitle='Vote and agree on the perfect travel spot.'
+				description='Undecided on where to go? Take a fun quiz with your friends, set your preferences, and let the app find the best destination for your group!'
+				image={itinerarymap}
+				reverse
+				decorationLeft={<img src={star3} alt='Plus icon' style={{ width: 80 }} />}
+			/>
 			<TestimonialSection></TestimonialSection>
-			<p>LandingPage</p>
+			<CallToActionFooter></CallToActionFooter>
 		</>
 	);
 };
