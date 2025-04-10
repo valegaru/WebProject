@@ -6,26 +6,28 @@ import "./ExpenseTracker.css";
 import BudgetRange from "../../components/Expenses/BudgetRange/BudgetRange";
 import Calendar from "../../components/Calendar/Calendar";
 import CurrencyToggleButton from "../../components/CurrencyToggleButton/CurrencyToggleButton";
-import { events } from "../../data/events"; // <-- import your events data
-import { getHour } from "../../utils/getHour"; // if you want to filter by date/hour later
+import { events } from "../../data/events"; 
+
 
 function ExpenseTracker() {
   const [currency, setCurrency] = useState("COP");
-  const [selectedDate, setSelectedDate] = useState("2025-04-09"); // Replace if you use real dates
+  const [selectedDate, setSelectedDate] = useState("2025-04-09"); 
 
   const [individualBudget, setIndividualBudget] = useState(0);
   const [groupBudget, setGroupBudget] = useState(0);
 
   useEffect(() => {
-    const individualTotal = events
-      .filter((event) => event.participants?.includes("You"))
-      .reduce((sum, event) => sum + event.amount, 0);
+
+    const individualTotal = events.reduce((sum, event) => {
+      const yourParticipation = event.participants?.find((p) => p.name === "You");
+      return yourParticipation ? sum + yourParticipation.contribution : sum;
+    }, 0);
 
     const groupTotal = events.reduce((sum, event) => sum + event.amount, 0);
 
     setIndividualBudget(individualTotal);
     setGroupBudget(groupTotal);
-  }, [selectedDate]); // You can update this when filtering events by date in the future
+  }, [selectedDate]); 
 
   return (
     <>
