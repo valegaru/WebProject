@@ -4,7 +4,8 @@ import Matchmaker from './pages/Matchmaker/Matchmaker';
 import ExpenseTracker from './pages/ExpenseTracker/ExpenseTracker';
 import TripPlanner from './pages/TripPlanner/TripPlanner';
 import Landing from './pages/landing/landing';
-import MatchmakerQuestions from './pages/Matchmaker/MatchmakerQuestions';
+import MatchmakerQuestions from './pages/Matchmaker/MatchmakerRoom.jsx';
+import MatchmakerRoom from './pages/Matchmaker/MatchmakerRoom.jsx';
 
 const App = () => {
 	return (
@@ -12,6 +13,7 @@ const App = () => {
 			<Routes>
 				<Route path='/' element={<Home />} />
 				<Route path='/matchmaker' element={<Matchmaker />} />
+				<Route path='/room' element={<MatchmakerRoom />} />
 				<Route path='/questions' element={<MatchmakerQuestions />} />
 				<Route path='/expenseTracker' element={<ExpenseTracker />} />
 				<Route path='/tripPlanner' element={<TripPlanner />} />
