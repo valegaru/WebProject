@@ -6,47 +6,57 @@ import ExpenseCard from "../Expenses/ExpenseCard/ExpenseCard";
 const Calendar = ({ currency }) => {
   const startHour = 12;
   const endHour = 17;
-  const hourHeight = 80;
+
+  const hoursArray = Array.from({ length: endHour - startHour }, (_, i) => startHour + i);
 
   return (
     <Box
       sx={{
         borderLeft: "2px solid #ccc",
-        height: (endHour - startHour) * hourHeight,
-        overflowY: "scroll",
+        overflowY: "auto",
+        maxHeight: "80vh",
+        paddingRight: 2,
       }}
     >
-      {[...Array(endHour - startHour)].map((_, i) => {
-        const hour = startHour + i;
+      {hoursArray.map((hour) => {
         const event = events.find((e) => getHour(e.startTime) === hour);
 
         return (
           <Box
             key={hour}
             sx={{
-              height: hourHeight,
               borderBottom: "1px solid #eee",
+              paddingY: 2,
               paddingLeft: 1,
               display: "flex",
               alignItems: "center",
-              position: "relative",
+              gap: 2,
             }}
           >
+            {/* Hour label */}
             <Typography
-              sx={{ fontWeight: "bold", minWidth: 50, marginRight: 2 }}
+              sx={{
+                fontWeight: "bold",
+                minWidth: 60,
+                textAlign: "right",
+                color: event ? "inherit" : "#999",
+              }}
             >
               {`${hour}:00`}
             </Typography>
 
-            {event && (
-              <ExpenseCard
-                title={event.title}
-                amount={event.amount}
-                status={event.status}
-                currency={currency}
-                participants={event.participants || []} 
-              />
-            )}
+            {/* Event (Expense Card) */}
+            <Box>
+              {event && (
+                <ExpenseCard
+                  title={event.title}
+                  amount={event.amount}
+                  status={event.status}
+                  currency={currency}
+                  participants={event.participants || []}
+                />
+              )}
+            </Box>
           </Box>
         );
       })}
