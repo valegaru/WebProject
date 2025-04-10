@@ -23,8 +23,6 @@ const Landing = () => {
 				buttonText='Start planning your trip'
 				backgroundImage={bannerimage}
 			/>
-			<TestimonialsList></TestimonialsList>
-			<CallToActionFooter></CallToActionFooter>
 			<FeatureCard
 				title='Create Your Trip'
 				subtitle='Start by setting up your trip'
@@ -49,7 +47,7 @@ const Landing = () => {
 			/>
 			<ItineraryHighlight title='LOUVRE' price='250,000' peopleCount={5} boostPercentage={150} isPrimary={false} />
 			<TestimonialSection></TestimonialSection>
-			<p>LandingPage</p>
+			<CallToActionFooter></CallToActionFooter>
 		</>
 	);
 };
