@@ -25,23 +25,13 @@ function ExpenseTracker() {
       <Navbar />
 
       <div className="budget-section">
-        <BudgetRange
-          label="individual"
-          min={individualBudget.min}
-          max={individualBudget.max}
-          currency={currency}
-        />
-        <BudgetRange
-          label="group"
-          min={groupBudget.min}
-          max={groupBudget.max}
-          currency={currency}
-        />
+        <BudgetRange label="individual" min={individualBudget.min} max={individualBudget.max} currency={currency}/>
+        <BudgetRange label="group" min={groupBudget.min} max={groupBudget.max} currency={currency}/>
         <CurrencyToggleButton currency={currency} setCurrency={setCurrency} />
       </div>
 
       <div className="carousel-and-button">
-        <DateCarousel />
+        <DateCarousel/>
         <CustomButton label="ADD EXPENSE" />
       </div>
 

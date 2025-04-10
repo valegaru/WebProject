@@ -1,7 +1,7 @@
 .expense-card {
     background-color: #f0f0f0;
     padding: 1rem;
-    border-radius: 8px;
+    border-radius: 20px;
     width: 100%;
     max-width: 500px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -48,7 +48,6 @@
     color: #666;
   }
   
-  /* Responsiveness */
   @media (max-width: 768px) {
     .expense-card {
       padding: 0.75rem;
@@ -92,4 +91,12 @@
 .expense-card.pending .expense-card-status {
   color: #1A202C;
 }
-  
+
+.expense-card-title {
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.expense-card-status {
+  text-transform: uppercase;
+}

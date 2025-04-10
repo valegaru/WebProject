@@ -6,7 +6,7 @@ import ExpenseCard from "../Expenses/ExpenseCard/ExpenseCard";
 const Calendar = ({ currency }) => {
   const startHour = 12;
   const endHour = 17;
-  const hourHeight = 150;
+  const hourHeight = 80;
 
   return (
     <Box
@@ -44,6 +44,7 @@ const Calendar = ({ currency }) => {
                 amount={event.amount}
                 status={event.status}
                 currency={currency}
+                participants={event.participants || []} 
               />
             )}
           </Box>
