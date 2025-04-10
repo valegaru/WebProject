@@ -34,7 +34,7 @@ function ExpenseTracker() {
         <CustomButton label="ADD EXPENSE" />
       </div>
 
-      <Calendar></Calendar>
+      <Calendar currency={currency}></Calendar>
 
     </>
   );

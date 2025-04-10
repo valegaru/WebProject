@@ -1,8 +1,9 @@
 import { Box, Typography } from "@mui/material";
 import { events } from "../../data/events";
 import { getHour } from "../../utils/getHour";
+import ExpenseCard from "../Expenses/ExpenseCard/ExpenseCard";
 
-const Calendar = () => {
+const Calendar = ({ currency }) => {
   const startHour = 12;
   const endHour = 17;
   const hourHeight = 80;
@@ -38,23 +39,12 @@ const Calendar = () => {
             </Typography>
 
             {event && (
-              <Box
-                sx={{
-                  backgroundColor: "#f0f0f0",
-                  padding: 1,
-                  borderRadius: 1,
-                  width: "70%",
-                  boxShadow: 1,
-                }}
-              >
-                <Typography variant="subtitle2" fontWeight="bold">
-                  {event.title}
-                </Typography>
-                <Typography variant="body2">
-                  ${event.amount.toLocaleString()} COP
-                </Typography>
-                <Typography variant="caption">{event.status}</Typography>
-              </Box>
+              <ExpenseCard
+                title={event.title}
+                amount={event.amount}
+                status={event.status}
+                currency={currency}
+              />
             )}
           </Box>
         );

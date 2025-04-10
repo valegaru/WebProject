@@ -1,0 +1,57 @@
+.expense-card {
+    background-color: #f0f0f0;
+    padding: 1rem;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    margin: 0 auto;
+    transition: transform 0.2s ease;
+  }
+  
+  .expense-card:hover {
+    transform: translateY(-2px);
+  }
+  
+  .expense-card-title {
+    font-weight: bold;
+    font-size: 1rem;
+  }
+  
+  .expense-card-amount {
+    font-size: 0.95rem;
+  }
+  
+  .expense-card-status {
+    font-size: 0.8rem;
+    color: #666;
+  }
+  
+  /* Responsiveness */
+  @media (max-width: 768px) {
+    .expense-card {
+      padding: 0.75rem;
+      width: 90%;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .expense-card {
+      padding: 0.5rem;
+      font-size: 0.9rem;
+    }
+  
+    .expense-card-title {
+      font-size: 0.95rem;
+    }
+  
+    .expense-card-amount {
+      font-size: 0.85rem;
+    }
+  
+    .expense-card-status {
+      font-size: 0.75rem;
+    }
+  }
+  
