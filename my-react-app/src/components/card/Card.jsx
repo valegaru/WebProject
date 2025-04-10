@@ -1,12 +1,11 @@
-
 import React from 'react';
 import './card.css';
 
 import UsersIcon from '../../assets/users.png'; // para trips
 import itinerary from '../../assets/itinerary.png';
-import  expense  from '../../assets/expense.png';
+import expense from '../../assets/expense.png';
 
- const Card = ({ image, label, date, onClick,numberMembers, variant = 'saved' }) => {
+const Card = ({ image, label, date, onClick, numberMembers, variant = 'saved' }) => {
 	return (
 		<div className={`custom-card ${variant}`} onClick={onClick}>
 			{variant === 'saved' || variant === 'matches' ? (
@@ -21,12 +20,12 @@ import  expense  from '../../assets/expense.png';
 					<img src={image} alt={label} className='card-img' />
 					<div className='trip-info'>
 						<div className='text-info'>
-						<p className='trip-label'>{label}</p>
-						<p className='trip-dates'>{date}</p>
+							<p className='trip-label'>{label}</p>
+							<p className='trip-dates'>{date}</p>
 						</div>
 						<div className='members'>
-						<p className='numberMembers'>{numberMembers}</p>
-						<img src={UsersIcon} className='trip-icon' alt="trip icon" />
+							<p className='numberMembers'>{numberMembers}</p>
+							<img src={UsersIcon} className='trip-icon' alt='trip icon' />
 						</div>
 					</div>
 				</>
