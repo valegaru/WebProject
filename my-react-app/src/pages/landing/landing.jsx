@@ -9,12 +9,20 @@ import airplaneBadge from '../../assets/airplane-badge.svg';
 import planewindow from '../../assets/planewindow.png';
 import ItineraryHighlight from '../../components/ItineraryHighlight/ItineraryHighlight';
 import TestimonialSection from '../../components/TestimonialSection/TestimonialSection';
+import './landing.css';
+import bannerimage from '../../assets/bannerimage.png';
 
 const Landing = () => {
 	return (
 		<>
 			<Navbar></Navbar>
-			<Banner></Banner>
+			<Banner
+				title='Postal Trip'
+				subtitle='Plan it together, live it better.'
+				description='Tired of chaotic trip planning? With Postal Trip, you and your friends can seamlessly organize itineraries, split expenses, and decide on destinations together—all in one place.'
+				buttonText='Start planning your trip'
+				backgroundImage={bannerimage}
+			/>
 			<TestimonialsList></TestimonialsList>
 			<CallToActionFooter></CallToActionFooter>
 			<FeatureCard
@@ -24,7 +32,6 @@ const Landing = () => {
 				image={planewindow}
 				decorationRight={<img src={airplaneBadge} alt='Plane badge' style={{ width: 100 }} />}
 			/>
-
 			<FeatureCard
 				title='Collaborative Itineraries'
 				subtitle='Plan every detail of your trip, day by day, with your group.'
@@ -40,7 +47,6 @@ const Landing = () => {
 				peopleCount={5}
 				isPrimary={true}
 			/>
-
 			<ItineraryHighlight title='LOUVRE' price='250,000' peopleCount={5} boostPercentage={150} isPrimary={false} />
 			<TestimonialSection></TestimonialSection>
 			<p>LandingPage</p>
