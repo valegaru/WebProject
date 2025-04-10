@@ -1,6 +1,7 @@
 import Navbar from "../../components/Navbar/Navbar"
 import DateCarousel from "../../components/DateCarousel/DateCarousel"
 import CustomButton from "../../components/CustomButton/CustomButton"
+import "./ExpenseTracker.css"
 
 function ExpenseTracker() {
  
