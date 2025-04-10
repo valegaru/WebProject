@@ -6,7 +6,7 @@ import ExpenseCard from "../Expenses/ExpenseCard/ExpenseCard";
 const Calendar = ({ currency }) => {
   const startHour = 12;
   const endHour = 17;
-  const hourHeight = 80;
+  const hourHeight = 150;
 
   return (
     <Box

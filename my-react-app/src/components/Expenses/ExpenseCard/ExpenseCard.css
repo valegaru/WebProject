@@ -7,11 +7,32 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     transition: transform 0.2s ease;
+    border: 2px solid transparent;
   }
   
   .expense-card:hover {
     transform: translateY(-2px);
   }
+
+
+  .expense-card.complete {
+    background-color: #647E37;
+    border-color: #414721;
+    color: #FFF7E8;
+  }
+  
+  .expense-card.missing {
+    background-color: #A44819;
+    border-color: #A44819;
+    color: #FFF7E8;
+  }
+
+  .expense-card.pending {
+    background-color: #ffffff;
+    border-color: #1A202C;
+    color: #1A202C;
+  }
+  
   
   .expense-card-title {
     font-weight: bold;
@@ -53,4 +74,22 @@
       font-size: 0.75rem;
     }
   }
+
+  .expense-card.complete .expense-card-title,
+.expense-card.complete .expense-card-amount,
+.expense-card.complete .expense-card-status {
+  color: #FFF7E8;
+}
+
+.expense-card.missing .expense-card-title,
+.expense-card.missing .expense-card-amount,
+.expense-card.missing .expense-card-status {
+  color: #FFF7E8;
+}
+
+.expense-card.pending .expense-card-title,
+.expense-card.pending .expense-card-amount,
+.expense-card.pending .expense-card-status {
+  color: #1A202C;
+}
   

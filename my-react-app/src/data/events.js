@@ -39,7 +39,7 @@ export const events = [
       startTime: "16:00",
       endTime: "17:00",
       amount: 250000,
-      status: "surge",
+      status: "pending",
     },
   ];
   
