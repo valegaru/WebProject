@@ -1,6 +1,6 @@
+import './MatchmakerRoom.css';
 import Navbar from '../../components/Navbar/Navbar';
 import StepsProgressBar from '../../components/StepsProgressBar/StepsProgressBar';
-import ParticipantCard from '../../components/ParticipantCard/ParticipantCard';
 import ParticipantList from '../../components/ParticipantList/ParticipantList';
 import RoomInfoPanel from '../../components/RoomInfoPanel/RoomInfoPanel';
 
@@ -16,14 +16,18 @@ const participants = [
 function MatchmakerRoom() {
 	return (
 		<>
-			<Navbar></Navbar>
-			<StepsProgressBar currentStep={1} />
-			<ParticipantList participants={participants} />
-			<RoomInfoPanel
-				code='135783'
-				qrImage='https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg'
-				buttonRoute='/questions'
-			/>
+			<Navbar />
+			<div className="matchmaker-room-container">
+				<StepsProgressBar currentStep={1} />
+				<div className="main-content">
+					<ParticipantList participants={participants} />
+					<RoomInfoPanel
+						code="135783"
+						qrImage="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg"
+						buttonRoute="/questions"
+					/>
+				</div>
+			</div>
 		</>
 	);
 }
