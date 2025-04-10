@@ -10,11 +10,19 @@ import planewindow from '../../assets/planewindow.png';
 import ItineraryHighlight from '../../components/ItineraryHighlight/ItineraryHighlight';
 import TestimonialSection from '../../components/TestimonialSection/TestimonialSection';
 import './landing.css';
+import bannerimage from '../../assets/bannerimage.png';
 
 const Landing = () => {
 	return (
 		<>
-			<Navbar></Navbar>S<Banner></Banner>
+			<Navbar></Navbar>
+			<Banner
+				title='Postal Trip'
+				subtitle='Plan it together, live it better.'
+				description='Tired of chaotic trip planning? With Postal Trip, you and your friends can seamlessly organize itineraries, split expenses, and decide on destinations together—all in one place.'
+				buttonText='Start planning your trip'
+				backgroundImage={bannerimage}
+			/>
 			<TestimonialsList></TestimonialsList>
 			<CallToActionFooter></CallToActionFooter>
 			<FeatureCard
