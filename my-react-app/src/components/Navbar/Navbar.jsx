@@ -31,12 +31,11 @@ const Navbar = () => {
         
         <Box className="logo-container">
           <img src="/src/assets/logo.png" className="logo-image" />
-          {!isMobile && (
-            <Typography className="nav-title">Postal Trip</Typography>
-          )}
+          {!isMobile && (<p className="nav-title">Postal Trip</p>)}
         </Box>
 
         {!isMobile && (
+          
           <Stack direction="row" spacing={5} alignItems="center">
             <NavLink
               to="/"
@@ -89,7 +88,6 @@ const Navbar = () => {
           <ProfilePic
             name="Juan"
             imgUrl="https://github.com/valegaru/WebProject/blob/main/my-react-app/src/assets/user1.png?raw=true"
-            isHighlighted={true}
           />
 
           <Button

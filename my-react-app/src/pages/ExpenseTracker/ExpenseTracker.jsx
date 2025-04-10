@@ -11,7 +11,7 @@ import { events } from "../../data/events";
 
 function ExpenseTracker() {
   const [currency, setCurrency] = useState("COP");
-  const [selectedDate, setSelectedDate] = useState("2025-04-09"); 
+  const [selectedDate, setSelectedDate] = useState("2025-04-07"); 
 
   const [individualBudget, setIndividualBudget] = useState(0);
   const [groupBudget, setGroupBudget] = useState(0);
@@ -33,21 +33,21 @@ function ExpenseTracker() {
     <>
       <Navbar />
 
-      <div className="budget-section">
-        <BudgetRange
-          label="individual"
-          min={individualBudget}
-          max={individualBudget}
-          currency={currency}
-        />
-        <BudgetRange
-          label="group"
-          min={groupBudget}
-          max={groupBudget}
-          currency={currency}
-        />
-        <CurrencyToggleButton currency={currency} setCurrency={setCurrency} />
+      <div className="upper-expense">
+
+          <div className="trip-name-and-toggle">
+            <p>Paris Voyage Expenses</p>
+            <CurrencyToggleButton currency={currency} setCurrency={setCurrency}/>
+          </div>
+
+          <div className="budget-section">
+            <BudgetRange label="individual" min={individualBudget} max={individualBudget} currency={currency}/>
+            <BudgetRange label="group" min={groupBudget} max={groupBudget} currency={currency}/>
+
+          </div>
+
       </div>
+      
 
       <div className="carousel-and-button">
         <DateCarousel onDateChange={setSelectedDate} />

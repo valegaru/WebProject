@@ -4,3 +4,19 @@
     align-items: center;
     justify-content: center;
 }
+
+.upper-expense{
+    padding-top: 30px;
+    padding-bottom: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 60vw;
+    justify-content: space-between  ;
+}
+
+.trip-name-and-toggle{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
