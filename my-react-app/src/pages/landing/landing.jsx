@@ -14,6 +14,7 @@ import bannerimage from '../../assets/bannerimage.png';
 import itinerarymap from '../../assets/itinerarymap.png';
 import FeatureCardWithHighlights from '../../components/FeatureCard2/FeatureCardWithHigh';
 import greenstar from '../../assets/greenstar.svg';
+import star3 from '../../assets/star3.svg';
 const Landing = () => {
 	return (
 		<>
@@ -56,6 +57,14 @@ const Landing = () => {
 				]}
 				reverse={true}
 				decorationRights={<img src={greenstar} alt='Plus icon' style={{ width: 80 }} />}
+			/>
+			<FeatureCard
+				title='Destination Matchmaker'
+				subtitle='Vote and agree on the perfect travel spot.'
+				description='Undecided on where to go? Take a fun quiz with your friends, set your preferences, and let the app find the best destination for your group!'
+				image={itinerarymap}
+				reverse
+				decorationLeft={<img src={star3} alt='Plus icon' style={{ width: 80 }} />}
 			/>
 			<TestimonialSection></TestimonialSection>
 			<CallToActionFooter></CallToActionFooter>

@@ -51,7 +51,7 @@
 .decoration.left {
 	left: 70px;
 	top: 30%;
-	transform: translateY(-50%)scale(1.5); /* cambiar la escala de los stickers */
+	transform: translateY(-50%)scale(2.5); /* cambiar la escala de los stickers */
 }
 
 .decoration.right {
