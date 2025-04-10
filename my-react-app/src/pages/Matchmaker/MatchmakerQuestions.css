@@ -28,3 +28,9 @@
 .banner-button:hover {
 	background-color: #3a6628;
 }
+
+body {
+	background-color: #fdf7ed;
+	margin: 0;
+	padding: 0;
+}

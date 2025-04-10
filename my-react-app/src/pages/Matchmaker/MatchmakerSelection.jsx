@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 import CardCity from '../../components/CardCity/CardCity';
+import "./MatchmakerSelection.css";
 
 function MatchmakerSelection() {
 	const navigate = useNavigate();
