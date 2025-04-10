@@ -12,7 +12,8 @@ import TestimonialSection from '../../components/TestimonialSection/TestimonialS
 import './landing.css';
 import bannerimage from '../../assets/bannerimage.png';
 import itinerarymap from '../../assets/itinerarymap.png';
-
+import FeatureCardWithHighlights from '../../components/FeatureCard2/FeatureCardWithHigh';
+import greenstar from '../../assets/greenstar.svg';
 const Landing = () => {
 	return (
 		<>
@@ -39,14 +40,23 @@ const Landing = () => {
 				reverse
 				decorationLeft={<img src={starburst} alt='Plus icon' style={{ width: 80 }} />}
 			/>
-			<ItineraryHighlight
-				title='TRAIN SAINT DENNIS → ROCHARD'
-				price='100,000'
-				missing='20,000'
-				peopleCount={5}
-				isPrimary={true}
+			<FeatureCardWithHighlights
+				title='Smart Expense Tracking'
+				subtitle='Automatically split costs and keep budgets clear.'
+				description='Keep track of all shared and individual expenses in real-time. The app calculates who owes what, ensuring fair and hassle-free cost sharing. No more awkward money conversations!'
+				highlights={[
+					<ItineraryHighlight
+						title='TRAIN SAINT DENNIS → ROCHARD'
+						price='100,000'
+						missing='20,000'
+						peopleCount={5}
+						isPrimary={true}
+					/>,
+					<ItineraryHighlight title='LOUVRE' price='250,000' peopleCount={5} boostPercentage={150} isPrimary={false} />,
+				]}
+				reverse={true}
+				decorationRights={<img src={greenstar} alt='Plus icon' style={{ width: 80 }} />}
 			/>
-			<ItineraryHighlight title='LOUVRE' price='250,000' peopleCount={5} boostPercentage={150} isPrimary={false} />
 			<TestimonialSection></TestimonialSection>
 			<CallToActionFooter></CallToActionFooter>
 		</>
