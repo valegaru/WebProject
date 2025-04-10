@@ -7,35 +7,30 @@ import './CardCity.css';
 const CardCity = ({ city, onDislike, onLike }) => {
 	return (
 		<div className='card-city'>
-			<img src={city.image} alt={city.name} className='city-image' />
-			<div className='card-city-content'>
-				<h2 className='city-name'>
-					{city.name} {city.flag && <img src={city.flag} alt='flag' className='flag-icon' />}
+			<div className='city-image-container'>
+				<img src={city.image} alt={city.name} className='city-image' />
+				<div className='image-gradient' />
+				<h2 className='city-name-overlay'>
+					{city.name}{' '}
+					{city.flag && <img src={city.flag} alt='flag' className='flag-icon' />}
 				</h2>
+			</div>
 
-				<div className='section'>
-					<h3>Description</h3>
-					<p>
-						<strong>Aesthetic:</strong> {city.aesthetic}
-					</p>
-					<p>
-						<strong>Vibe:</strong> {city.vibe}
-					</p>
-					<p>
-						<strong>Gastronomy:</strong> {city.gastronomy}
-					</p>
-					<p>
-						<strong>Renowned for:</strong> {city.renowned}
-					</p>
-				</div>
+			<div className='card-city-content'>
+				<div className='city-sections-row'>
+					<div className='section description-section'>
+						<h3>Description</h3>
+						<p><strong>Aesthetic:</strong> {city.aesthetic}</p>
+						<p><strong>Vibe:</strong> {city.vibe}</p>
+						<p><strong>Gastronomy:</strong> {city.gastronomy}</p>
+						<p><strong>Renowned for:</strong> {city.renowned}</p>
+					</div>
 
-				<div className='city-info-lists'>
 					<InfoList title='Activities' items={city.activities} />
 					<InfoList title='Top Attractions' items={city.attractions} />
 				</div>
 
-				{/* Botones personalizados */}
-				<div className='action-buttons flex justify-center gap-6 mt-6'>
+				<div className='card-actions'>
 					<DislikeButton onClick={onDislike} />
 					<LikeButton onClick={onLike} />
 				</div>

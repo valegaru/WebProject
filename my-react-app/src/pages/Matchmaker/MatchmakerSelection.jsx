@@ -5,7 +5,7 @@ import CardCity from '../../components/CardCity/CardCity';
 
 function MatchmakerSelection() {
 	const navigate = useNavigate();
-	
+
 	const cities = [
 		{
 			name: 'Barcelona',
@@ -48,23 +48,38 @@ function MatchmakerSelection() {
 		},
 		{
 			name: 'Kyoto',
-			image: '/assets/kyoto.jpg',
+			image: 'https://boutiquejapan.com/wp-content/uploads/2019/07/yasaka-pagoda-higashiyama-kyoto-japan-1140x761.jpg',
 			aesthetic: 'Traditional temples and cherry blossoms.',
 			vibe: 'Tranquil, historic, and spiritual.',
 			gastronomy: 'Kaiseki, matcha, and ramen.',
 			renowned: 'Geishas, bamboo forests, and Zen gardens.',
 			activities: [
-				{ image: '/assets/kaiseki.jpg', label: 'Kaiseki Dinner' },
-				{ image: '/assets/tea.jpg', label: 'Tea Ceremony' },
-				{ image: '/assets/geisha.jpg', label: 'Geisha Show' },
+				{
+					image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2RigRZJ4XGSGf_dAyzvYTabTvDWljhNNZlg&s',
+					label: 'Kaiseki Dinner',
+				},
+				{
+					image: 'https://d2j57bp7wdztc7.cloudfront.net/pages/images/tea-ceremony/tea-ceremony-gion-01.jpg',
+					label: 'Tea Ceremony',
+				},
+				{ image: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/13/bc/d4/bc.jpg', label: 'Geisha Show' },
 			],
 			attractions: [
-				{ image: '/assets/fushimi.jpg', label: 'Fushimi Inari Shrine' },
-				{ image: '/assets/forest.jpg', label: 'Arashiyama Bamboo Grove' },
-				{ image: '/assets/golden.jpg', label: 'Kinkaku-ji (Golden Pavilion)' },
+				{
+					image:
+						'https://res.cloudinary.com/jnto/image/upload/w_750,h_503,fl_lossy,f_auto/v1648523563/kyoto/20201026_fushimi_inari_taisha_shrine_01',
+					label: 'Fushimi Inari Shrine',
+				},
+				{
+					image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGS3pzLfCXr0di0Mrgd_R56tYy4DrwNF-Blw&s',
+					label: 'Arashiyama Bamboo Grove',
+				},
+				{
+					image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp9j4jI_NuLic6fnjcEPZZ-kMzORfL9m9v7A&s',
+					label: 'Kinkaku-ji (Golden Pavilion)',
+				},
 			],
 		},
-
 	];
 
 	const [currentIndex, setCurrentIndex] = useState(0);
