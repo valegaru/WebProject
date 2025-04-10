@@ -1,18 +1,6 @@
 import * as React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import {
-  AppBar,
-  Box,
-  Toolbar,
-  Typography,
-  Button,
-  Avatar,
-  Stack,
-  IconButton,
-  Menu,
-  MenuItem,
-  useMediaQuery
-} from '@mui/material';
+import { AppBar, Box, Toolbar, Typography, Button, Avatar, Stack, IconButton, Menu, MenuItem, useMediaQuery } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import './Navbar.css';
 
