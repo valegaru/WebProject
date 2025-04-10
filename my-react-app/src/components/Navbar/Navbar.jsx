@@ -20,7 +20,7 @@ const Navbar = () => {
     <AppBar elevation={0} sx={{ backgroundColor: '#f4e4c5', px: 4, py: 1 }} className="navbar">
       <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
         <Box className="logo-container">
-          <Box className="logo-circle" />
+        <img src="/src/assets/logo.png" className="logo-image" />
           <Typography className="nav-title">Postal Trip</Typography>
         </Box>
 
