@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home/Home';
 
-import Trip from './pages/tripPlanner/TripPlanner';
+import Trip from './pages/TripPlanner/TripPlanner';
 
 import Matchmaker from './pages/Matchmaker/Matchmaker';
 import ExpenseTracker from './pages/ExpenseTracker/ExpenseTracker';
