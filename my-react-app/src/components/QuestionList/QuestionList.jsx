@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import QuestionCard from '../QuestionCard/QuestionCard';
 import './QuestionList.css';
-
+import DestinationSelector from '../DestinationSelector/DestinationSelector';
 const questionsData = [
 	{
 		id: 'A',
@@ -81,6 +81,7 @@ const QuestionList = () => {
 					/>
 				))}
 			</div>
+      <DestinationSelector />
 		</div>
 	);
 };

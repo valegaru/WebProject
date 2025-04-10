@@ -7,9 +7,9 @@ function MatchmakerQuestions() {
 		<>
 			<Navbar></Navbar>
 			<div style={{ marginTop: '1000px' }}>
-	<StepsProgressBar currentStep={2} />
-	<QuestionList />
-</div>
+				<StepsProgressBar currentStep={2} />
+				<QuestionList />
+			</div>
 		</>
 	);
 }
