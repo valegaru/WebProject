@@ -13,7 +13,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleCreateTrip = () => {
-    navigate('/tripPlanner');
+    navigate('/expenseTracker');
   };
 
   return (
