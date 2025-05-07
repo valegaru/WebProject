@@ -1,0 +1,23 @@
+.participant-card {
+	display: flex;
+	align-items: center;
+	background: #fff;
+	border-radius: 1.5rem;
+	padding: 1.2rem 1.5rem;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.avatar {
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+	object-fit: cover;
+	margin-right: 1rem;
+	border: 3px solid #4a7c2f;
+}
+
+.name {
+	font-weight: 600;
+	color: #1f2937;
+	font-size: 1rem;
+}
