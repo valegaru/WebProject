@@ -16,12 +16,17 @@
 	object-fit: cover;
 }
 
+p {
+	font-family: 'Darker Grotesque', sans-serif;
+	font-size: 20px;
+}
+
 .card-label {
 	background-color: var(--card-color);
 	color: white;
 	text-align: center;
 	padding: 0.6rem;
-	font-weight: 600;
+	/* font-weight: 600; */
 	border-bottom-left-radius: 20px;
 	border-bottom-right-radius: 20px;
 	margin-top: -4px;
@@ -106,7 +111,7 @@
 	.trip-info,
 	.info-label {
 		padding: 0.8rem;
-		font-size: 0.9rem;
+		/* font-size: 0.9rem; */
 		border-radius: 0 0 16px 16px;
 	}
 
