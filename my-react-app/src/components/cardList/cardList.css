@@ -82,35 +82,33 @@
 
 /* Temas */
 .card-list-container.saved {
-	--main-color: #127EB0;
+	--main-color: #127eb0;
 	--main-color-hover: #005f91;
-  --color:#FFFFFF;
+	--color: #ffffff;
 }
 
 .card-list-container.trips {
-	--main-color: #ECBE15;
+	--main-color: #ecbe15;
 	--main-color-hover: #e5b400;
-  --color:#000000;
+	--color: #000000;
 }
 
 .card-list-container.matches {
-	--main-color: #A44819;
+	--main-color: #a44819;
 	--main-color-hover: #763f33;
-  --color:#FFFFFF;
+	--color: #ffffff;
 }
 
 .card-list-container.green {
-	--main-color: #647E37;
+	--main-color: #647e37;
 	--main-color-hover: #495d27;
-  --color:#FFFFFF;
+	--color: #ffffff;
 }
 .arrow-icon {
-  width: 40px;
-  height: 40px;
-  color: var(--primary-color); /* Puedes usar esta variable para cambiar color */
+	width: 40px;
+	height: 40px;
+	color: var(--primary-color); /* Puedes usar esta variable para cambiar color */
 }
-
-
 
 @media screen and (max-width: 768px) {
 	.cards-section {
