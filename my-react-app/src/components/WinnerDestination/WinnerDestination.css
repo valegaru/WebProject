@@ -1,0 +1,100 @@
+/* Contenedor general */
+.card-city {
+	margin-top: 5%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: transparent;
+	border-radius: 32px;
+	padding: 1rem;
+	margin: 2rem auto;
+	width: 95%;
+	max-width: 900px;
+	overflow: hidden;
+	position: relative;
+}
+
+/* Imagen superior con gradiente */
+.city-image-container {
+	position: relative;
+	width: 100%;
+	border-radius: 32px 32px 0 0;
+	overflow: hidden;
+}
+
+.city-image {
+	width: 100%;
+	max-height: 320px;
+	object-fit: cover;
+	display: block;
+	border-radius: 32px 32px 0 0;
+}
+
+.image-gradient {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 100%;
+	background: linear-gradient(to top, #41542f, transparent);
+	pointer-events: none;
+}
+
+/* Título de la ciudad encima de la imagen */
+.city-name-overlay {
+	position: absolute;
+	bottom: 1.5rem;
+	left: 2rem;
+	color: white;
+	font-size: 2rem;
+	font-weight: bold;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	z-index: 1;
+}
+
+.flag-icon {
+	width: 28px;
+	height: auto;
+	border-radius: 4px;
+	box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Contenido inferior (solo botón en este caso) */
+.card-city-content {
+	background-color: #41542f;
+	color: white;
+	width: 100%;
+	padding: 2rem;
+	border-radius: 0 0 32px 32px;
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+/* Específico para la versión WinnerDestination */
+.winner-content {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 3rem 2rem;
+}
+
+/* Botón reutilizado del banner */
+.banner-button {
+	background-color: #4a7c2f;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	padding: 0.9rem 1.5rem;
+	font-size: 1rem;
+	cursor: pointer;
+	width: 369px;
+	height: 50px;
+	transition: background-color 0.3s ease;
+}
+
+.banner-button:hover {
+	background-color: #3a6628;
+}

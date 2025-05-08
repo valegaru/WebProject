@@ -1,0 +1,15 @@
+.budget-container {
+    font-family: Arial, sans-serif;
+  }
+  
+  .budget-label {
+    color: #B2511B;
+    font-weight: bold;
+    margin-right: 4px;
+  }
+  
+  .budget-range {
+    color: #000;
+    font-weight: bold;
+  }
+  

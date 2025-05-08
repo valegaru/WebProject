@@ -1,0 +1,36 @@
+.matchmaker-wrapper {
+	padding: 2rem 5vw;
+	padding-bottom: 4rem;
+	background-color: #fffaf2;
+	min-height: 100vh;
+}
+
+.navigation-button-container {
+	display: flex;
+	justify-content: center;
+	margin-top: 2rem;
+}
+
+/* Reutilizando estilo del banner */
+.banner-button {
+	background-color: #4a7c2f;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	padding: 0.9rem 1.5rem;
+	font-size: 1rem;
+	cursor: pointer;
+	width: 369px;
+	height: 50px;
+	transition: background-color 0.3s ease;
+}
+
+.banner-button:hover {
+	background-color: #3a6628;
+}
+
+body {
+	background-color: #fdf7ed;
+	margin: 0;
+	padding: 0;
+}

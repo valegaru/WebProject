@@ -1,7 +1,7 @@
 import React from 'react';
 import './Home.css';
 import Navbar from '../../components/Navbar/Navbar';
-import CardList from '../../components/cardList/cardList';
+import CardList from '../../components/cardList/CardList';
 import mapImage from '../../assets/map.png';
 
 import restaurants from '../../assets/restaurants.png';

@@ -1,0 +1,23 @@
+.participant-list {
+  margin-top: 2rem;
+}
+
+.participant-list h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.divider {
+  border: none;
+  height: 1px;
+  background-color: #d1d5db; /* gray-300 */
+  margin-bottom: 1.5rem;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columnas fijas */
+  gap: 4rem;
+}
