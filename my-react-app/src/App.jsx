@@ -12,9 +12,12 @@ import MatchmakerQuestions from './pages/Matchmaker/MatchmakerQuestions.jsx';
 import MatchmakerRoom from './pages/Matchmaker/MatchmakerRoom.jsx';
 import MatchmakerSelection from './pages/Matchmaker/MatchmakerSelection.jsx';
 import MatchmakerResults from './pages/Matchmaker/MatchmakerResults.jsx';
+import { Provider } from 'react-redux';
+import {store} from './store/store.js'
 
 const App = () => {
 	return (
+		<Provider store={store}>
 		<BrowserRouter>
 			<Routes>
 				<Route path='/' element={<Home />} />
@@ -28,6 +31,7 @@ const App = () => {
 				<Route path='/landing' element={<Landing />} />
 			</Routes>
 		</BrowserRouter>
+		</Provider>
 	);
 };
 
