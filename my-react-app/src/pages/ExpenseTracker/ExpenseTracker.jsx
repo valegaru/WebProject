@@ -8,6 +8,7 @@ import Calendar from "../../components/Calendar/Calendar";
 import CurrencyToggleButton from "../../components/CurrencyToggleButton/CurrencyToggleButton";
 import { events } from "../../data/events"; 
 import { Typography } from "@mui/material";
+import { addNewExpense } from "../../utils/firebaseUtils";
 
 
 function ExpenseTracker() {
@@ -16,6 +17,11 @@ function ExpenseTracker() {
 
   const [individualBudget, setIndividualBudget] = useState(0);
   const [groupBudget, setGroupBudget] = useState(0);
+
+  const addExpense = (id,name,price) => {
+    addNewExpense(id,name,price)
+    console.log("expensed" + id + name + price)
+  }
 
   useEffect(() => {
 
@@ -60,10 +66,11 @@ function ExpenseTracker() {
 
       <div className="carousel-and-button">
         <DateCarousel onDateChange={setSelectedDate} />
-        <CustomButton label="ADD EXPENSE" />
+        <CustomButton label="ADD EXPENSE" onClick={() => addExpense({ uidUser: "e", name: "22", price: "er" })}/>
       </div>
 
       <Calendar currency={currency} />
+
     </>
   );
 }
