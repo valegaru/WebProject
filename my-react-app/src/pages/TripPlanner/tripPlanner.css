@@ -1,5 +1,4 @@
 .trip-planner-container {
-	font-family: '', sans-serif;
 	background-color: #fef6ed;
 	color: #1f1f1f;
 }
@@ -37,13 +36,14 @@
 } */
 
 .trip-header > p {
-	font-size: 14px;
+	font-size: 16px;
 	color: #444;
 	margin-top: 4px;
 }
 
 .trip-description {
 	margin-top: 20px;
+	font-family: 'Darker Grotesque', sans-serif;
 }
 
 .container {
@@ -187,13 +187,13 @@
 
 	.container {
 		display: flex;
-	flex-direction: column;
-	gap: 10px;
-	position: relative;
-	margin-top: -30px;
-	margin-left: 14px;
-	width: 600px;
-	align-items: start;
+		flex-direction: column;
+		gap: 10px;
+		position: relative;
+		margin-top: -30px;
+		margin-left: 14px;
+		width: 600px;
+		align-items: start;
 	}
 
 	.textContent {

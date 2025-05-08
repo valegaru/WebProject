@@ -1,24 +1,30 @@
+/* Navbar.css */
+
+/* Estilos generales del navbar */
 .navbar {
   background-color: #f4e4c5;
   border: 1px solid #647e37;
   display: flex;
+  justify-content: space-between;
   position: sticky !important;
-  width: 100vw !important;
   top: 0;
   z-index: 1;
+  padding: 0 16px; /* Ajuste del padding */
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
 }
 
+/* Logo y título */
 .logo-container {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
 }
 
-.logo-circle {
-  width: 35.85px;
-  height: 35.85px;
-  border-radius: 9999px;
-  border: 1.65px solid #647e37;
+.logo-image {
+  width: 40px;
+  height: auto;
 }
 
 .nav-title {
@@ -30,6 +36,7 @@
   letter-spacing: 0.55px;
 }
 
+/* Enlaces de navegación */
 .nav-link {
   color: #647e37;
   font-size: 20px;
@@ -54,6 +61,7 @@
   color: #2d2e27;
 }
 
+/* Botón de llamada a la acción (Create New Trip) */
 .cta-button {
   background-color: #647e37 !important;
   color: #fff7e8 !important;
@@ -70,3 +78,131 @@
 .cta-button:hover {
   background-color: #586f2f !important;
 }
+
+/* Estilos responsivos para pantallas móviles (max-width: 768px) */
+@media (max-width: 768px) {
+  /* Ajustes para el logo y título en móvil */
+  .logo-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logo-image {
+    width: 30px;
+  }
+
+  .nav-title {
+    font-size: 20px;
+  }
+
+  /* Enlaces de navegación en versión móvil */
+  .nav-link {
+    font-size: 18px;
+    padding: 8px;
+  }
+
+  /* Ajustes del botón "Create New Trip" en móvil */
+  .cta-button {
+    font-size: 18px;
+    padding: 6px 16px;
+  }
+
+  /* Ajustes para el menú de hamburguesa */
+  .menu-item {
+    font-size: 18px;
+    padding: 12px;
+  }
+
+  /* Navbar padding en pantallas móviles */
+  .navbar {
+    padding: 8px;
+    width: 100%;
+  }
+
+  /* Evitar que el navbar se desborde */
+  .navbar .logo-container,
+  .navbar .cta-button {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .profile-pic {
+    display: none; /* Ocultar la foto de perfil en móvil */
+  }
+}
+
+
+/* .navbar {
+	background-color: #f4e4c5;
+	border: 1px solid #647e37;
+	display: flex;
+	position: sticky !important;
+	width: 100vw !important;
+	top: 0;
+	z-index: 1;
+}
+
+.logo-container {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+
+.logo-circle {
+	width: 35.85px;
+	height: 35.85px;
+	border-radius: 9999px;
+	border: 1.65px solid #647e37;
+}
+
+.nav-title {
+	color: #647e37;
+	font-size: 29.5px;
+	font-family: 'Bricolage Grotesque', sans-serif;
+	font-weight: 800;
+	line-height: 35.4px;
+	letter-spacing: 0.55px;
+}
+
+.nav-link {
+	color: #647e37;
+	font-size: 20px;
+	font-family: 'Darker Grotesque', sans-serif;
+	font-weight: 600;
+	line-height: 20.2px;
+	letter-spacing: 0.6px;
+	cursor: pointer;
+	opacity: 0.9;
+	text-decoration: none;
+	transition: all 0.2s ease-in-out;
+}
+
+.nav-link:hover {
+	opacity: 1;
+	color: #2d2e27;
+}
+
+.nav-link.active {
+	opacity: 1;
+	font-weight: 800;
+	color: #2d2e27;
+}
+
+.cta-button {
+	background-color: #647e37 !important;
+	color: #fff7e8 !important;
+	font-size: 24px;
+	font-family: 'Bricolage Grotesque', sans-serif;
+	font-weight: 700;
+	line-height: 26.4px;
+	letter-spacing: 0.6px;
+	border-radius: 12px;
+	padding: 8px 24px;
+	text-transform: none;
+}
+
+.cta-button:hover {
+	background-color: #586f2f !important;
+} */

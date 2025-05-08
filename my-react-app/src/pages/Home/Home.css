@@ -157,6 +157,7 @@
 @media screen and (max-width: 768px) {
 	.home-container {
 		padding: 0 1rem;
+		font-family: 'Bricolage Grotesque', sans-serif;
 	}
 
 	.map-section {
@@ -171,6 +172,7 @@
 
 	.search-bar {
 		width: 80%;
+		height: 60px;
 		left: 50%;
 		top: 16px;
 		transform: translateX(-50%);
