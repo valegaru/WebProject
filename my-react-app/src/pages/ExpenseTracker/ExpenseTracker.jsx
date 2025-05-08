@@ -66,7 +66,7 @@ function ExpenseTracker() {
 
       <div className="carousel-and-button">
         <DateCarousel onDateChange={setSelectedDate} />
-        <CustomButton label="ADD EXPENSE" onClick={() => addExpense("e","22","er")}/>
+        <CustomButton label="ADD EXPENSE" onClick={() => addExpense({ uidUser: "e", name: "22", price: "er" })}/>
       </div>
 
       <Calendar currency={currency} />
