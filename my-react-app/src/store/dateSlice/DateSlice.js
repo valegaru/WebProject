@@ -5,7 +5,7 @@ const initialState = {
 };
 
 export const DateSlice = createSlice({
-    name: 'selectedDate',
+    name: 'date',
     initialState,
     reducers: {
         setSelectedDate: (state, action) => {
