@@ -33,7 +33,6 @@ const Calendar = ({ currency }) => {
               gap: 2,
             }}
           >
-            {/* Hour label */}
             <Typography
               sx={{
                 fontWeight: "bold",
@@ -45,7 +44,6 @@ const Calendar = ({ currency }) => {
               {`${hour}:00`}
             </Typography>
 
-            {/* Event (Expense Card) */}
             <Box>
               {event && (
                 <ExpenseCard

@@ -8,5 +8,6 @@ export const store = configureStore({
     date: DateReducer,
     auth: AuthReducer,
     currency: CurrencyReducer,
+    events: eventReducer,
   }
 });

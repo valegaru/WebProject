@@ -1,4 +1,3 @@
-// data/events.js
 export const events = [
   {
     id: 0,
