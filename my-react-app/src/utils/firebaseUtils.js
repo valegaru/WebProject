@@ -22,4 +22,5 @@ export const fetchExpensesByDate = async (dateString) => {
 // fetchTripsFromUser(userId) = db -> users -> (select user by userId) -> tripIDs -> (MATCH TRIP ID, return its data)
 // fetchExpensesIDs(fetchTripsIDs()) = return expensesIDs array
 // fetchItinerariesIDs(fetchTripsIDs()) = return itinerariesIDs array
-// fetchExpense(expenseID) = 
+// fetchExpense(tripId, expenseID) = db -> trips -> (select trip by tripId) -> expenses -> (select expense by expenseID) -> return expense data
+// fetchItinerary(tripId, itineraryID) = db -> trips -> (select trip by tripId -> intinerary -> (select itinerary by itineraryID) -> return itinerary data
