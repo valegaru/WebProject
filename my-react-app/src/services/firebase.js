@@ -20,5 +20,7 @@ onAuthStateChanged(auth, (user) => {
     const uid = user.uid;
     console.log(uid);
   } else {
+    // User is signed out
+    // ...
   }
 });
