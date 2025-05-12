@@ -51,6 +51,26 @@ export const fetchTripsFromUser = async (userId) => {
   }
 };
 
+export const fetchDayEvents = async (tripID, expenseID, date) => {
+    try {
+      const tripRef = doc(db, "trips", tripID);
+      const expenseRef = doc(collection(tripRef, "expenses"), expenseID);
+      const dayRef = doc(collection(expenseRef, "days"), date);
+      const eventsCollection = collection(dayRef, "events");
+
+      const snapshot = await getDocs(eventsCollection);
+
+      const events = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      console.log("evencitos",events)
+      return events;
+    } catch (error) {
+      console.error("fallaste loco:", error);
+      return [];
+    }
+};
 
 
 // fetchUserData(userId) = db -> users -> (select user by userId) -> retunr data
