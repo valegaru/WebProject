@@ -9,8 +9,12 @@ export default function LogoutButton() {
 
 	const handleLogout = () => {
 		dispatch(clearUserId()); // Limpiar Redux y localStorage
-		navigate('/landing'); // Redirigir al landing
+		navigate('/'); // Redirigir al landing
 	};
 
-	return <button id='logoutbutton' onClick={handleLogout}>Cerrar sesión</button>;
+	return (
+		<button id='logoutbutton' onClick={handleLogout}>
+			Cerrar sesión
+		</button>
+	);
 }
