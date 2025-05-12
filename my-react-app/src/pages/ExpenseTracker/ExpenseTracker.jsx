@@ -17,6 +17,7 @@ function ExpenseTracker() {
 
   const [individualBudget, setIndividualBudget] = useState(0);
   const [groupBudget, setGroupBudget] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const addExpense = (id,name,price) => {
     addNewExpense(id,name,price)
@@ -34,17 +35,19 @@ function ExpenseTracker() {
 
     setIndividualBudget(individualTotal);
     setGroupBudget(groupTotal);
+    setLoading(false)
   }, [selectedDate]); 
 
   return (
     <>
       <Navbar />
-
+      {loading ? (<Typography>Gay</Typography>):(<>
+      
       <div className="upper-expense">
 
-          <div className="trip-name-and-toggle">
+        <div className="trip-name-and-toggle">
           <Typography
-           sx={{
+          sx={{
               fontWeight: "bold",
               textTransform: "uppercase",
               fontSize: "1.5rem", 
@@ -69,7 +72,8 @@ function ExpenseTracker() {
         <CustomButton label="ADD EXPENSE" onClick={() => addExpense({ uidUser: "e", name: "22", price: "er" })}/>
       </div>
 
-      <Calendar currency={currency} />
+      <Calendar currency={currency} /></>)}
+      
 
     </>
   );
