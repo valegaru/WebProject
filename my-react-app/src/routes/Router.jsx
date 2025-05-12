@@ -13,9 +13,31 @@ import MatchmakerSelection from '../pages/Matchmaker/MatchmakerSelection';
 import ExpenseTracker from '../pages/ExpenseTracker/ExpenseTracker';
 import Profile from '../pages/Profile/Profile';
 import TripCreation from '../pages/TripCreation/TripCreation';
+import { onAuthStateChanged } from 'firebase/auth';
+import { useDispatch } from 'react-redux';
+import { auth } from '../services/firebase';
+import { clearUserId, setUserId } from '../store/auth/AuthSlice';
+import { useEffect } from 'react';
 
 
 const Router = () => {
+
+    const dispatch = useDispatch();
+
+	useEffect(() => {
+		const unsuscribe = onAuthStateChanged(auth, (user)=>{
+			if (user) {
+				dispatch(setUserId(user));
+			} else {
+				dispatch(clearUserId());
+			}
+		})
+
+		return () => unsuscribe();
+	}, [dispatch])
+
+
+    return(
     <BrowserRouter>
 				<Routes>
 					{/* Públicas */}
@@ -106,6 +128,6 @@ const Router = () => {
 					/>
 				</Routes>
 			</BrowserRouter>
-}
+)}
 
 export default Router;

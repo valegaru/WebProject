@@ -21,21 +21,6 @@ import { clearUserId, setUserId } from './store/auth/AuthSlice.jsx';
 import Router from './routes/Router.jsx';
 
 const App = () => {
-
-	const dispatch = useDispatch();
-
-	useEffect(() => {
-		const unsuscribe = onAuthStateChanged(auth, (user)=>{
-			if (user) {
-				dispatch(setUserId(user));
-			} else {
-				dispatch(clearUserId());
-			}
-		})
-
-		return () => unsuscribe();
-	}, [dispatch])
-
 	return (
 		<Provider store={store}>
 			<Router></Router>
