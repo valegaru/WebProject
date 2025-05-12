@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import './PrivateRoute.css';
 
 const PrivateRoute = ({ children }) => {
 	const userId = useSelector((state) => state.auth.userId);
