@@ -1,13 +1,13 @@
-.login-page {
+.register-page {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 100vw; /* 🔹 Asegura que ocupe todo el ancho */
+	width: 100vw;
 	min-height: 100vh;
-	background-color: #fffaf2; /* sin opacidad */
+	background-color: #fffaf2;
 }
 
-.login-card {
+.register-card {
 	background-color: white;
 	padding: 2rem 2.5rem;
 	border-radius: 16px;
@@ -17,19 +17,13 @@
 	text-align: center;
 }
 
-.login-title {
+.register-title {
 	font-size: 1.8rem;
 	color: #1d2d44;
-	margin-bottom: 0.5rem;
-}
-
-.login-subtitle {
-	color: #4a4a4a;
-	font-size: 1rem;
 	margin-bottom: 1.5rem;
 }
 
-.login-input {
+.register-input {
 	width: 100%;
 	padding: 0.9rem 1rem;
 	margin-bottom: 1rem;
@@ -39,7 +33,7 @@
 	background-color: #fdfdfd;
 }
 
-.login-button {
+.register-button {
 	width: 100%;
 	background-color: #4a7c2f;
 	color: white;
@@ -51,28 +45,6 @@
 	transition: background-color 0.3s ease;
 }
 
-.login-button:hover {
+.register-button:hover {
 	background-color: #3a6628;
-}
-
-.login-error {
-	color: red;
-	font-size: 0.9rem;
-	margin-bottom: 1rem;
-}
-
-.login-footer {
-	margin-top: 1rem;
-	color: #333;
-	font-size: 0.95rem;
-}
-
-.login-link {
-	color: #2979ff;
-	text-decoration: none;
-	font-weight: 500;
-}
-
-.login-link:hover {
-	text-decoration: underline;
 }
