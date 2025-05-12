@@ -7,11 +7,11 @@ import BudgetRange from "../../components/Expenses/BudgetRange/BudgetRange";
 import Calendar from "../../components/Calendar/Calendar";
 import CurrencyToggleButton from "../../components/CurrencyToggleButton/CurrencyToggleButton";
 import { Typography } from "@mui/material";
-import { addNewExpense, fetchDayEvents, fetchUserData } from "../../utils/firebaseUtils";
+import { addNewExpense, fetchUserData } from "../../utils/firebaseUtils";
 import { useSelector } from "react-redux";
 import { auth } from "../../services/firebase";
 import { fetchTripsFromUser } from "../../utils/tripsUtils";
-
+import { fetchExpensesDayEvents } from "../../utils/expensesUtils";
 
 
 function ExpenseTracker() {
@@ -38,7 +38,7 @@ function ExpenseTracker() {
     console.log("Redux Store:", JSON.stringify(storeState, null, 2));
     fetchUserData(uidBURN);
     fetchTripsFromUser(uidBURN);
-    fetchDayEvents("xN1RgphfLnpTIm7xoOhu","Lz9ZchnTEIFCFbPF1onz", "2025-04-07")
+    fetchExpenseDayEvents("xN1RgphfLnpTIm7xoOhu","Lz9ZchnTEIFCFbPF1onz", "2025-04-07")
     
     const individualTotal = events.reduce((sum, event) => {
       const yourParticipation = event.participants?.find((p) => p.name === "You");
