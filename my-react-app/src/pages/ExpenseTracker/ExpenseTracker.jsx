@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from 'react-redux';
 import Navbar from "../../components/Navbar/Navbar";
 import DateCarousel from "../../components/DateCarousel/DateCarousel";
 import CustomButton from "../../components/CustomButton/CustomButton";
@@ -12,9 +13,12 @@ import { useSelector } from "react-redux";
 import { auth } from "../../services/firebase";
 import { fetchTripsFromUser } from "../../utils/tripsUtils";
 import { fetchExpensesDayEvents } from "../../utils/expensesUtils";
+import { addEvent } from "../../store/eventSlice/EventSlice";
 
 
 function ExpenseTracker() {
+  const dispatch = useDispatch();
+
   const [currency, setCurrency] = useState("COP");
   const [selectedDate, setSelectedDate] = useState(""); 
   const events = useSelector((state) => state.events);
@@ -35,23 +39,34 @@ function ExpenseTracker() {
   }
 
   useEffect(() => {
+  async function loadData() {
     console.log("Redux Store:", JSON.stringify(storeState, null, 2));
-    fetchUserData(uidBURN);
-    fetchTripsFromUser(uidBURN);
-    fetchExpensesDayEvents("xN1RgphfLnpTIm7xoOhu","Lz9ZchnTEIFCFbPF1onz", "2025-04-07")
     
+    await fetchUserData(uidBURN);
+    await fetchTripsFromUser(uidBURN);
+
+    const events = await fetchExpensesDayEvents("xN1RgphfLnpTIm7xoOhu", "Lz9ZchnTEIFCFbPF1onz", "2025-04-07");
+
+    events.forEach((event) => {
+      dispatch(addEvent(event));
+    });
+
     const individualTotal = events.reduce((sum, event) => {
-      const yourParticipation = event.participants?.find((p) => p.name === "You");
+      const yourParticipation = event.participants?.find(p => p.name === "You");
       return yourParticipation ? sum + yourParticipation.contribution : sum;
     }, 0);
 
-    const groupTotal = events.reduce((sum, event) => sum + event.amount, 0);
+    const groupTotal = events.reduce((sum, event) => sum + Number(event.amount), 0);
 
     setIndividualBudget(individualTotal);
     setGroupBudget(groupTotal);
     setSelectedDate(date);
     setLoading(false);
-  }, []); 
+  }
+
+  loadData();
+}, []);
+
 
   return (
     <>
