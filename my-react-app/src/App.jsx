@@ -13,7 +13,6 @@ import MatchmakerResults from './pages/Matchmaker/MatchmakerResults.jsx';
 import { Provider } from 'react-redux';
 import {store} from './store/store.js'
 import Register from './pages/Register/Register.jsx';
-import ExpenseTrackerTest from './pages/ExpenseTrackerTest/ExpenseTrackerTest.jsx';
 
 const App = () => {
 	return (
@@ -31,7 +30,6 @@ const App = () => {
 				<Route path='/landing' element={<Landing />} />
 				<Route path='/login' element={<Login />} />
 				<Route path='/register' element={<Register/>} />
-				<Route path='/expenseTrackerTest' element={<ExpenseTrackerTest/>} />
 			</Routes>
 		</BrowserRouter>
 		</Provider>

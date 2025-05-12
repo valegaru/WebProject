@@ -1,11 +1,11 @@
 import { Box, Typography } from "@mui/material";
-import { events } from "../../data/events";
 import { getHour } from "../../utils/getHour";
 import ExpenseCard from "../Expenses/ExpenseCard/ExpenseCard";
 
 const Calendar = ({ currency }) => {
   const startHour = 12;
   const endHour = 17;
+  const events = useSelector((state) => state.events);
 
   const hoursArray = Array.from({ length: endHour - startHour }, (_, i) => startHour + i);
 
