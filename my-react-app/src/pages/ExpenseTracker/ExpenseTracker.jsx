@@ -52,8 +52,10 @@ function ExpenseTracker() {
     });
 
     const individualTotal = events.reduce((sum, event) => {
-      const yourParticipation = event.participants?.find(p => p.name === "You");
-      return yourParticipation ? sum + yourParticipation.contribution : sum;
+    const yourParticipation = event.participants
+      ? Object.values(event.participants).find(p => p.userID === uidBURN)
+      : null;
+      return yourParticipation ? sum + Number(yourParticipation.contribution) : sum;
     }, 0);
 
     const groupTotal = events.reduce((sum, event) => sum + Number(event.amount), 0);

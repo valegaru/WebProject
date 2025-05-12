@@ -9,17 +9,17 @@ const eventSlice = createSlice({
     initialState,
     reducers: {
         addEvent: (state, action) => {
-            state.push(action.payload);
-    },
-        removeEvent: (state, action) => {
-            return state.filter(event => event.id !== action.payload);
-    },
-    updateEvent: (state, action) => {
-        const index = state.findIndex(event => event.id === action.payload.id);
-        if (index !== -1) {
-            state[index] = action.payload;
-        }
-    },
+    state.events.push(action.payload);
+},
+removeEvent: (state, action) => {
+    state.events = state.events.filter(event => event.id !== action.payload);
+},
+updateEvent: (state, action) => {
+    const index = state.events.findIndex(event => event.id === action.payload.id);
+    if (index !== -1) {
+        state.events[index] = action.payload;
+    }
+}
 },
 });
 
