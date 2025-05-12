@@ -6,7 +6,8 @@ import { useSelector } from "react-redux";
 const Calendar = ({ currency }) => {
   const startHour = 12;
   const endHour = 17;
-  const events = useSelector((state) => state.events);
+  const events = useSelector((state) => state.events.events);
+
 
   const hoursArray = Array.from({ length: endHour - startHour }, (_, i) => startHour + i);
 
