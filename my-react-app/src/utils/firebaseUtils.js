@@ -73,6 +73,6 @@ export const fetchDayEvents = async (tripID, expenseID, date) => {
 // updateEvent() =
 // deleteEvent() =
 
-// addTrip() =
+// addTrip() = db -> trips -> (add fields: description, destination, startDate, endDate, name, participants[], add collections: expenses, itineraries)
 
 // updateTrip() =  
