@@ -10,14 +10,29 @@ import MatchmakerQuestions from './pages/Matchmaker/MatchmakerQuestions.jsx';
 import MatchmakerRoom from './pages/Matchmaker/MatchmakerRoom.jsx';
 import MatchmakerSelection from './pages/Matchmaker/MatchmakerSelection.jsx';
 import MatchmakerResults from './pages/Matchmaker/MatchmakerResults.jsx';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import { store } from './store/store.js';
 import Register from './pages/Register/Register.jsx';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute.jsx';
 import Profile from './pages/Profile/Profile.jsx';
 import TripCreation from './pages/TripCreation/TripCreation.jsx';
+import { onAuthStateChanged } from 'firebase/auth';
+import { clearUserId, setUserId } from './store/auth/AuthSlice.jsx';
 
 const App = () => {
+
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		const unsuscribe = onAuthStateChanged(auth, (user)=>{
+			if (user) {
+				dispatch(setUserId(user));
+			} else {
+				dispatch(clearUserId());
+			}
+		})
+	}, [])
+
 	return (
 		<Provider store={store}>
 			<BrowserRouter>
