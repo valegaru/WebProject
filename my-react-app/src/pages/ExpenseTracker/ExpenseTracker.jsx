@@ -38,7 +38,7 @@ function ExpenseTracker() {
     console.log("Redux Store:", JSON.stringify(storeState, null, 2));
     fetchUserData(uidBURN);
     fetchTripsFromUser(uidBURN);
-    fetchExpenseDayEvents("xN1RgphfLnpTIm7xoOhu","Lz9ZchnTEIFCFbPF1onz", "2025-04-07")
+    fetchExpensesDayEvents("xN1RgphfLnpTIm7xoOhu","Lz9ZchnTEIFCFbPF1onz", "2025-04-07")
     
     const individualTotal = events.reduce((sum, event) => {
       const yourParticipation = event.participants?.find((p) => p.name === "You");
