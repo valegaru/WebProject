@@ -45,7 +45,7 @@ function ExpenseTracker() {
   return (
     <>
       <Navbar />
-      {loading ? (<Typography>Gay</Typography>):(<>
+      {loading ? (<Typography>Loading...</Typography>):(<>
       
       <div className="upper-expense">
 

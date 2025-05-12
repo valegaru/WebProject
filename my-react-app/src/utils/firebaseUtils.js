@@ -20,7 +20,40 @@ export const fetchExpensesByDate = async (dateString) => {
     return snapshot.docs.map(doc => doc.data());
 };
 
-// fetchTripsFromUser(userId) = db -> users -> (select user by userId) -> tripIDs -> (MATCH TRIP ID, return its data)
+export const fetchUserData = async (userId) => {
+  try {
+    const userRef = doc(db, "users", userId);
+    const userSnap = await getDoc(userRef);
+
+    if (userSnap.exists()) {
+      return userSnap.data();
+    } else {
+      console.log("Mano, no hay nadie");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    return null;
+  }
+};
+
+export const fetchTripsFromUser = async (userId) => {
+  try {
+    const userData = await fetchUserData(userId);
+    if (!userData || !userData.tripIDs) {
+      console.log("No trip IDs found");
+      return [];
+    }
+
+    return userData.tripIDs;
+  } catch (error) {
+    console.error("Error fetching trips from user:", error);
+    return [];
+  }
+};
+
+// fetchUserData(userId) = db -> users -> (select user by userId) -> retunr data
+// fetchTripsFromUser(fetchUserDate(userId)) = db -> users -> (select user by userId) -> tripIDs -> (return all tripsIDs)
 // fetchExpensesIDs(fetchTripsIDs()) = return expensesIDs array
 // fetchItinerariesIDs(fetchTripsIDs()) = return itinerariesIDs array
 // fetchExpense(tripId, expenseID) = db -> trips -> (select trip by tripId) -> expenses -> (select expense by expenseID) -> return expense data
