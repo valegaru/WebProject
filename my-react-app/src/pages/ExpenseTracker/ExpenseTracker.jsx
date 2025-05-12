@@ -7,9 +7,10 @@ import BudgetRange from "../../components/Expenses/BudgetRange/BudgetRange";
 import Calendar from "../../components/Calendar/Calendar";
 import CurrencyToggleButton from "../../components/CurrencyToggleButton/CurrencyToggleButton";
 import { Typography } from "@mui/material";
-import { addNewExpense, fetchDayEvents, fetchTripsFromUser, fetchUserData } from "../../utils/firebaseUtils";
+import { addNewExpense, fetchDayEvents, fetchUserData } from "../../utils/firebaseUtils";
 import { useSelector } from "react-redux";
 import { auth } from "../../services/firebase";
+import { fetchTripsFromUser } from "../../utils/tripsUtils";
 
 
 

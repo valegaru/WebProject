@@ -29,19 +29,6 @@ export const fetchUserData = async (userId) => {
   }
 };
 
-export const fetchTripsFromUser = async (userId) => {
-  try {
-    const userRef = doc(db, "users", userId);
-    const tripCollectionRef = collection(userRef, "tripsIDs");
-    const tripSnapshot = await getDocs(tripCollectionRef);
-    console.log("fetCHY", tripSnapshot.docs.map(doc => doc.data()));
-    return tripSnapshot;
-  } catch (error) {
-    console.error("Error fetching trips from user:", error);
-    return [];
-  }
-};
-
 export const fetchDayEvents = async (tripID, expenseID, date) => {
     try {
       const tripRef = doc(db, "trips", tripID);
@@ -73,6 +60,3 @@ export const fetchDayEvents = async (tripID, expenseID, date) => {
 // updateEvent() =
 // deleteEvent() =
 
-// addTrip() = db -> trips -> (add fields: description, destination, startDate, endDate, name, participants[], add collections: expenses, itineraries)
-
-// updateTrip() =  
