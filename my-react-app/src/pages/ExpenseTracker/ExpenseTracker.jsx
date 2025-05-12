@@ -6,14 +6,17 @@ import "./ExpenseTracker.css";
 import BudgetRange from "../../components/Expenses/BudgetRange/BudgetRange";
 import Calendar from "../../components/Calendar/Calendar";
 import CurrencyToggleButton from "../../components/CurrencyToggleButton/CurrencyToggleButton";
-import { events } from "../../data/events"; 
 import { Typography } from "@mui/material";
 import { addNewExpense } from "../../utils/firebaseUtils";
+import { useSelector } from "react-redux";
+
 
 
 function ExpenseTracker() {
   const [currency, setCurrency] = useState("COP");
-  const [selectedDate, setSelectedDate] = useState("2025-04-07"); 
+  const [selectedDate, setSelectedDate] = useState(""); 
+  const events = useSelector((state) => state.events);
+  const date = useSelector((state) => state.date)
 
   const [individualBudget, setIndividualBudget] = useState(0);
   const [groupBudget, setGroupBudget] = useState(0);
@@ -35,7 +38,8 @@ function ExpenseTracker() {
 
     setIndividualBudget(individualTotal);
     setGroupBudget(groupTotal);
-    setLoading(false)
+    setSelectedDate(date);
+    setLoading(false);
   }, [selectedDate]); 
 
   return (
