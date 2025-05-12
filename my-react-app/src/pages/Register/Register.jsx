@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // ← importar esto
+import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../../services/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
@@ -12,7 +12,7 @@ const Register = () => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
 
-	const navigate = useNavigate(); // ← usar el hook de navegación
+	const navigate = useNavigate();
 
 	const handleRegister = async () => {
 		setLoading(true);
@@ -26,12 +26,14 @@ const Register = () => {
 				email,
 			});
 
+			localStorage.setItem('userId', uid); // Guardar el UID para desbloquear rutas
+
 			alert('🎉 Registro exitoso');
 			setEmail('');
 			setPassword('');
 			setUsername('');
 
-			navigate('/home'); // ← redirigir al Home
+			navigate('/home'); // redirigir al Home
 		} catch (error) {
 			console.error(error.code, error.message);
 			setError('❌ ' + error.message);
@@ -41,39 +43,35 @@ const Register = () => {
 	};
 
 	return (
-		<div className="register-page">
-			<div className="register-card">
-				<h2 className="register-title">Crear una cuenta</h2>
+		<div className='register-page'>
+			<div className='register-card'>
+				<h2 className='register-title'>Crear una cuenta</h2>
 				<input
-					className="register-input"
-					type="text"
-					placeholder="Nombre de usuario"
+					className='register-input'
+					type='text'
+					placeholder='Nombre de usuario'
 					value={username}
 					onChange={(e) => setUsername(e.target.value)}
 					required
 				/>
 				<input
-					className="register-input"
-					type="email"
-					placeholder="Correo electrónico"
+					className='register-input'
+					type='email'
+					placeholder='Correo electrónico'
 					value={email}
 					onChange={(e) => setEmail(e.target.value)}
 					required
 				/>
 				<input
-					className="register-input"
-					type="password"
-					placeholder="Contraseña"
+					className='register-input'
+					type='password'
+					placeholder='Contraseña'
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
 					required
 				/>
 				{error && <p style={{ color: 'red', fontSize: '14px' }}>{error}</p>}
-				<button
-					className="register-button"
-					onClick={handleRegister}
-					disabled={loading}
-				>
+				<button className='register-button' onClick={handleRegister} disabled={loading}>
 					{loading ? 'Registrando...' : 'Registrarse'}
 				</button>
 			</div>
