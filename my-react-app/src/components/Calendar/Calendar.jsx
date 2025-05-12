@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { getHour } from "../../utils/getHour";
 import ExpenseCard from "../Expenses/ExpenseCard/ExpenseCard";
+import { useSelector } from "react-redux";
 
 const Calendar = ({ currency }) => {
   const startHour = 12;
