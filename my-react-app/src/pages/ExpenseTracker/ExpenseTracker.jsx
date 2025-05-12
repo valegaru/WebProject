@@ -19,6 +19,7 @@ function ExpenseTracker() {
   const events = useSelector((state) => state.events);
   const date = useSelector((state) => state.date);
   const uid = useSelector((state) => state.auth.user);
+  const uidBURN = "G5ZH4Tqp0QTNLDUNkYwNQOaNCZa2"
   const storeState = useSelector((state) => state);
 
 
@@ -34,14 +35,9 @@ function ExpenseTracker() {
 
   useEffect(() => {
     console.log("Redux Store:", JSON.stringify(storeState, null, 2));
-    console.log(uid)
-    if (uid) {
-      fetchUserData(uid);
-      fetchTripsFromUser(uid);
-      } else {
-        console.log("User not authenticated yet");
-      }
-
+    fetchUserData(uidBURN);
+    fetchTripsFromUser(uidBURN);
+    
     const individualTotal = events.reduce((sum, event) => {
       const yourParticipation = event.participants?.find((p) => p.name === "You");
       return yourParticipation ? sum + yourParticipation.contribution : sum;

@@ -40,18 +40,18 @@ export const fetchUserData = async (userId) => {
 
 export const fetchTripsFromUser = async (userId) => {
   try {
-    const userData = await fetchUserData(userId);
-    if (!userData || !userData.tripIDs) {
-      console.log("No trip IDs found");
-      return [];
-    }
-    console.log("dataaaaaa"+ userData.tripIDs)
-    return userData.tripIDs;
+    const userRef = doc(db, "users", userId);
+    const tripCollectionRef = collection(userRef, "tripsIDs");
+    const tripSnapshot = await getDocs(tripCollectionRef);
+    console.log("fetCHY", tripSnapshot.docs.map(doc => doc.data()));
+    return tripSnapshot;
   } catch (error) {
     console.error("Error fetching trips from user:", error);
     return [];
   }
 };
+
+
 
 // fetchUserData(userId) = db -> users -> (select user by userId) -> retunr data
 // fetchTripsFromUser(fetchUserDate(userId)) = db -> users -> (select user by userId) -> tripIDs -> (return all tripsIDs)
