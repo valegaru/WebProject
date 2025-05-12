@@ -14,7 +14,7 @@ import { Provider } from 'react-redux';
 import { store } from './store/store.js';
 import Register from './pages/Register/Register.jsx';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute.jsx';
-
+import Profile from './pages/Profile/Profile.jsx';
 const App = () => {
 	return (
 		<Provider store={store}>
@@ -87,6 +87,14 @@ const App = () => {
 						element={
 							<PrivateRoute>
 								<ExpenseTracker />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path='/Profile'
+						element={
+							<PrivateRoute>
+								< Profile />
 							</PrivateRoute>
 						}
 					/>
