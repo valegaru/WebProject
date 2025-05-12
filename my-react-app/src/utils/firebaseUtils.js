@@ -26,6 +26,7 @@ export const fetchUserData = async (userId) => {
     const userSnap = await getDoc(userRef);
 
     if (userSnap.exists()) {
+      console.log(userSnap.data())
       return userSnap.data();
     } else {
       console.log("Mano, no hay nadie");
@@ -44,7 +45,7 @@ export const fetchTripsFromUser = async (userId) => {
       console.log("No trip IDs found");
       return [];
     }
-
+    console.log("dataaaaaa"+ userData.tripIDs)
     return userData.tripIDs;
   } catch (error) {
     console.error("Error fetching trips from user:", error);

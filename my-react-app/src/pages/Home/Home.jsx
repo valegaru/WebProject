@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Home.css';
 import Navbar from '../../components/Navbar/Navbar';
 import CardList from '../../components/cardList/CardList';
@@ -12,6 +12,7 @@ import latamTour from '../../assets/latamGroup.png';
 import paris from '../../assets/paris.png';
 import newYork from '../../assets/newYork.png';
 import thailand from '../../assets/thailand.png';
+import { useSelector } from 'react-redux';
 
 const Home = () => {
 	const savedList = [
@@ -34,6 +35,11 @@ const Home = () => {
 		{ image: paris, label: 'Paris' },
 		{ image: newYork, label: 'New York' },
 	];
+
+	const storeState = useSelector((state) => state); 
+	useEffect(()=>{
+		console.log("Redux Store:", JSON.stringify(storeState, null, 2));
+	},[])
 
 	return (
 		<div className='home-container'>

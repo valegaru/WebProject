@@ -7,8 +7,9 @@ import BudgetRange from "../../components/Expenses/BudgetRange/BudgetRange";
 import Calendar from "../../components/Calendar/Calendar";
 import CurrencyToggleButton from "../../components/CurrencyToggleButton/CurrencyToggleButton";
 import { Typography } from "@mui/material";
-import { addNewExpense } from "../../utils/firebaseUtils";
+import { addNewExpense, fetchTripsFromUser, fetchUserData } from "../../utils/firebaseUtils";
 import { useSelector } from "react-redux";
+import { auth } from "../../services/firebase";
 
 
 
@@ -16,7 +17,11 @@ function ExpenseTracker() {
   const [currency, setCurrency] = useState("COP");
   const [selectedDate, setSelectedDate] = useState(""); 
   const events = useSelector((state) => state.events);
-  const date = useSelector((state) => state.date)
+  const date = useSelector((state) => state.date);
+  const uid = useSelector((state) => state.auth.user);
+  const storeState = useSelector((state) => state);
+
+
 
   const [individualBudget, setIndividualBudget] = useState(0);
   const [groupBudget, setGroupBudget] = useState(0);
@@ -28,6 +33,14 @@ function ExpenseTracker() {
   }
 
   useEffect(() => {
+    console.log("Redux Store:", JSON.stringify(storeState, null, 2));
+    console.log(uid)
+    if (uid) {
+      fetchUserData(uid);
+      fetchTripsFromUser(uid);
+      } else {
+        console.log("User not authenticated yet");
+      }
 
     const individualTotal = events.reduce((sum, event) => {
       const yourParticipation = event.participants?.find((p) => p.name === "You");
@@ -40,7 +53,7 @@ function ExpenseTracker() {
     setGroupBudget(groupTotal);
     setSelectedDate(date);
     setLoading(false);
-  }, [selectedDate]); 
+  }, []); 
 
   return (
     <>
