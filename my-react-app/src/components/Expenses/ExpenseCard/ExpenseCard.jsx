@@ -15,7 +15,7 @@ const ExpenseCard = ({ title, amount, status, currency, participants }) => {
       </div>
 
       <Box sx={{ display: "flex", gap: "12px", flexDirection: "row", flexWrap: "wrap" }}>
-        {participants?.map((p, index) => (
+        {Object.values(participants).map((p, index) => (
           <ProfileInfo
             key={index}
             name={p.name}

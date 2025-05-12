@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Home.css';
 import Navbar from '../../components/Navbar/Navbar';
 import CardList from '../../components/cardList/CardList';
@@ -12,6 +12,7 @@ import latamTour from '../../assets/latamGroup.png';
 import paris from '../../assets/paris.png';
 import newYork from '../../assets/newYork.png';
 import thailand from '../../assets/thailand.png';
+import { useSelector } from 'react-redux';
 
 const Home = () => {
 	const savedList = [
@@ -22,10 +23,10 @@ const Home = () => {
 	];
 
 	const trips = [
-		{ image: latamTour, label: 'Latam Tour', date:'Jan 16 - May 24/25', numberMembers:'hola' },
-		{ image: destinations, label: 'Rio Janeiro', date:'Jan 16 - May 24/25', numberMembers:'hi' },
-		{ image: paris, label: 'Paris Voyage', date:'Jan 16 - May 24/25', numberMembers:'hi' },
-		{ image: newYork, label: 'New York', date:'Jan 16 - May 24/25', numberMembers:'hi' },
+		{ image: latamTour, label: 'Latam Tour', date: 'Jan 16 - May 24/25', numberMembers: 'hola' },
+		{ image: destinations, label: 'Rio Janeiro', date: 'Jan 16 - May 24/25', numberMembers: 'hi' },
+		{ image: paris, label: 'Paris Voyage', date: 'Jan 16 - May 24/25', numberMembers: 'hi' },
+		{ image: newYork, label: 'New York', date: 'Jan 16 - May 24/25', numberMembers: 'hi' },
 	];
 
 	const matches = [
@@ -35,10 +36,14 @@ const Home = () => {
 		{ image: newYork, label: 'New York' },
 	];
 
+	const storeState = useSelector((state) => state);
+	useEffect(() => {
+		console.log('Redux Store:', JSON.stringify(storeState, null, 2));
+	}, []);
+
 	return (
 		<div className='home-container'>
-			<Navbar/>
-
+			<Navbar />
 			<div className='map-section'>
 				<img src={mapImage} alt='World Map' className='map-image' />
 				<input type='text' placeholder='Search for a location' className='search-bar' />
@@ -47,18 +52,15 @@ const Home = () => {
 			<h2 className='home-title'>Hi, Juan!</h2>
 
 			<div className='section'>
-      <CardList title='Saved list' cardsData={savedList} variantColor='saved' />
-
+				<CardList title='Saved list' cardsData={savedList} variantColor='saved' />
 			</div>
 
 			<div className='section'>
-      <CardList title='Trips' cardsData={trips} variantColor='trips' />
-
+				<CardList title='Trips' cardsData={trips} variantColor='trips' />
 			</div>
 
 			<div className='section'>
-      <CardList title='Destination Matches' cardsData={matches} variantColor='matches' />
-
+				<CardList title='Destination Matches' cardsData={matches} variantColor='matches' />
 			</div>
 		</div>
 	);

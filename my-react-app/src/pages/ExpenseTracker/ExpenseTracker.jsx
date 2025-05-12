@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from 'react-redux';
 import Navbar from "../../components/Navbar/Navbar";
 import DateCarousel from "../../components/DateCarousel/DateCarousel";
 import CustomButton from "../../components/CustomButton/CustomButton";
@@ -6,39 +7,79 @@ import "./ExpenseTracker.css";
 import BudgetRange from "../../components/Expenses/BudgetRange/BudgetRange";
 import Calendar from "../../components/Calendar/Calendar";
 import CurrencyToggleButton from "../../components/CurrencyToggleButton/CurrencyToggleButton";
-import { events } from "../../data/events"; 
 import { Typography } from "@mui/material";
+import { addNewExpense, fetchUserData } from "../../utils/firebaseUtils";
+import { useSelector } from "react-redux";
+import { auth } from "../../services/firebase";
+import { fetchTripsFromUser } from "../../utils/tripsUtils";
+import { fetchExpensesDayEvents } from "../../utils/expensesUtils";
+import { addEvent } from "../../store/eventSlice/EventSlice";
 
 
 function ExpenseTracker() {
+  const dispatch = useDispatch();
+
   const [currency, setCurrency] = useState("COP");
-  const [selectedDate, setSelectedDate] = useState("2025-04-07"); 
+  const [selectedDate, setSelectedDate] = useState(""); 
+  const events = useSelector((state) => state.events);
+  const date = useSelector((state) => state.date);
+  const uid = useSelector((state) => state.auth.user);
+  const uidBURN = "G5ZH4Tqp0QTNLDUNkYwNQOaNCZa2"
+  const storeState = useSelector((state) => state);
+
+
 
   const [individualBudget, setIndividualBudget] = useState(0);
   const [groupBudget, setGroupBudget] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  const addExpense = (id,name,price) => {
+    addNewExpense(id,name,price)
+    console.log("expensed" + id + name + price)
+  }
 
   useEffect(() => {
+  const loadData = async () => {
+    console.log("Redux Store:", JSON.stringify(storeState, null, 2));
+    
+    await fetchUserData(uidBURN);
+    await fetchTripsFromUser(uidBURN);
+
+    const events = await fetchExpensesDayEvents("xN1RgphfLnpTIm7xoOhu", "Lz9ZchnTEIFCFbPF1onz", "2025-04-07");
+
+    events.forEach((event) => {
+      dispatch(addEvent(event));
+    });
 
     const individualTotal = events.reduce((sum, event) => {
-      const yourParticipation = event.participants?.find((p) => p.name === "You");
-      return yourParticipation ? sum + yourParticipation.contribution : sum;
+    const yourParticipation = event.participants
+      ? Object.values(event.participants).find(p => p.userID === uidBURN)
+      : null;
+      return yourParticipation ? sum + Number(yourParticipation.contribution) : sum;
     }, 0);
 
-    const groupTotal = events.reduce((sum, event) => sum + event.amount, 0);
+    const groupTotal = events.reduce((sum, event) => sum + Number(event.amount), 0);
 
     setIndividualBudget(individualTotal);
     setGroupBudget(groupTotal);
-  }, [selectedDate]); 
+    setSelectedDate(date);
+    setLoading(false);
+  }
+
+  loadData();
+}, []);
+
 
   return (
     <>
       <Navbar />
-
+      {loading ? (<Typography>Loading...</Typography>):(<>
+      
       <div className="upper-expense">
 
-          <div className="trip-name-and-toggle">
+        <div className="trip-name-and-toggle">
           <Typography
-           sx={{
+          sx={{
               fontWeight: "bold",
               textTransform: "uppercase",
               fontSize: "1.5rem", 
@@ -60,10 +101,12 @@ function ExpenseTracker() {
 
       <div className="carousel-and-button">
         <DateCarousel onDateChange={setSelectedDate} />
-        <CustomButton label="ADD EXPENSE" />
+        <CustomButton label="ADD EXPENSE" onClick={() => addExpense({ uidUser: "e", name: "22", price: "er" })}/>
       </div>
 
-      <Calendar currency={currency} />
+      <Calendar currency={currency} /></>)}
+      
+
     </>
   );
 }

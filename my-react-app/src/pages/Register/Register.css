@@ -1,0 +1,50 @@
+.register-page {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100vw;
+	min-height: 100vh;
+	background-color: #fffaf2;
+}
+
+.register-card {
+	background-color: white;
+	padding: 2rem 2.5rem;
+	border-radius: 16px;
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+	width: 100%;
+	max-width: 400px;
+	text-align: center;
+}
+
+.register-title {
+	font-size: 1.8rem;
+	color: #1d2d44;
+	margin-bottom: 1.5rem;
+}
+
+.register-input {
+	width: 100%;
+	padding: 0.9rem 1rem;
+	margin-bottom: 1rem;
+	border: 1px solid #ccc;
+	border-radius: 10px;
+	font-size: 1rem;
+	background-color: #fdfdfd;
+}
+
+.register-button {
+	width: 100%;
+	background-color: #4a7c2f;
+	color: white;
+	border: none;
+	border-radius: 10px;
+	padding: 0.9rem;
+	font-size: 1rem;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.register-button:hover {
+	background-color: #3a6628;
+}

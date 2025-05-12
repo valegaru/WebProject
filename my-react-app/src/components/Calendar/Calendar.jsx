@@ -1,11 +1,13 @@
 import { Box, Typography } from "@mui/material";
-import { events } from "../../data/events";
 import { getHour } from "../../utils/getHour";
 import ExpenseCard from "../Expenses/ExpenseCard/ExpenseCard";
+import { useSelector } from "react-redux";
 
 const Calendar = ({ currency }) => {
   const startHour = 12;
   const endHour = 17;
+  const events = useSelector((state) => state.events.events);
+
 
   const hoursArray = Array.from({ length: endHour - startHour }, (_, i) => startHour + i);
 
@@ -33,7 +35,6 @@ const Calendar = ({ currency }) => {
               gap: 2,
             }}
           >
-            {/* Hour label */}
             <Typography
               sx={{
                 fontWeight: "bold",
@@ -45,7 +46,6 @@ const Calendar = ({ currency }) => {
               {`${hour}:00`}
             </Typography>
 
-            {/* Event (Expense Card) */}
             <Box>
               {event && (
                 <ExpenseCard
