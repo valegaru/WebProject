@@ -1,21 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  user: null
+	userId: localStorage.getItem('userId') || null, // ← Para mantener la sesión al recargar
 };
 
-export const AuthSlice = createSlice({
-  name: 'auth',
-  initialState,
-  reducers: {
-    setUser: (state, action) => {
-      state.user = action.payload;
-    },
-    removeUser: (state) => {
-      state.user = null;
-    }
-  }
+const authSlice = createSlice({
+	name: 'auth',
+	initialState,
+	reducers: {
+		setUserId: (state, action) => {
+			state.userId = action.payload;
+			localStorage.setItem('userId', action.payload); // ← Guardar en localStorage
+		},
+		clearUserId: (state) => {
+			state.userId = null;
+			localStorage.removeItem('userId'); // ← Eliminar del localStorage
+		},
+	},
 });
 
-export const { setUser, removeUser } = AuthSlice.actions;
-export default AuthSlice.reducer;
+export const { setUserId, clearUserId } = authSlice.actions;
+export default authSlice.reducer;
