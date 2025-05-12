@@ -29,28 +29,6 @@ export const fetchUserData = async (userId) => {
   }
 };
 
-export const fetchDayEvents = async (tripID, expenseID, date) => {
-    try {
-      const tripRef = doc(db, "trips", tripID);
-      const expenseRef = doc(collection(tripRef, "expenses"), expenseID);
-      const dayRef = doc(collection(expenseRef, "days"), date);
-      const eventsCollection = collection(dayRef, "events");
-
-      const snapshot = await getDocs(eventsCollection);
-
-      const events = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      console.log("evencitos",events)
-      return events;
-    } catch (error) {
-      console.error("fallaste loco:", error);
-      return [];
-    }
-};
-
-
 // fetchExpensesIDs(tripID) = return expensesIDs array
 // fetchItinerariesIDs(tripID) = return itinerariesIDs array
 // fetchExpense(tripId, expenseID) = db -> trips -> (select trip by tripId) -> expenses -> (select expense by expenseID) -> return expense data
