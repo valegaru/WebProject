@@ -36,35 +36,38 @@ const Register = () => {
 	};
 
 	return (
-		<div className="register-page">
-			<form className="register-form" onSubmit={(e) => e.preventDefault()}>
-				<h2>Crear una cuenta</h2>
+		<div className='register-page'>
+			<div className='register-card'>
+				<h2 className='register-title'>Crear una cuenta</h2>
 				<input
-					type="text"
-					placeholder="Nombre de usuario"
+					className='register-input'
+					type='text'
+					placeholder='Nombre de usuario'
 					value={username}
 					onChange={(e) => setUsername(e.target.value)}
 					required
 				/>
 				<input
-					type="email"
-					placeholder="Correo electrónico"
+					className='register-input'
+					type='email'
+					placeholder='Correo electrónico'
 					value={email}
 					onChange={(e) => setEmail(e.target.value)}
 					required
 				/>
 				<input
-					type="password"
-					placeholder="Contraseña"
+					className='register-input'
+					type='password'
+					placeholder='Contraseña'
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
 					required
 				/>
 				{error && <p style={{ color: 'red', fontSize: '14px' }}>{error}</p>}
-				<button onClick={handleRegister} disabled={loading}>
+				<button className='register-button' onClick={handleRegister} disabled={loading}>
 					{loading ? 'Registrando...' : 'Registrarse'}
 				</button>
-			</form>
+			</div>
 		</div>
 	);
 };
