@@ -13,6 +13,7 @@ import MatchmakerResults from './pages/Matchmaker/MatchmakerResults.jsx';
 import { Provider } from 'react-redux';
 import { store } from './store/store.js';
 import Register from './pages/Register/Register.jsx';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute.jsx';
 
 const App = () => {
 	return (
