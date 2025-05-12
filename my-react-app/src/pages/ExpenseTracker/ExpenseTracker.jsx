@@ -39,7 +39,7 @@ function ExpenseTracker() {
   }
 
   useEffect(() => {
-  async function loadData() {
+  const loadData = async () => {
     console.log("Redux Store:", JSON.stringify(storeState, null, 2));
     
     await fetchUserData(uidBURN);
