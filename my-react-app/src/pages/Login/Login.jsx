@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
-import { setUserId } from '../../store/auth/AuthSlice'; 
+import { setUserId } from '../../store/auth/AuthSlice';
 import { auth } from '../../services/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
@@ -19,7 +19,7 @@ const Login = () => {
 
 			// Guardamos el ID del usuario en Redux y localStorage
 			dispatch(setUserId(user.uid));
-			navigate('/'); // Redirigir al home si todo salió bien
+			navigate('/home'); // Redirigir al home si todo salió bien
 		} catch (error) {
 			setError('Credenciales inválidas');
 			console.error(error.code, error.message);
