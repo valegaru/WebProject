@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { setUserId } from '../../store/auth/AuthSlice';
 import { auth } from '../../services/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import './Login.css'; // 👈 Importa los estilos
 
 const Login = () => {
 	const dispatch = useDispatch();
@@ -16,10 +17,8 @@ const Login = () => {
 		try {
 			const userCredential = await signInWithEmailAndPassword(auth, email, password);
 			const user = userCredential.user;
-
-			// Guardamos el ID del usuario en Redux y localStorage
 			dispatch(setUserId(user.uid));
-			navigate('/home'); // Redirigir al home si todo salió bien
+			navigate('/home');
 		} catch (error) {
 			setError('Credenciales inválidas');
 			console.error(error.code, error.message);
@@ -27,11 +26,23 @@ const Login = () => {
 	};
 
 	return (
-		<div>
-			<input type='text' onChange={(e) => setEmail(e.target.value)} placeholder='User email' value={email} />
-			<input type='password' onChange={(e) => setPassword(e.target.value)} placeholder='Password' value={password} />
-			<button onClick={handleLogin}>Login</button>
-			{error && <p style={{ color: 'red' }}>{error}</p>} {/* Muestra el error */}
+		<div id='login-container'>
+			<input
+				className='login-input'
+				type='text'
+				onChange={(e) => setEmail(e.target.value)}
+				placeholder='Correo electrónico'
+				value={email}
+			/>
+			<input
+				className='login-input'
+				type='password'
+				onChange={(e) => setPassword(e.target.value)}
+				placeholder='Contraseña'
+				value={password}
+			/>
+			<button id='login-button' onClick={handleLogin}>Iniciar sesión</button>
+			{error && <p id='login-error'>{error}</p>}
 		</div>
 	);
 };
