@@ -3,6 +3,7 @@ import './Home.css';
 import Navbar from '../../components/Navbar/Navbar';
 import CardList from '../../components/cardList/CardList';
 import mapImage from '../../assets/map.png';
+import LogoutButton from '../../components/LogoutButton/LogoutButton';
 
 import restaurants from '../../assets/restaurants.png';
 import activities from '../../assets/activities.png';
@@ -36,7 +37,7 @@ const Home = () => {
 		{ image: newYork, label: 'New York' },
 	];
 
-	const storeState = useSelector((state) => state); 
+	const storeState = useSelector((state) => state);
 	useEffect(()=>{
 		console.log("Redux Store:", JSON.stringify(storeState, null, 2));
 	},[])
@@ -44,7 +45,7 @@ const Home = () => {
 	return (
 		<div className='home-container'>
 			<Navbar/>
-
+<LogoutButton/>
 			<div className='map-section'>
 				<img src={mapImage} alt='World Map' className='map-image' />
 				<input type='text' placeholder='Search for a location' className='search-bar' />

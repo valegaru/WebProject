@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { clearUserId } from "../redux/slices/authSlice";
+import { clearUserId } from "../../store/auth/AuthSlice";
 import { useNavigate } from "react-router-dom";
 
 export default function LogoutButton() {
