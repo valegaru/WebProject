@@ -15,6 +15,8 @@ import { store } from './store/store.js';
 import Register from './pages/Register/Register.jsx';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute.jsx';
 import Profile from './pages/Profile/Profile.jsx';
+import TripCreation from './pages/TripCreation/TripCreation.jsx';
+
 const App = () => {
 	return (
 		<Provider store={store}>
@@ -91,10 +93,18 @@ const App = () => {
 						}
 					/>
 					<Route
-						path='/Profile'
+						path='/profile'
 						element={
 							<PrivateRoute>
 								< Profile />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path='/tripcreation'
+						element={
+							<PrivateRoute>
+								< TripCreation />
 							</PrivateRoute>
 						}
 					/>
