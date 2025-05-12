@@ -11,15 +11,6 @@ export const addNewExpense= async ({ uidUser, name, price }) => {
     console.log('Document written with ID: ', docRef.id);
 };
 
-export const fetchExpensesByDate = async (dateString) => {
-    const snapshot = await getDocs(query(
-      collection(db,  "expenses"),
-      where("date", "==", dateString)
-    ));
-
-    return snapshot.docs.map(doc => doc.data());
-};
-
 export const fetchUserData = async (userId) => {
   try {
     const userRef = doc(db, "users", userId);
@@ -73,9 +64,15 @@ export const fetchDayEvents = async (tripID, expenseID, date) => {
 };
 
 
-// fetchUserData(userId) = db -> users -> (select user by userId) -> retunr data
-// fetchTripsFromUser(fetchUserDate(userId)) = db -> users -> (select user by userId) -> tripIDs -> (return all tripsIDs)
-// fetchExpensesIDs(fetchTripsIDs()) = return expensesIDs array
-// fetchItinerariesIDs(fetchTripsIDs()) = return itinerariesIDs array
+// fetchExpensesIDs(tripID) = return expensesIDs array
+// fetchItinerariesIDs(tripID) = return itinerariesIDs array
 // fetchExpense(tripId, expenseID) = db -> trips -> (select trip by tripId) -> expenses -> (select expense by expenseID) -> return expense data
 // fetchItinerary(tripId, itineraryID) = db -> trips -> (select trip by tripId -> intinerary -> (select itinerary by itineraryID) -> return itinerary data
+
+// addEvent() =
+// updateEvent() =
+// deleteEvent() =
+
+// addTrip() =
+
+// updateTrip() =  
