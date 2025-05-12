@@ -45,7 +45,6 @@ const Home = () => {
 	return (
 		<div className='home-container'>
 			<Navbar/>
-<LogoutButton/>
 			<div className='map-section'>
 				<img src={mapImage} alt='World Map' className='map-image' />
 				<input type='text' placeholder='Search for a location' className='search-bar' />
