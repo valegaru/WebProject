@@ -63,7 +63,7 @@ export const fetchTripsFromUser = async (userId) => {
   }
 };
 
-// addTrip() = db -> trips -> (add fields: description, destination, startDate, endDate, name, participants[], add collections: expenses, itineraries)
+// addTrip() = db -> trips -> (add fields: description, destination, startDate, endDate, name, participants[], add collections: expenses, itineraries, addtripid(()=>(db->users(matchUserId)->addTrip id to tripsIDs collection)))
 
 // updateTrip() =  
 
