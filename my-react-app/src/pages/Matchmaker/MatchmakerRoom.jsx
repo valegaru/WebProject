@@ -17,14 +17,16 @@ function MatchmakerRoom() {
 	return (
 		<>
 			<Navbar />
-			<div className="matchmaker-room-container">
-				<StepsProgressBar currentStep={1} />
-				<div className="main-content">
-					<ParticipantList participants={participants} />
+			<div className='matchmaker-room-container'>
+				<StepsProgressBar className='progress-bar' currentStep={1} sx={{ order: 1 }}/>
+				<div className='main-content'>
+					<ParticipantList className='participants' participants={participants} sx={{ order: 3 }} />
 					<RoomInfoPanel
-						code="135783"
-						qrImage="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg"
-						buttonRoute="/questions"
+						className='qr'
+						code='135783'
+						qrImage='https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg'
+						buttonRoute='/questions'
+						sx={{ order: 2 }}
 					/>
 				</div>
 			</div>

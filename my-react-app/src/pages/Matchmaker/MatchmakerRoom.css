@@ -1,5 +1,5 @@
 .matchmaker-room-container {
-  margin-top:100px;
+	margin-top: 100px;
 	background-color: #fdf7ed; /* color de fondo */
 	min-height: 100vh; /* ocupa toda la altura */
 	width: 100vw; /* ocupa toda la anchura */
@@ -25,4 +25,25 @@ body {
 	grid-template-columns: 2fr 1fr;
 	gap: 10rem;
 	align-items: flex-start;
+}
+
+@media (max-width: 768px) {
+	.matchmaker-room-container,
+	.main-content {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.participants {
+		display: flex;
+		flex-direction: column;
+
+		.progress-bar {
+			order: 1;
+		}
+
+		.qr{
+			order: 2;
+		}
+	}
 }

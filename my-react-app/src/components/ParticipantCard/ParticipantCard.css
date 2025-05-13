@@ -21,3 +21,10 @@
 	color: #1f2937;
 	font-size: 1rem;
 }
+
+@media (max-width: 768px) {
+	.participant-card {
+		display: flex;
+		flex-direction: column;
+	}
+}

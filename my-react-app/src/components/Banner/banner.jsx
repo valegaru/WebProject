@@ -21,7 +21,7 @@ const Banner = ({ title, subtitle, description, buttonText, backgroundImage, but
 					{buttonText} <strong>Now</strong>
 				</button>
 			</div>
-			<div className='sticker'>✈️ Postal Trip</div>
+			{/* <div className='sticker'>✈️ Postal Trip</div> */}
 		</section>
 	);
 };
