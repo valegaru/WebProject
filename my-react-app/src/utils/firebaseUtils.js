@@ -29,6 +29,44 @@ export const fetchUserData = async (userId) => {
   }
 };
 
+export const fetchExpensesDayEvents = async (tripID, expenseID, date) => {
+    try {
+      const tripRef = doc(db, "trips", tripID);
+      const expenseRef = doc(collection(tripRef, "expenses"), expenseID);
+      const dayRef = doc(collection(expenseRef, "days"), date);
+      const eventsCollection = collection(dayRef, "events");
+
+      const snapshot = await getDocs(eventsCollection);
+
+      const events = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      console.log("evencitos",events)
+      return events;
+    } catch (error) {
+      console.error("fallaste loco:", error);
+      return [];
+    }
+};
+
+export const fetchTripsFromUser = async (userId) => {
+  try {
+    const userRef = doc(db, "users", userId);
+    const tripCollectionRef = collection(userRef, "tripsIDs");
+    const tripSnapshot = await getDocs(tripCollectionRef);
+    console.log("fetCHY", tripSnapshot.docs.map(doc => doc.data()));
+    return tripSnapshot;
+  } catch (error) {
+    console.error("Error fetching trips from user:", error);
+    return [];
+  }
+};
+
+// addTrip() = db -> trips -> (add fields: description, destination, startDate, endDate, name, participants[], add collections: expenses, itineraries)
+
+// updateTrip() =  
+
 // fetchExpensesIDs(tripID) = return expensesIDs array
 // fetchItinerariesIDs(tripID) = return itinerariesIDs array
 // fetchExpense(tripId, expenseID) = db -> trips -> (select trip by tripId) -> expenses -> (select expense by expenseID) -> return expense data
