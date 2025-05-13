@@ -89,41 +89,34 @@
 		justify-content: space-between;
 	}
 
-	/* Asegurarse de que la imagen del logo esté al centro en mobile */
 	.logo-container {
-		order: 3; /* Mueve el logo a la última posición */
-		flex: 1;
+		order: 3;
 		justify-content: center;
-    align-items: center;
+		align-items: center;
 	}
 
-	/* Esconde el nav-title en la versión móvil */
 	.nav-title {
 		display: none;
 	}
 
-	/* Reorganiza el orden de los elementos */
 	.cta-button {
-		order: 4; /* Último elemento en mobile */
+		order: 4;
 	}
 
-	/* Cambia el orden del menú y la foto de perfil en mobile */
 	.profile-pic {
-		order: 2; /* Foto de perfil después del menú */
+		order: 2;
 	}
 
 	.hamburger-menu {
-		order: 1; /* Menú de hamburguesa primero */
+		order: 1;
 	}
 
-	/* Asegúrate de que el icono de menú esté bien alineado */
 	.menu-item {
 		order: 2;
 	}
 
-	/* Stack them vertically and reorder */
 	.logo-image {
-		width: 40px; /* Ajusta el tamaño de la imagen logo en mobile */
+		width: 40px;
 		height: 40px;
 	}
 }

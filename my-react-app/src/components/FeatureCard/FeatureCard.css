@@ -5,7 +5,7 @@
 	padding: 10rem 10rem;
 	position: relative;
 	gap: 3rem;
-	background-color: #fdf7ed;
+	/* background-color: #fdf7ed; */
 }
 
 .feature-card.reverse {
@@ -58,4 +58,17 @@
 	right: 100px;
 	top: 30%;
 	transform: translateY(-50%) scale(1.5); /* cambiar la escala de los stickers */
+}
+
+@media (max-width: 768px) {
+	.feature-card {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-between;
+		padding: 10rem 10rem;
+		position: relative;
+		gap: 3rem;
+		/* background-color: #fdf7ed; */
+	}
 }

@@ -78,3 +78,21 @@
 	z-index: 1;
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
+
+@media (max-width: 768px) {
+	/* .banner {
+		display: flex;
+		flex-direction: column;
+	} */
+	.banner {
+		padding: 2rem 2rem;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: center;
+		text-align: left;
+	}
+
+	.banner-button {
+		width: 100px;
+	}
+}
