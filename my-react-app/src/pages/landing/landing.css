@@ -1,0 +1,70 @@
+/* landing.css */
+
+/* Banner Section */
+.banner {
+	width: 100vw;
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 3rem 5rem;
+	background-image: url('../../assets/bannerimage.png');
+	background-size: cover;
+	background-position: center;
+	position: relative;
+	color: #1e1e1e;
+	overflow: hidden;
+	box-sizing: border-box;
+}
+
+/* Feature Cards */
+.feature-card {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 6rem 3rem;
+	position: relative;
+	gap: 3rem;
+	background-color: #fdf7ed;
+	border-radius: 1rem;
+}
+
+/* Testimonial Section */
+.testimonial-section {
+	background-color: #fdf3e5;
+	padding: 3rem 1.5rem;
+}
+
+/* Call to Action Footer */
+.cta-footer {
+	position: relative;
+	width: 100%;
+	height: 300px;
+	background-image: url('../../assets/footer.png');
+	background-size: cover;
+	background-position: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+	.banner {
+		padding: 2rem 2rem;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: center;
+		text-align: left;
+	}
+
+	.feature-card {
+		padding: 4rem 2rem;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	.cta-footer {
+		height: 250px;
+	}
+}

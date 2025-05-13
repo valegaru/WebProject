@@ -1,4 +1,3 @@
-// Navbar.jsx
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
@@ -37,11 +36,13 @@ const Navbar = () => {
 	return (
 		<AppBar elevation={0} sx={{ backgroundColor: '#f4e4c5', px: 4, py: 1 }} className='navbar'>
 			<Toolbar disableGutters sx={{ justifyContent: 'space-between', width: '100%' }}>
+				{/* Logo and title (changes order in mobile) */}
 				<Box className='logo-container'>
 					<img src='/src/assets/logo.png' className='logo-image' />
 					{!isMobile && <p className='nav-title'>Postal Trip</p>}
 				</Box>
 
+				{/* Navigation links (hidden in mobile) */}
 				{!isMobile && (
 					<Stack direction='row' spacing={5} alignItems='center'>
 						<NavLink to='/' className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
@@ -56,7 +57,9 @@ const Navbar = () => {
 					</Stack>
 				)}
 
+				{/* Right items stack */}
 				<Stack direction='row' spacing={2} alignItems='center'>
+					{/* Mobile Menu and Profile */}
 					{isMobile && (
 						<>
 							<IconButton
@@ -65,6 +68,7 @@ const Navbar = () => {
 								onClick={handleMenuOpen}
 								aria-controls='mobile-menu'
 								aria-haspopup='true'
+								sx={{ order: 1 }} // Position it first in mobile
 							>
 								<MenuIcon sx={{ color: '#647e37', fontSize: 32 }} />
 							</IconButton>
@@ -80,17 +84,36 @@ const Navbar = () => {
 									Destination Matchmaker
 								</MenuItem>
 							</Menu>
+
+							<ProfilePic
+								name='Juan'
+								imgUrl='https://github.com/valegaru/WebProject/blob/main/my-react-app/src/assets/user1.png?raw=true'
+								sx={{ order: 2 }} // Position profile picture second in mobile
+							/>
+
+							<Button
+								variant='contained'
+								className='cta-button'
+								onClick={handleCreateTrip}
+								sx={{ order: 4 }} // Position the button last in mobile
+							>
+								Create New Trip
+							</Button>
 						</>
 					)}
 
-					<ProfilePic
-						name='Juan'
-						imgUrl='https://github.com/valegaru/WebProject/blob/main/my-react-app/src/assets/user1.png?raw=true'
-					/>
-
-					<Button variant='contained' className='cta-button' onClick={handleCreateTrip}>
-						Create New Trip
-					</Button>
+					{/* Desktop Profile and Button */}
+					{!isMobile && (
+						<>
+							<ProfilePic
+								name='Juan'
+								imgUrl='https://github.com/valegaru/WebProject/blob/main/my-react-app/src/assets/user1.png?raw=true'
+							/>
+							<Button variant='contained' className='cta-button' onClick={handleCreateTrip}>
+								Create New Trip
+							</Button>
+						</>
+					)}
 				</Stack>
 			</Toolbar>
 		</AppBar>
@@ -196,7 +219,7 @@ export default Navbar;
 //             className="cta-button"
 //             onClick={handleCreateTrip}
 //           >
-//             Create New Trip
+//             New Trip
 //           </Button>
 //         </Stack>
 //       </Toolbar>
