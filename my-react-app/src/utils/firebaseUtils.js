@@ -1,6 +1,6 @@
 import { db } from '../services/firebase';
 import { addDoc, collection } from 'firebase/firestore';
-import { doc, getDoc, getDocs, query, where } from 'firebase/firestore';
+import { doc, getDoc, getDocs, addDoc, updateDoc, arrayUnion, query, where } from 'firebase/firestore';
 
 export const addNewExpense= async ({ uidUser, name, price }) => {
     const docRef = await addDoc(collection(db, 'expense'), {
@@ -62,6 +62,25 @@ export const fetchTripsFromUser = async (userId) => {
     return [];
   }
 };
+
+export const addTrip = async ({userId,description,destination,startDate,endDate,name,participants}) => {
+  
+  try {
+    const tripData = {description,destination,startDate,endDate,name,participants};
+    const tripRef = await addDoc(collection(db, "trips"), tripData);
+
+    const userRef = doc(db, "users", userId);
+    await updateDoc(userRef, {
+      tripIDs: arrayUnion(tripRef.id)
+    });
+
+    return tripRef.id;
+  } catch (error) {
+    console.error("Error adding trip:", error);
+    return null;
+  }
+};
+
 
 // addTrip() = db -> trips -> (add fields: description, destination, startDate, endDate, name, participants[], add collections: expenses, itineraries, addtripid(()=>(db->users(matchUserId)->addTrip id to tripsIDs collection)))
 
