@@ -44,3 +44,9 @@
 .cta-btn:hover {
 	background-color: #3a621e;
 }
+
+@media (max-width: 768px) {
+.cta-footer {
+	height: 250px;
+width: 600px;}
+}

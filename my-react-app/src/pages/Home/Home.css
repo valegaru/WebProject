@@ -171,9 +171,9 @@
 	}
 
 	.search-bar {
-		width: 80%;
-		height: 60px;
-		left: 50%;
+		width: 40%;
+		height: 50px;
+		left: 25%;
 		top: 16px;
 		transform: translateX(-50%);
 		font-size: 14px;

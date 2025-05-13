@@ -1,6 +1,9 @@
-/* landing.css */
+*{
+p{font-size: 16px;}
+}
 
-/* Banner Section */
+/* landing.css
+
 .banner {
 	width: 100vw;
 	min-height: 100vh;
@@ -17,7 +20,7 @@
 	box-sizing: border-box;
 }
 
-/* Feature Cards */
+
 .feature-card {
 	display: flex;
 	align-items: center;
@@ -29,13 +32,13 @@
 	border-radius: 1rem;
 }
 
-/* Testimonial Section */
+
 .testimonial-section {
 	background-color: #fdf3e5;
 	padding: 3rem 1.5rem;
 }
 
-/* Call to Action Footer */
+
 .cta-footer {
 	position: relative;
 	width: 100%;
@@ -48,7 +51,7 @@
 	align-items: center;
 }
 
-/* Responsive Adjustments */
+
 @media (max-width: 768px) {
 	.banner {
 		padding: 2rem 2rem;
@@ -67,4 +70,4 @@
 	.cta-footer {
 		height: 250px;
 	}
-}
+} */
