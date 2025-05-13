@@ -8,11 +8,9 @@ import BudgetRange from "../../components/Expenses/BudgetRange/BudgetRange";
 import Calendar from "../../components/Calendar/Calendar";
 import CurrencyToggleButton from "../../components/CurrencyToggleButton/CurrencyToggleButton";
 import { Typography } from "@mui/material";
-import { addNewExpense, fetchUserData } from "../../utils/firebaseUtils";
+import { addNewExpense, fetchExpensesDayEvents, fetchTripsFromUser, fetchUserData } from "../../utils/firebaseUtils";
 import { useSelector } from "react-redux";
 import { auth } from "../../services/firebase";
-import { fetchTripsFromUser } from "../../utils/tripsUtils";
-import { fetchExpensesDayEvents } from "../../utils/expensesUtils";
 import { addEvent } from "../../store/eventSlice/EventSlice";
 
 
