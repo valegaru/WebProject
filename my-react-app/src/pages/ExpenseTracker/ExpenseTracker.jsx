@@ -14,7 +14,7 @@ import { auth } from "../../services/firebase";
 import { addEvent } from "../../store/eventSlice/EventSlice";
 
 
-function ExpenseTracker() {
+const ExpenseTracker = () => {
   const dispatch = useDispatch();
 
   const [currency, setCurrency] = useState("COP");

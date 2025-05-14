@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Box, IconButton, Paper, Typography, Stack } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSelectedDate } from '../../store/dateSlice/DateSlice';
+
 
 const allDays = [
   { date: '2025-04-07', day: 'Mon' },
@@ -18,6 +21,10 @@ const allDays = [
 const VISIBLE_COUNT = 5;
 
 const DateCarousel = () => {
+
+  const dispatch = useDispatch();
+  const date = useSelector((state) => state.date.selectedDate)
+
   const [startIndex, setStartIndex] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -34,6 +41,10 @@ const DateCarousel = () => {
     );
   };
 
+  const dateClick = (date) => {
+    dispatch(setSelectedDate(date))
+  }
+
   return (
     <Stack direction="row" alignItems="center" spacing={1}>
       <IconButton onClick={handlePrev} disabled={startIndex === 0}>
@@ -47,7 +58,10 @@ const DateCarousel = () => {
         return (
           <Paper
             key={globalIndex}
-            onClick={() => setSelectedIndex(globalIndex)}
+            onClick={() => {
+              dateClick(d.date+"T00:00")
+              console.log(date)
+              setSelectedIndex(globalIndex)}}
             sx={{
               width: 64,
               height: 64,
