@@ -50,6 +50,36 @@ export const fetchExpensesDayEvents = async (tripID, expenseID, date) => {
     }
 };
 
+export const addExpenseEvent = async (tripID, expenseID, date, eventData) => {
+  try {
+    const dayRef = doc(db, "trips", tripID, "expenses", expenseID, "days", date);
+    const daySnap = await getDoc(dayRef);
+
+    if (!daySnap.exists()) {
+      await setDoc(dayRef, {}); 
+    }
+
+    const eventRef = doc(collection(dayRef, "events"));
+    await setDoc(eventRef, eventData);
+
+    return eventRef.id;
+  } catch (error) {
+    console.error("Error adding expense event:", error);
+    return null;
+  }
+};
+
+export const updateExpenseEvent = async (tripID, expenseID, date, eventID, updatedData) => {
+  try {
+    const eventRef = doc(db, "trips", tripID, "expenses", expenseID, "days", date, "events", eventID);
+    await updateDoc(eventRef, updatedData);
+    return true;
+  } catch (error) {
+    console.error("Error updating expense event:", error);
+    return false;
+  }
+};
+
 export const fetchTripsFromUser = async (userId) => {
   try {
     const userRef = doc(db, "users", userId);
