@@ -3,6 +3,7 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../../services/firebase';
 import Navbar from '../../components/Navbar/Navbar';
 import LogoutButton from '../../components/LogoutButton/LogoutButton';
+import './Profile.css';
 
 function Profile() {
 	const [userData, setUserData] = useState({ username: '', email: '', photoUrl: '' });
@@ -19,7 +20,7 @@ function Profile() {
 				const checkAuth = () =>
 					new Promise((resolve) => {
 						const unsubscribe = auth.onAuthStateChanged((user) => {
-							unsubscribe(); // Detener el listener después de obtener el usuario
+							unsubscribe();
 							resolve(user);
 						});
 					});
@@ -61,7 +62,7 @@ function Profile() {
 
 		const formData = new FormData();
 		formData.append('file', file);
-		formData.append('upload_preset', 'ml_default'); // Asegúrate que sea unsigned
+		formData.append('upload_preset', 'ml_default');
 
 		try {
 			const res = await fetch('https://api.cloudinary.com/v1_1/dbx6eatsd/image/upload', {
@@ -74,13 +75,8 @@ function Profile() {
 				const user = auth.currentUser;
 				if (user) {
 					const userRef = doc(db, 'users', user.uid);
-					await updateDoc(userRef, {
-						photoUrl: data.secure_url,
-					});
-					setUserData((prev) => ({
-						...prev,
-						photoUrl: data.secure_url,
-					}));
+					await updateDoc(userRef, { photoUrl: data.secure_url });
+					setUserData((prev) => ({ ...prev, photoUrl: data.secure_url }));
 					setUploadStatus('Imagen subida correctamente.');
 				} else {
 					setUploadStatus('Error: Usuario no autenticado.');
@@ -93,58 +89,49 @@ function Profile() {
 			setUploadStatus('Error al subir la imagen.');
 		} finally {
 			setUploading(false);
-			setTimeout(() => setUploadStatus(''), 4000); // Borra mensaje después de 4s
+			setTimeout(() => setUploadStatus(''), 4000);
 		}
 	};
 
 	const defaultImage = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+
 	return (
 		<>
 			<Navbar />
-			<div style={{ textAlign: 'center', marginTop: '2rem' }}>
-				<h2>Perfil de usuario</h2>
+			<div className="profile-page">
+				<div className="profile-card">
+					<h2 className="profile-title">Tu Perfil</h2>
 
-				{loading ? (
-					<p>Cargando perfil...</p>
-				) : error ? (
-					<p style={{ color: 'red' }}>{error}</p>
-				) : (
-					<>
-						<div
-							style={{
-								width: '200px',
-								height: '200px',
-								borderRadius: '50%',
-								overflow: 'hidden',
-								margin: '1rem auto',
-								border: '2px solid #ccc',
-							}}
-						>
-							<img
-								src={userData.photoUrl || defaultImage}
-								alt='Foto de perfil'
-								style={{
-									width: '100%',
-									height: '100%',
-									objectFit: 'cover',
-								}}
+					{loading ? (
+						<p>Cargando perfil...</p>
+					) : error ? (
+						<p className="profile-error">{error}</p>
+					) : (
+						<>
+							<div className="profile-avatar">
+								<img src={userData.photoUrl || defaultImage} alt="Foto de perfil" />
+							</div>
+
+							<input
+								type="file"
+								accept="image/*"
+								onChange={handleImageUpload}
+								disabled={uploading}
+								className="profile-input-file"
 							/>
-						</div>
 
-						<input type='file' accept='image/*' onChange={handleImageUpload} disabled={uploading} />
-						{uploading && <p>Subiendo imagen...</p>}
-						{uploadStatus && <p>{uploadStatus}</p>}
+							{uploading && <p className="profile-status">Subiendo imagen...</p>}
+							{uploadStatus && <p className="profile-status">{uploadStatus}</p>}
 
-						<p>
-							<strong>Nombre de usuario:</strong> {userData.username}
-						</p>
-						<p>
-							<strong>Email:</strong> {userData.email}
-						</p>
+							<p className="profile-info"><strong>Usuario:</strong> {userData.username}</p>
+							<p className="profile-info"><strong>Email:</strong> {userData.email}</p>
 
-						<LogoutButton />
-					</>
-				)}
+							<div style={{ marginTop: '1.5rem' }}>
+								<LogoutButton />
+							</div>
+						</>
+					)}
+				</div>
 			</div>
 		</>
 	);
