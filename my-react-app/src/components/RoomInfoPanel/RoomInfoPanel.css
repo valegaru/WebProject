@@ -1,33 +1,39 @@
 .room-info-panel {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
 }
 
 .qr-box {
-  width: 180px;
-  height: 180px;
-  background-color: #d4d4d4; /* Tailwind gray-300 */
-  border-radius: 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-size: cover;
-  background-position: center;
+	width: 180px;
+	height: 180px;
+	background-color: #d4d4d4; /* Tailwind gray-300 */
+	border-radius: 1.5rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-size: cover;
+	background-position: center;
 }
 
 .qr-placeholder {
-  color: #1f2937;
-  font-size: 0.9rem;
-  font-weight: 500;
+	color: #1f2937;
+	font-size: 0.9rem;
+	font-weight: 500;
 }
 
 .code-box {
-  background-color: #e5e7eb; /* Tailwind gray-200 */
-  border-radius: 0.75rem;
-  padding: 0.6rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #1f2937;
+	background-color: #e5e7eb; /* Tailwind gray-200 */
+	border-radius: 0.75rem;
+	padding: 0.6rem 1.5rem;
+	font-size: 1rem;
+	font-weight: 700;
+	color: #1f2937;
+}
+
+@media (max-width: 768px) {
+	.banner-button {
+		width: 100px;
+	}
 }

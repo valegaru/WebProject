@@ -11,8 +11,7 @@ const CardCity = ({ city, onDislike, onLike }) => {
 				<img src={city.image} alt={city.name} className='city-image' />
 				<div className='image-gradient' />
 				<h2 className='city-name-overlay'>
-					{city.name}{' '}
-					{city.flag && <img src={city.flag} alt='flag' className='flag-icon' />}
+					{city.name} {city.flag && <img src={city.flag} alt='flag' className='flag-icon' />}
 				</h2>
 			</div>
 
@@ -20,10 +19,18 @@ const CardCity = ({ city, onDislike, onLike }) => {
 				<div className='city-sections-row'>
 					<div className='section description-section'>
 						<h3>Description</h3>
-						<p><strong>Aesthetic:</strong> {city.aesthetic}</p>
-						<p><strong>Vibe:</strong> {city.vibe}</p>
-						<p><strong>Gastronomy:</strong> {city.gastronomy}</p>
-						<p><strong>Renowned for:</strong> {city.renowned}</p>
+						<p>
+							<strong>Aesthetic:</strong> {city.aesthetic}
+						</p>
+						<p>
+							<strong>Vibe:</strong> {city.vibe}
+						</p>
+						<p>
+							<strong>Gastronomy:</strong> {city.gastronomy}
+						</p>
+						<p>
+							<strong>Renowned for:</strong> {city.renowned}
+						</p>
 					</div>
 
 					<InfoList title='Activities' items={city.activities} />

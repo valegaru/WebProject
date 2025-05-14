@@ -43,3 +43,21 @@
 	left: 50%;
 	transform: translateX(-50%);
 }
+
+@media (max-width: 768px) {
+	.info-cards {
+		display: flex;
+		overflow-x: auto;
+		flex-wrap: nowrap;
+		gap: 1rem;
+		padding-bottom: 1rem;
+		scroll-snap-type: x mandatory;
+		scroll-padding: 1rem;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.info-cards > * {
+		flex: 0 0 calc(50% - 1rem); /* 2 tarjetas visibles */
+		scroll-snap-align: start;
+	}
+}

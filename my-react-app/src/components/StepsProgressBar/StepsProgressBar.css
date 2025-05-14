@@ -28,7 +28,7 @@
 .active-step .step-label,
 .active-step .step-number {
 	font-weight: 800;
-	color:  #4a7c2f;
+	color: #4a7c2f;
 }
 
 .completed-step .step-label,
@@ -41,4 +41,13 @@
 .inactive-step .step-number {
 	color: #5d7e4c; /* Tailwind's gray-400 */
 	font-weight: 400;
+}
+
+@media (max-width: 768px) {
+	.steps-container {
+		order: 1;
+		font-size: 20px;
+		display: flex;
+		flex-direction: column;
+	}
 }
