@@ -8,10 +8,11 @@ import BudgetRange from "../../components/Expenses/BudgetRange/BudgetRange";
 import Calendar from "../../components/Calendar/Calendar";
 import CurrencyToggleButton from "../../components/CurrencyToggleButton/CurrencyToggleButton";
 import { Typography } from "@mui/material";
-import { addNewExpense, fetchExpensesDayEvents, fetchTripsFromUser, fetchUserData } from "../../utils/firebaseUtils";
+import { addNewExpense, addTrip, fetchExpensesDayEvents, fetchTripsFromUser, fetchUserData } from "../../utils/firebaseUtils";
 import { useSelector } from "react-redux";
 import { auth } from "../../services/firebase";
 import { addEvent } from "../../store/eventSlice/EventSlice";
+
 
 
 const ExpenseTracker = () => {
@@ -95,7 +96,8 @@ const ExpenseTracker = () => {
 
       <div className="carousel-and-button">
         <DateCarousel/>
-        <CustomButton label="ADD EXPENSE" onClick={() => addExpense({ uidUser: uid, name: "22", price: "er" })}/>
+        <CustomButton label="ADD EXPENSE" onClick={() => {addExpense({ uidUser: uid, name: "22", price: "er" })
+        addTrip(uid, "Holi", "your mom", date, date, "BRAZIL TRIP", "Just me");}}/>
       </div>
 
       <Calendar/></>)}

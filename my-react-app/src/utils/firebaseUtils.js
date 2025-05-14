@@ -1,7 +1,6 @@
 import { db } from '../services/firebase';
 import { collection } from 'firebase/firestore';
-import { doc, getDoc, getDocs, addDoc, updateDoc, arrayUnion, query, where } from 'firebase/firestore';
-
+import { doc, getDoc, getDocs, addDoc, updateDoc, arrayUnion, query, where, setDoc} from 'firebase/firestore';
 export const addNewExpense= async ({ uidUser, name, price }) => {
     const docRef = await addDoc(collection(db, 'expense'), {
       uidUser,
@@ -106,6 +105,7 @@ export const addTrip = async (userId, description, destination, startDate, endDa
       name,
       participants,
     });
+    
 
     const expensesRef = doc(collection(tripRef, "expenses"));
     await setDoc(expensesRef, {});
@@ -113,9 +113,9 @@ export const addTrip = async (userId, description, destination, startDate, endDa
     const itineraryRef = doc(collection(tripRef, "itinerary"));
     await setDoc(itineraryRef, {});
 
-    const userRef = doc(db, "users", userId);
-    await updateDoc(userRef, {
-      tripIDs: arrayUnion(tripRef.id),
+    const tripIDRef = doc(collection(db, `users/${userId}/tripsIDs`));
+    await setDoc(tripIDRef, {
+    tripsIDs: tripRef.id,
     });
 
     return tripRef.id;
