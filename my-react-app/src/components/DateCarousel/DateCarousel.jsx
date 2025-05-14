@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, IconButton, Paper, Typography, Stack } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedDate } from '../../store/dateSlice/DateSlice';
+import { addEvent } from '../../store/eventSlice/EventSlice';
 
 
 const allDays = [
