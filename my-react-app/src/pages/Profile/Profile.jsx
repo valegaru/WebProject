@@ -97,8 +97,7 @@ function Profile() {
 		}
 	};
 
-	const defaultImage = 'https://res.cloudinary.com/dbx6eatsd/image/upload/v1716075265/default-avatar.png';
-
+	const defaultImage = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
 	return (
 		<>
 			<Navbar />
