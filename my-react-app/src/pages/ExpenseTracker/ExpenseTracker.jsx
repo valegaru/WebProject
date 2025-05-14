@@ -85,8 +85,8 @@ const ExpenseTracker = () => {
           </div>
 
           <div className="budget-section">
-            <BudgetRange label="individual" min={individualBudget} max={individualBudget} currency={currency}/>
-            <BudgetRange label="group" min={groupBudget} max={groupBudget} currency={currency}/>
+            <BudgetRange label="individual" min={individualBudget} max={individualBudget}/>
+            <BudgetRange label="group" min={groupBudget} max={groupBudget}/>
 
           </div>
 
