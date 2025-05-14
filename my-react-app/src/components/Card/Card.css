@@ -96,7 +96,7 @@ p {
 
 @media screen and (max-width: 768px) {
 	.custom-card {
-		width: 100%; /* que se adapte al ancho del contenedor */
+		width: 100%;
 		border-radius: 0 16px 16px 16px;
 		margin-bottom: 1rem;
 	}
@@ -115,8 +115,7 @@ p {
 		border-radius: 0 0 16px 16px;
 	}
 
-	.trip-info,
-	.info-label {
+	.trip-info {
 		flex-direction: column;
 		gap: 0.4rem;
 		text-align: left;

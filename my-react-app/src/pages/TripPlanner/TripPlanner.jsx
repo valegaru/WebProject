@@ -1,7 +1,7 @@
 import React from 'react';
 import './tripPlanner.css';
 import Navbar from '../../components/Navbar/Navbar';
-import CardList from '../../components/cardList/CardList';
+import CardList from '../../components/cardList/cardList';
 
 import expenseImg from '../../assets/expense.png';
 import itineraryImg from '../../assets/itinerary.png';
