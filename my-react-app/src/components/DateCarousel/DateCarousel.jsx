@@ -3,16 +3,17 @@ import { Box, IconButton, Paper, Typography, Stack } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 
 const allDays = [
-  { date: '07', day: 'Sun' },
-  { date: '08', day: 'Mon' },
-  { date: '09', day: 'Tue' },
-  { date: '10', day: 'Wed' },
-  { date: '11', day: 'Thu' },
-  { date: '12', day: 'Fri' },
-  { date: '13', day: 'Sat' },
-  { date: '14', day: 'Sun' },
-  { date: '15', day: 'Mon' },
+  { date: '2025-04-07', day: 'Mon' },
+  { date: '2025-04-08', day: 'Tue' },
+  { date: '2025-04-09', day: 'Wed' },
+  { date: '2025-04-10', day: 'Thu' },
+  { date: '2025-04-11', day: 'Fri' },
+  { date: '2025-04-12', day: 'Sat' },
+  { date: '2025-04-13', day: 'Sun' },
+  { date: '2025-04-14', day: 'Mon' },
+  { date: '2025-04-15', day: 'Tue' },
 ];
+
 
 const VISIBLE_COUNT = 5;
 
@@ -63,9 +64,10 @@ const DateCarousel = () => {
             }}
           >
             <Typography variant="body1" fontWeight="bold">
-              {d.date}
+              {new Date(d.date+"T00:00").getDate()}
             </Typography>
             <Typography variant="body2">{d.day}</Typography>
+
           </Paper>
         );
       })}
