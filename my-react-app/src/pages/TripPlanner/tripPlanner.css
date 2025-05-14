@@ -199,11 +199,11 @@
 	.textContent {
 		display: flex;
 		flex-direction: column;
-		width: 300px;
+		width: 500px;
 	}
 
 	.trip-header h1 {
-		font-size: 22px;
+		font-size: 30px;
 		margin: 0;
 	}
 
@@ -212,7 +212,7 @@
 	}
 
 	.nameDate p {
-		font-size: 14px;
+		font-size: 20px;
 		margin: 0;
 	}
 
@@ -222,11 +222,11 @@
 	}
 
 	.trip-description h3 {
-		font-size: 14px;
+		font-size: 20px;
 	}
 
 	.trip-description p {
-		font-size: 13px;
+		font-size: 18px;
 	}
 
 	/* .trip-members {
@@ -234,7 +234,7 @@
 	} */
 
 	.trip-members h4 {
-		font-size: 13px;
+		font-size: 18px;
 		margin-top: -300px;
 	}
 
@@ -273,7 +273,7 @@
 	}
 
 	.card-label {
-		font-size: 14px;
+		font-size: 16px;
 	}
 
 	.card-date {
