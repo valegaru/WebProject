@@ -9,7 +9,7 @@
 }
 
 .feature-card.reverse {
-	flex-direction: column;
+	flex-direction: row-reverse;
 }
 
 .feature-image img {
@@ -70,6 +70,10 @@
 		position: relative;
 		gap: 3rem;
 		/* background-color: #fdf7ed; */
+	}
+
+	.feature-card.reverse {
+		flex-direction: column;
 	}
 } /* .feature-card {
 	display: flex;
