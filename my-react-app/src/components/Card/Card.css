@@ -114,6 +114,9 @@ p {
 		/* font-size: 0.9rem; */
 		border-radius: 0 0 16px 16px;
 	}
+	.info-label {
+		width: 500px !important;
+	}
 
 	.trip-info {
 		flex-direction: column;
@@ -135,5 +138,10 @@ p {
 
 	.trip-icon {
 		width: 24px;
+	}
+
+	.trip-label,
+	.info-date {
+		width: 100px;
 	}
 }
