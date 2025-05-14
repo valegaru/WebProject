@@ -1,5 +1,5 @@
 import { db } from '../services/firebase';
-import { addDoc, collection } from 'firebase/firestore';
+import { collection } from 'firebase/firestore';
 import { doc, getDoc, getDocs, addDoc, updateDoc, arrayUnion, query, where } from 'firebase/firestore';
 
 export const addNewExpense= async ({ uidUser, name, price }) => {
@@ -50,6 +50,36 @@ export const fetchExpensesDayEvents = async (tripID, expenseID, date) => {
     }
 };
 
+export const addExpenseEvent = async (tripID, expenseID, date, eventData) => {
+  try {
+    const dayRef = doc(db, "trips", tripID, "expenses", expenseID, "days", date);
+    const daySnap = await getDoc(dayRef);
+
+    if (!daySnap.exists()) {
+      await setDoc(dayRef, {}); 
+    }
+
+    const eventRef = doc(collection(dayRef, "events"));
+    await setDoc(eventRef, eventData);
+
+    return eventRef.id;
+  } catch (error) {
+    console.error("Error adding expense event:", error);
+    return null;
+  }
+};
+
+export const updateExpenseEvent = async (tripID, expenseID, date, eventID, updatedData) => {
+  try {
+    const eventRef = doc(db, "trips", tripID, "expenses", expenseID, "days", date, "events", eventID);
+    await updateDoc(eventRef, updatedData);
+    return true;
+  } catch (error) {
+    console.error("Error updating expense event:", error);
+    return false;
+  }
+};
+
 export const fetchTripsFromUser = async (userId) => {
   try {
     const userRef = doc(db, "users", userId);
@@ -63,15 +93,29 @@ export const fetchTripsFromUser = async (userId) => {
   }
 };
 
-export const addTrip = async ({userId,description,destination,startDate,endDate,name,participants}) => {
-  
+export const addTrip = async (userId, description, destination, startDate, endDate, name, participants) => {
   try {
-    const tripData = {description,destination,startDate,endDate,name,participants};
-    const tripRef = await addDoc(collection(db, "trips"), tripData);
+    const tripRef = doc(collection(db, "trips"));
+
+    await setDoc(tripRef, {
+      userId,
+      description,
+      destination,
+      startDate,
+      endDate,
+      name,
+      participants,
+    });
+
+    const expensesRef = doc(collection(tripRef, "expenses"));
+    await setDoc(expensesRef, {});
+
+    const itineraryRef = doc(collection(tripRef, "itinerary"));
+    await setDoc(itineraryRef, {});
 
     const userRef = doc(db, "users", userId);
     await updateDoc(userRef, {
-      tripIDs: arrayUnion(tripRef.id)
+      tripIDs: arrayUnion(tripRef.id),
     });
 
     return tripRef.id;
