@@ -3,7 +3,7 @@ import './BudgetRange.css';
 import { useSelector } from 'react-redux';
 
 
-const BudgetRange = ({ label, min, max}) => {
+const BudgetRange = ({label, min, max}) => {
 
   const currency = useSelector((state) => state.currency.currency)
   const formatNumber = (value) => {
