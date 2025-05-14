@@ -4,7 +4,7 @@
 	border: 1px solid #647e37;
 	display: flex;
 	position: sticky !important;
-	width: 100vh !important;
+	width: 100vw !important;
 	top: 0;
 	z-index: 1;
 	padding: 0 16px;
@@ -87,6 +87,7 @@
 	.navbar {
 		flex-direction: row;
 		justify-content: space-between;
+		width: 100vh !important;
 	}
 
 	.logo-container {

@@ -116,7 +116,7 @@
 		display: flex;
 		overflow-x: auto;
 		flex-wrap: nowrap;
-		gap: 1rem;
+		/* gap: 1rem; */
 		padding-bottom: 1rem;
 		scroll-snap-type: x mandatory;
 		scroll-padding: 1rem;
@@ -126,6 +126,10 @@
 	.cards-section > * {
 		flex: 0 0 calc(50% - 1rem); /* 2 tarjetas visibles */
 		scroll-snap-align: start;
+	}
+
+	.card-list-container.green {
+		width: 550px;
 	}
 
 	/* .watch-more {
