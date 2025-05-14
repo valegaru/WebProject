@@ -15,7 +15,6 @@ import itinerarymap from '../../assets/itinerarymap.png';
 import FeatureCardWithHighlights from '../../components/FeatureCard2/FeatureCardWithHigh';
 import greenstar from '../../assets/greenstar.svg';
 import star3 from '../../assets/star3.svg';
-
 const Landing = () => {
 	return (
 		<>
