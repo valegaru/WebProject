@@ -74,7 +74,7 @@ const Navbar = () => {
 							</IconButton>
 
 							<Menu id='mobile-menu' anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose} keepMounted>
-								<MenuItem onClick={handleMenuClose} component={NavLink} to='/'>
+								<MenuItem onClick={handleMenuClose} component={NavLink} to='/home'>
 									Home
 								</MenuItem>
 								<MenuItem onClick={handleMenuClose} component={NavLink} to='/tripPlanner'>
