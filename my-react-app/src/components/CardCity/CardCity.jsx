@@ -17,7 +17,7 @@ const CardCity = ({ city, onDislike, onLike }) => {
 
 			<div className='card-city-content'>
 				<div className='city-sections-row'>
-					<div className='section description-section'>
+					<div className='description-section'>
 						<h3>Description</h3>
 						<p>
 							<strong>Aesthetic:</strong> {city.aesthetic}

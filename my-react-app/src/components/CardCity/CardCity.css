@@ -5,13 +5,18 @@
 	align-items: center;
 	background-color: transparent;
 	border-radius: 32px;
-	padding: 1rem;
-	margin: 2rem auto;
-	/* width: 95%;
-	max-width: 90%; */
+	/* padding: 1rem;
+	margin: 2rem auto; */
+	width: 1000px;
 	overflow: hidden;
 	position: relative;
 }
+/* .city-sections-row {
+	display: flex;
+	flex-direction: column;
+	margin: 0;
+	padding: 0;
+} */
 
 .city-image-container {
 	position: relative;
@@ -81,7 +86,7 @@
 }
 
 .description-section {
-	max-width: 300px;
+	width: 800px;
 }
 
 .section h3 {
@@ -106,7 +111,7 @@
 @media (max-width: 768px) {
 	.card-city {
 		width: 200px;
-		height: 800px;
+		/* height: 800px; */
 	}
 	.city-name-overlay {
 		font-size: 1.6rem;
