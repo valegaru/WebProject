@@ -1,6 +1,4 @@
 .banner {
-	width: 100vw;
-	min-height: 100vh;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -90,6 +88,8 @@
 		align-items: flex-start;
 		justify-content: center;
 		text-align: left;
+		width: 100vh;
+		height: 80vh;
 	}
 
 	.banner-button {
