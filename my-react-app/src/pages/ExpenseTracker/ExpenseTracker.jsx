@@ -81,7 +81,7 @@ const ExpenseTracker = () => {
               }}
               >Paris Voyage Expense</Typography>
 
-            <CurrencyToggleButton currency={currency}/>
+            <CurrencyToggleButton/>
           </div>
 
           <div className="budget-section">
@@ -98,7 +98,7 @@ const ExpenseTracker = () => {
         <CustomButton label="ADD EXPENSE" onClick={() => addExpense({ uidUser: uid, name: "22", price: "er" })}/>
       </div>
 
-      <Calendar currency={currency} /></>)}
+      <Calendar/></>)}
       
 
     </>

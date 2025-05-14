@@ -4,15 +4,13 @@ import ExpenseCard from "../Expenses/ExpenseCard/ExpenseCard";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 
-const Calendar = ({ currency }) => {
+const Calendar = () => {
   const startHour = 12;
   const endHour = 17;
   const events = useSelector((state) => state.events.events);
   const date = useSelector((state) => state.date.selectedDate);
   
   const hoursArray = Array.from({ length: endHour - startHour }, (_, i) => startHour + i);
-
-  useEffect(() => {},[date]);
 
   return (
     <Box
@@ -55,7 +53,6 @@ const Calendar = ({ currency }) => {
                   title={event.title}
                   amount={event.amount}
                   status={event.status}
-                  currency={currency}
                   participants={event.participants || []}
                 />
               )}
