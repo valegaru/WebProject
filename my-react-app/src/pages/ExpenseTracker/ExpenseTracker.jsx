@@ -21,7 +21,7 @@ function ExpenseTracker() {
   const [selectedDate, setSelectedDate] = useState(""); 
   const events = useSelector((state) => state.events);
   const date = useSelector((state) => state.date);
-  const uid = useSelector((state) => state.auth.user);
+  const uid = useSelector((state) => state.auth.userId);
   const uidBURN = "G5ZH4Tqp0QTNLDUNkYwNQOaNCZa2"
   const storeState = useSelector((state) => state);
 
@@ -99,7 +99,7 @@ function ExpenseTracker() {
 
       <div className="carousel-and-button">
         <DateCarousel onDateChange={setSelectedDate} />
-        <CustomButton label="ADD EXPENSE" onClick={() => addExpense({ uidUser: "e", name: "22", price: "er" })}/>
+        <CustomButton label="ADD EXPENSE" onClick={() => addExpense({ uidUser: uid, name: "22", price: "er" })}/>
       </div>
 
       <Calendar currency={currency} /></>)}
