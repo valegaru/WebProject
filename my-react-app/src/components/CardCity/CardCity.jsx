@@ -46,4 +46,5 @@ const CardCity = ({ city, onDislike, onLike }) => {
 	);
 };
 
+
 export default CardCity;
