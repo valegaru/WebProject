@@ -63,7 +63,7 @@ function Profile() {
 	};
 
 	const defaultImage =
-		'https://res.cloudinary.com/dbx6eatsd/image/upload/v1716075265/default-avatar.png';
+		'https://www.google.com/url?sa=i&url=https%3A%2F%2Fpixabay.com%2Fes%2Fvectors%2Ffoto-de-perfil-en-blanco-973460%2F&psig=AOvVaw2HgXZU1pr56pHFTUppXANh&ust=1747348180816000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCIC6oLCBpI0DFQAAAAAdAAAAABAE';
 
 	return (
 		<>
@@ -83,7 +83,7 @@ function Profile() {
 				>
 					<img
 						src={userData.photoUrl || defaultImage}
-						alt="Foto de perfil"
+						alt='Foto de perfil'
 						style={{
 							width: '100%',
 							height: '100%',
@@ -92,7 +92,7 @@ function Profile() {
 					/>
 				</div>
 
-				<input type="file" accept="image/*" onChange={handleImageUpload} />
+				<input type='file' accept='image/*' onChange={handleImageUpload} />
 
 				<p>
 					<strong>Nombre de usuario:</strong> {userData.username}
