@@ -20,7 +20,7 @@ const ExpenseTracker = () => {
   const [currency, setCurrency] = useState("COP");
   const [selectedDate, setSelectedDate] = useState(""); 
   const events = useSelector((state) => state.events);
-  const date = useSelector((state) => state.date);
+  const date = useSelector((state) => state.date.selectedDate);
   const uid = useSelector((state) => state.auth.userId);
   const uidBURN = "G5ZH4Tqp0QTNLDUNkYwNQOaNCZa2"
   const storeState = useSelector((state) => state);
@@ -43,7 +43,7 @@ const ExpenseTracker = () => {
     await fetchUserData(uidBURN);
     await fetchTripsFromUser(uidBURN);
 
-    const events = await fetchExpensesDayEvents("xN1RgphfLnpTIm7xoOhu", "Lz9ZchnTEIFCFbPF1onz", "2025-04-07");
+    const events = await fetchExpensesDayEvents("xN1RgphfLnpTIm7xoOhu", "Lz9ZchnTEIFCFbPF1onz", date);
 
     events.forEach((event) => {
       dispatch(addEvent(event));
