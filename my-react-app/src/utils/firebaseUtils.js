@@ -63,15 +63,23 @@ export const fetchTripsFromUser = async (userId) => {
   }
 };
 
-export const addTrip = async ({userId,description,destination,startDate,endDate,name,participants}) => {
-  
+export const addTrip = async (userId, tripData) => {
   try {
-    const tripData = {description,destination,startDate,endDate,name,participants};
-    const tripRef = await addDoc(collection(db, "trips"), tripData);
+    const tripRef = doc(collection(db, "trips"));
+    await setDoc(tripRef, {
+      ...tripData,
+      participants: [userId],
+    });
+
+    const expensesRef = doc(collection(tripRef, "expenses"));
+    await setDoc(expensesRef, {});
+
+    const itineraryRef = doc(collection(tripRef, "itinerary"));
+    await setDoc(itineraryRef, {});
 
     const userRef = doc(db, "users", userId);
     await updateDoc(userRef, {
-      tripIDs: arrayUnion(tripRef.id)
+      tripIDs: arrayUnion(tripRef.id),
     });
 
     return tripRef.id;
