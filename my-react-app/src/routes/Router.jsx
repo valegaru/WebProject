@@ -27,7 +27,7 @@ const Router = () => {
 	useEffect(() => {
 		const unsuscribe = onAuthStateChanged(auth, (user)=>{
 			if (user) {
-				dispatch(setUserId(user));
+				dispatch(setUserId({ uid: user.uid, email: user.email }));
 			} else {
 				dispatch(clearUserId());
 			}
