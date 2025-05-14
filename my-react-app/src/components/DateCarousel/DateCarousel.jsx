@@ -59,7 +59,7 @@ const DateCarousel = () => {
           <Paper
             key={globalIndex}
             onClick={() => {
-              dateClick(d.date+"T00:00")
+              dateClick(d.date)
               console.log(date)
               setSelectedIndex(globalIndex)}}
             sx={{

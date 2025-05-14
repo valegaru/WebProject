@@ -40,8 +40,8 @@ const ExpenseTracker = () => {
   const loadData = async () => {
     console.log("Redux Store:", JSON.stringify(storeState, null, 2));
     
-    await fetchUserData(uidBURN);
-    await fetchTripsFromUser(uidBURN);
+    await fetchUserData(uid);
+    await fetchTripsFromUser(uid);
 
     const events = await fetchExpensesDayEvents("xN1RgphfLnpTIm7xoOhu", "Lz9ZchnTEIFCFbPF1onz", date);
 
@@ -51,7 +51,7 @@ const ExpenseTracker = () => {
 
     const individualTotal = events.reduce((sum, event) => {
     const yourParticipation = event.participants
-      ? Object.values(event.participants).find(p => p.userID === uidBURN)
+      ? Object.values(event.participants).find(p => p.userID === uid)
       : null;
       return yourParticipation ? sum + Number(yourParticipation.contribution) : sum;
     }, 0);
