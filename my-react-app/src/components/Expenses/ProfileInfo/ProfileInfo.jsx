@@ -1,7 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import ProfilePic from "../../ProfilePic/ProfilePic";
+import { useSelector } from "react-redux";
 
-const ProfileInfo = ({ name, imgUrl, contribution, currency }) => {
+const ProfileInfo = ({ name, imgUrl, contribution}) => {
+
+  const currency = useSelector((state) => state.currency.currency)
+
   return (
     <Box sx={{ display: "flex", alignItems: "center", gap: "6px" }}>
       <ProfilePic imgUrl={imgUrl} />
