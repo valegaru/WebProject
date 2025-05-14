@@ -1,5 +1,5 @@
 import { db } from '../services/firebase';
-import { addDoc, collection } from 'firebase/firestore';
+import { collection } from 'firebase/firestore';
 import { doc, getDoc, getDocs, addDoc, updateDoc, arrayUnion, query, where } from 'firebase/firestore';
 
 export const addNewExpense= async ({ uidUser, name, price }) => {
