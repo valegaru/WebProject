@@ -142,6 +142,7 @@ export const fetchTripById = async (tripId) => {
 		return null; 
 	}
 };
+
 export const addTrip = async (userId, description, destination, startDate, endDate, name, participants, tripPic) => {
 	try {
 		const tripRef = doc(collection(db, 'trips'));
@@ -157,15 +158,14 @@ export const addTrip = async (userId, description, destination, startDate, endDa
 			tripPic,
 		});
 
-		const expensesRef = doc(collection(tripRef, 'expenses'));
-		await setDoc(expensesRef, {});
+		await createExpense(tripRef, participants, startDate);
 
 		const itineraryRef = doc(collection(tripRef, 'itinerary'));
 		await setDoc(itineraryRef, {});
 
-		const tripIDRef = doc(collection(db, `users/${userId}/tripsIDs`));
+		const tripIDRef = doc(db, `users/${userId}/tripsIDs/${tripRef.id}`);
 		await setDoc(tripIDRef, {
-			id: tripIDRef.id,
+			id: tripRef.id,
 		});
 
 		return tripRef.id;
@@ -177,17 +177,18 @@ export const addTrip = async (userId, description, destination, startDate, endDa
 
 export const createExpense = async (tripRef, participants, startDate) => {
 	try {
+		const dateOnly = new Date(startDate).toISOString().split('T')[0]; 
 
 		const existingExpensesSnap = await getDocs(collection(tripRef, 'expenses'));
 		const expenseCount = existingExpensesSnap.size + 1;
 
-	    const expenseRef = doc(collection(tripRef, 'expenses'));
+		const expenseRef = doc(collection(tripRef, 'expenses'));
 		await setDoc(expenseRef, {
 			name: `Expense ${expenseCount}`,
 			participants: participants.map(p => p.id || p)
 		});
 
-		const dayRef = doc(collection(expenseRef, 'days'), startDate);
+		const dayRef = doc(collection(expenseRef, 'days'), dateOnly);
 		await setDoc(dayRef, {});
 
 		return { expenseRef, dayRef };
