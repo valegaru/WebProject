@@ -4,6 +4,10 @@
 	overflow: hidden;
 	cursor: pointer;
 	transition: transform 0.2s;
+	display: flex;
+	flex-direction: column;
+	background-color: var(--card-color);
+	color: var(--color, #000000);
 }
 
 .custom-card:hover {
@@ -16,9 +20,10 @@
 	object-fit: cover;
 }
 
+/* SAVED & MATCHES */
 .card-label {
 	background-color: var(--card-color);
-	color: white;
+	color: var(--color, #ffffff);
 	text-align: center;
 	padding: 0.6rem;
 	font-weight: 600;
@@ -26,49 +31,70 @@
 	border-bottom-right-radius: 20px;
 	margin-top: -4px;
 }
+
+/* TRIPS VARIANT */
 .trip-info {
 	background-color: var(--card-color);
 	color: #000000;
-	/* text-align: center; */
 	padding: 0.6rem;
-	/* font-weight: 600; */
 	border-bottom-left-radius: 20px;
 	border-bottom-right-radius: 20px;
 	margin-top: -4px;
 	display: flex;
-	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
 }
 
-.info-label {
-	background-color: var(--card-color);
-	color: #000000;
-	/* text-align: center; */
-	padding: 0.6rem;
-	/* font-weight: 600; */
-	border-bottom-left-radius: 20px;
-	border-bottom-right-radius: 20px;
-	margin-top: -4px;
+.text-info {
 	display: flex;
 	flex-direction: column;
-}
-.text-info {
-	text-align: left;
-	align-items: start;
-}
-.members {
-	text-align: right;
-	align-items: end;
-}
-
-.trip-icon {
-	width: 30px;
 }
 
 .trip-label {
 	font-weight: 600;
+	font-size: 1rem;
+	margin-bottom: 0.2rem;
 }
-.arrow-icon {
-	fill: var(--main-color);
+
+.trip-dates {
+	font-size: 0.9rem;
+	color: #444;
+}
+
+.members {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.numberMembers {
+	font-weight: 500;
+	font-size: 0.9rem;
+}
+
+.trip-icon {
+	width: 24px;
+	height: 24px;
+}
+
+/* INFO CARDS: EXPENSES & ITINERARY */
+.info-card {
+	display: flex;
+	align-items: center;
+	gap: 0.8rem;
+	padding: 1rem;
+	border-radius: 0 16px 16px 16px;
+	background-color: var(--card-color);
+}
+
+.info-label {
+	display: flex;
+	flex-direction: column;
+}
+
+.info-date {
+	font-size: 0.85rem;
+	color: #333;
 }
 
 .custom-card.saved {
@@ -89,47 +115,36 @@
 	--color: #ffffff;
 }
 
+/* MOBILE */
 @media screen and (max-width: 768px) {
 	.custom-card {
-		width: 100%; /* que se adapte al ancho del contenedor */
+		width: 100%;
 		border-radius: 0 16px 16px 16px;
 		margin-bottom: 1rem;
 	}
 
 	.card-img {
 		height: 160px;
-
-		border-top-right-radius: 16px;
 	}
 
 	.card-label,
-	.trip-info,
-	.info-label {
+	.trip-info {
 		padding: 0.8rem;
 		font-size: 0.9rem;
 		border-radius: 0 0 16px 16px;
 	}
 
-	.trip-info,
-	.info-label {
+	.trip-info {
 		flex-direction: column;
-		gap: 0.4rem;
-		text-align: left;
-	}
-
-	.text-info,
-	.members {
 		align-items: flex-start;
-		text-align: left;
+		gap: 0.4rem;
 	}
 
 	.members {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
+		align-self: flex-end;
 	}
 
-	.trip-icon {
-		width: 24px;
+	.info-card {
+		padding: 0.8rem;
 	}
 }

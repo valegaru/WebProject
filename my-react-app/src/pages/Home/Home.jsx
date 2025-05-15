@@ -27,11 +27,14 @@ const Home = () => {
 			if (!uid) return;
 			const fetchedTrips = await fetchTripsFromUser(uid);
 			const formattedTrips = fetchedTrips.map(trip => ({
-			image: destinations,
-			label: trip.name || trip.title || 'Unnamed Trip',
-			date: `${trip.startDate || '??'} - ${trip.endDate || '??'}`,
-			numberMembers: trip.participants?.length || 1,
-		}));
+				tripPic: trip.tripPic || destinations,
+				name: trip.name || 'Unnamed Trip',
+				startDate: trip.startDate,
+				endDate: trip.endDate,
+				description: trip.description || '',
+				participants: trip.participants || [],
+				onClick: () => console.log(`Clicked on trip: ${trip.name}`)
+			}));
 			setTrips(formattedTrips);
 		};
 
@@ -39,17 +42,17 @@ const Home = () => {
 	}, [uid]);
 
 	const savedList = [
-		{ image: restaurants, label: 'Restaurants' },
-		{ image: activities, label: 'Activities' },
-		{ image: destinations, label: 'Destinations' },
-		{ image: citiesEurope, label: 'Cities of Europe' },
+		{ tripPic: restaurants, name: 'Restaurants' },
+		{ tripPic: activities, name: 'Activities' },
+		{ tripPic: destinations, name: 'Destinations' },
+		{ tripPic: citiesEurope, name: 'Cities of Europe' },
 	];
 
 	const matches = [
-		{ image: thailand, label: 'Thailand' },
-		{ image: destinations, label: 'Rio Janeiro' },
-		{ image: paris, label: 'Paris' },
-		{ image: newYork, label: 'New York' },
+		{ tripPic: thailand, name: 'Thailand' },
+		{ tripPic: destinations, name: 'Rio Janeiro' },
+		{ tripPic: paris, name: 'Paris' },
+		{ tripPic: newYork, name: 'New York' },
 	];
 
 	return (
