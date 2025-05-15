@@ -103,6 +103,13 @@ function Profile() {
                 <img src={userData.profilePicture || defaultImage} alt="Foto de perfil" />
               </div>
 
+							<input
+								type='file'
+								accept='image/*'
+								onChange={handleImageUpload}
+								disabled={uploading}
+								className='profile-input-file'
+							/>
               <input
                 type="file"
                 accept="image/*"
@@ -111,9 +118,17 @@ function Profile() {
                 className="profile-input-file"
               />
 
+							{uploading && <p className='profile-status'>Subiendo imagen...</p>}
+							{uploadStatus && <p className='profile-status'>{uploadStatus}</p>}
               {uploading && <p className="profile-status">Subiendo imagen...</p>}
               {uploadStatus && <p className="profile-status">{uploadStatus}</p>}
 
+							<p className='profile-info'>
+								<strong>Usuario:</strong> {userData.username}
+							</p>
+							<p className='profile-info'>
+								<strong>Email:</strong> {userData.email}
+							</p>
               <p className="profile-info"><strong>Usuario:</strong> {userData.username}</p>
               <p className="profile-info"><strong>Email:</strong> {userData.email}</p>
 
