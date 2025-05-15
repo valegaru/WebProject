@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { addTrip, searchUsersByName } from '../../utils/firebaseUtils';
 import LogoutButton from '../../components/LogoutButton/LogoutButton';
@@ -17,11 +17,13 @@ function TripCreation() {
 		startDate: null,
 		endDate: null,
 		participants: [],
-		tripPic: '', // puedes adaptar esto si luego implementas upload de imágenes
+		tripPic: '',
 	});
 
 	const [searchTerm, setSearchTerm] = useState('');
 	const [searchResults, setSearchResults] = useState([]);
+	const [uploading, setUploading] = useState(false);
+	const [uploadStatus, setUploadStatus] = useState('');
 
 	const handleInputChange = (e) => {
 		setTripData({
@@ -47,7 +49,7 @@ function TripCreation() {
 		if (!alreadyAdded) {
 			setTripData({
 				...tripData,
-				participants: [...tripData.participants, user], // Guarda todo el objeto
+				participants: [...tripData.participants, user],
 			});
 		}
 		setSearchTerm('');
@@ -59,6 +61,39 @@ function TripCreation() {
 			...tripData,
 			participants: tripData.participants.filter((p) => p.id !== id),
 		});
+	};
+
+	const handleImageUpload = async (e) => {
+		const file = e.target.files[0];
+		if (!file) return;
+
+		setUploading(true);
+		setUploadStatus('Subiendo imagen...');
+
+		const formData = new FormData();
+		formData.append('file', file);
+		formData.append('upload_preset', 'ml_default'); // Cambia si tu preset es diferente
+
+		try {
+			const res = await fetch('https://api.cloudinary.com/v1_1/dbx6eatsd/image/upload', {
+				method: 'POST',
+				body: formData,
+			});
+			const data = await res.json();
+
+			if (data.secure_url) {
+				setTripData((prev) => ({ ...prev, tripPic: data.secure_url }));
+				setUploadStatus('Imagen subida correctamente.');
+			} else {
+				setUploadStatus('Error al subir la imagen.');
+			}
+		} catch (err) {
+			console.error('Error al subir a Cloudinary:', err);
+			setUploadStatus('Error al subir la imagen.');
+		} finally {
+			setUploading(false);
+			setTimeout(() => setUploadStatus(''), 4000);
+		}
 	};
 
 	const handleSubmit = async (e) => {
@@ -78,13 +113,22 @@ function TripCreation() {
 			startDate?.toISOString() || '',
 			endDate?.toISOString() || '',
 			name,
-			participants.map((p) => p.id), // Solo los IDs
+			participants.map((p) => p.id),
 			tripPic
 		);
 
 		if (tripID) {
 			alert('Viaje creado con éxito 🎉');
-			// Redirigir o limpiar formulario si deseas
+			// Limpiar formulario si quieres:
+			setTripData({
+				name: '',
+				description: '',
+				destination: '',
+				startDate: null,
+				endDate: null,
+				participants: [],
+				tripPic: '',
+			});
 		} else {
 			alert('Error al crear el viaje 😞');
 		}
@@ -118,6 +162,16 @@ function TripCreation() {
 						onChange={(date) => setTripData({ ...tripData, endDate: date })}
 						dateFormat='yyyy-MM-dd'
 					/>
+
+					<label>Subir foto del viaje:</label>
+					<input type='file' accept='image/*' onChange={handleImageUpload} disabled={uploading} />
+					{uploadStatus && <p>{uploadStatus}</p>}
+					{tripData.tripPic && (
+						<div>
+							<p>Vista previa:</p>
+							<img src={tripData.tripPic} alt='Foto del viaje' style={{ maxWidth: '300px', marginBottom: '1rem' }} />
+						</div>
+					)}
 
 					<label>Buscar participantes por username:</label>
 					<input type='text' value={searchTerm} onChange={handleSearchChange} placeholder='Escribe un nombre...' />
