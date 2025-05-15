@@ -38,7 +38,7 @@ const Navbar = () => {
           
           <Stack direction="row" spacing={5} alignItems="center">
             <NavLink
-              to="/"
+              to="/home"
               className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
             >
               Home

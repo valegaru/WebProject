@@ -19,7 +19,7 @@ const allDays = [
 ];
 
 
-const VISIBLE_COUNT = 5;
+const visibleCount = 5;
 
 const DateCarousel = () => {
 
@@ -29,7 +29,7 @@ const DateCarousel = () => {
   const [startIndex, setStartIndex] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const endIndex = startIndex + VISIBLE_COUNT;
+  const endIndex = startIndex + visibleCount;
   const visibleDays = allDays.slice(startIndex, endIndex);
 
   const handlePrev = () => {
@@ -38,7 +38,7 @@ const DateCarousel = () => {
 
   const handleNext = () => {
     setStartIndex((prev) =>
-      Math.min(prev + 1, allDays.length - VISIBLE_COUNT)
+      Math.min(prev + 1, allDays.length - visibleCount)
     );
   };
 
