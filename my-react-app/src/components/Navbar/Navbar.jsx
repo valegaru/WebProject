@@ -72,7 +72,7 @@ const Navbar = () => {
 								<MenuItem onClick={handleMenuClose} component={NavLink} to='/'>
 									Home
 								</MenuItem>
-								<MenuItem onClick={handleMenuClose} component={NavLink} to='/tripPlanner'>
+								<MenuItem onClick={handleMenuClose} component={NavLink} to='/trips'>
 									Trips
 								</MenuItem>
 								<MenuItem onClick={handleMenuClose} component={NavLink} to='/matchmaker'>
