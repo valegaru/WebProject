@@ -155,7 +155,7 @@ function TripCreation() {
                   onClick={() => addParticipant(user)}
                   style={{ cursor: 'pointer' }}
                 >
-                  {user.name} ({user.email})
+                  {user.username} ({user.email})
                 </li>
               ))}
             </ul>
