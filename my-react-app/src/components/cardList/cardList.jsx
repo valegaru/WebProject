@@ -42,6 +42,7 @@ const CardList = ({ title, cardsData, variantColor = 'default' }) => {
 						description={card.description}
 						participants={card.participants}
 						onClick={card.onClick}
+						 variant={variantColor}
 					/>
 				))}
 
