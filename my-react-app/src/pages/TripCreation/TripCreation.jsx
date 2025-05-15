@@ -82,7 +82,7 @@ function TripCreation() {
 
 		const formData = new FormData();
 		formData.append('file', file);
-		formData.append('upload_preset', 'ml_default'); // Cambia si tu preset es diferente
+		formData.append('upload_preset', 'ml_default');
 
 		try {
 			const res = await fetch('https://api.cloudinary.com/v1_1/dbx6eatsd/image/upload', {
@@ -183,7 +183,7 @@ function TripCreation() {
 						</div>
 					)}
 
-					<label>Buscar participantes por username:</label>
+					<label>Buscar participantes:</label>
 					<input type='text' value={searchTerm} onChange={handleSearchChange} placeholder='Escribe un nombre...' />
 					{searchResults.length > 0 && (
 						<ul style={{ border: '1px solid #ccc', padding: '0.5rem' }}>
