@@ -139,6 +139,23 @@ export const searchUsersByName = async (nameToSearch) => {
   return results;
 }
 
+export const getUserNameById = async (userId) => {
+  if (!userId) return null;
+
+  try {
+    const userRef = doc(db, "users", userId);
+    const userSnap = await getDoc(userRef);
+
+    if (userSnap.exists()) {
+      const userData = userSnap.data();
+      return userData.username || "";
+    } else {
+      return null;
+    }
+  } catch (error) {
+    return null;
+  }
+};
 
 // addTrip() = db -> trips -> (add fields: description, destination, startDate, endDate, name, participants[], add collections: expenses, itineraries, addtripid(()=>(db->users(matchUserId)->addTrip id to tripsIDs collection)))
 

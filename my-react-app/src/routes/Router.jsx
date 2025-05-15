@@ -18,6 +18,8 @@ import { useDispatch } from 'react-redux';
 import { auth } from '../services/firebase';
 import { clearUserId, setUserId } from '../store/auth/AuthSlice';
 import { useEffect } from 'react';
+import { getUserNameById } from '../utils/firebaseUtils';
+
 
 
 const Router = () => {
@@ -25,16 +27,17 @@ const Router = () => {
     const dispatch = useDispatch();
 
 	useEffect(() => {
-		const unsuscribe = onAuthStateChanged(auth, (user)=>{
+  		const unsubscribe = onAuthStateChanged(auth, async (user) => {
 			if (user) {
-				dispatch(setUserId({ uid: user.uid, email: user.email }));
+				const username = await getUserNameById(user.uid);
+				dispatch(setUserId({ uid: user.uid, email: user.email, username }));
 			} else {
 				dispatch(clearUserId());
 			}
-		})
+		});
 
-		return () => unsuscribe();
-	}, [dispatch])
+  return () => unsubscribe();
+}, [dispatch]);
 
 
     return(

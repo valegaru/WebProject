@@ -16,6 +16,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const Home = () => {
 
+	const uid = useSelector((state)=> state.auth.userId)
+	const name = useSelector((state) => state.auth.username)
+
 	useEffect(()=>{
 
 	},[])
@@ -54,7 +57,7 @@ const Home = () => {
 				<input type='text' placeholder='Search for a location' className='search-bar' />
 			</div>
 
-			<h2 className='home-title'>Hi, Juan!</h2>
+			<h2 className='home-title'>Hi, {name}</h2>
 
 			<div className='section'>
 				<CardList title='Saved list' cardsData={savedList} variantColor='saved' />
