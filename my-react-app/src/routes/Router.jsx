@@ -26,18 +26,18 @@ const Router = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-  		const unsubscribe = onAuthStateChanged(auth, async (user) => {
-			if (user) {
-				const username = await getUserNameById(user.uid);
-				dispatch(setUserId({ uid: user.uid, email: user.email, username }));
-			} else {
-				dispatch(clearUserId());
-			}
-		});
-		});
+  const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const username = await getUserNameById(user.uid);
+      dispatch(setUserId({ uid: user.uid, email: user.email, username }));
+    } else {
+      dispatch(clearUserId());
+    }
+  });
 
-  return () => unsubscribe();
+  return () => unsubscribe(); 
 }, [dispatch]);
+
 
 	return (
 		<BrowserRouter>
