@@ -27,13 +27,14 @@ const Home = () => {
 			if (!uid) return;
 			const fetchedTrips = await fetchTripsFromUser(uid);
 			const formattedTrips = fetchedTrips.map(trip => ({
+				id: trip.id,
 				tripPic: trip.tripPic || destinations,
 				name: trip.name || 'Unnamed Trip',
 				startDate: trip.startDate,
 				endDate: trip.endDate,
 				description: trip.description || '',
 				participants: trip.participants || [],
-				onClick: () => console.log(`Clicked on trip: ${trip.name}`)
+				onClick: () => console.log(`Clicked on trip: ${trip.id}`)
 			}));
 			setTrips(formattedTrips);
 		};

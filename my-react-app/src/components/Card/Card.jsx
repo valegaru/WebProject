@@ -8,6 +8,7 @@ const formatDate = (dateStr) => {
 };
 
 const Card = ({
+	id, 
 	tripPic,
 	name,
 	startDate,
@@ -17,14 +18,21 @@ const Card = ({
 	onClick,
 	variant = 'trips', // 'trips' | 'saved' | 'matches'
 }) => {
+	const handleClick = () => {
+		if (onClick) {
+			onClick(id);
+		}
+	};
+
 	// === TRIPS VARIANT ===
 	if (variant === 'trips') {
 		return (
-			<div className='simple-card trips' onClick={onClick}>
+			<div className='simple-card trips' onClick={handleClick} data-id={id}>
 				{tripPic && (
 					<img
 						src={
-							tripPic || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDAQmzG9L1vNwwjk-ObTkfDwE_oUBSSByO8g&s'
+							tripPic ||
+							'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDAQmzG9L1vNwwjk-ObTkfDwE_oUBSSByO8g&s'
 						}
 						alt={name || 'Trip image'}
 						className='card-img'
@@ -34,7 +42,8 @@ const Card = ({
 					{name && <h2 className='card-title'>{name}</h2>}
 					{(startDate || endDate) && (
 						<p className='card-dates'>
-							{startDate && formatDate(startDate)} {startDate && endDate && ' - '} {endDate && formatDate(endDate)}
+							{startDate && formatDate(startDate)} {startDate && endDate && ' - '}{' '}
+							{endDate && formatDate(endDate)}
 						</p>
 					)}
 					{description && <p className='card-description'>{description}</p>}
@@ -51,10 +60,13 @@ const Card = ({
 	// === SAVED VARIANT ===
 	if (variant === 'saved') {
 		return (
-			<div className='simple-card saved' onClick={onClick}>
+			<div className='simple-card saved' onClick={handleClick} data-id={id}>
 				{tripPic && (
 					<img
-						src={tripPic || ' https://visitvalle.travel/wp-content/uploads/2024/12/banner-interna-res.webp'}
+						src={
+							tripPic ||
+							'https://visitvalle.travel/wp-content/uploads/2024/12/banner-interna-res.webp'
+						}
 						alt={name || 'Saved image'}
 						className='card-img'
 					/>
@@ -67,7 +79,7 @@ const Card = ({
 	// === MATCHES VARIANT ===
 	if (variant === 'matches') {
 		return (
-			<div className='simple-card matches' onClick={onClick}>
+			<div className='simple-card matches' onClick={handleClick} data-id={id}>
 				{tripPic && (
 					<img
 						src={
@@ -83,7 +95,8 @@ const Card = ({
 		);
 	}
 
-	return null; // fallback por si no hay variante válida
+	return null;
 };
+
 
 export default Card;

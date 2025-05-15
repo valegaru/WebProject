@@ -34,6 +34,7 @@ const CardList = ({ title, cardsData, variantColor = 'default' }) => {
 				{cardsData.map((card, index) => (
 					<Card
 						key={index}
+						id={card.tripId}
 						tripPic={card.tripPic}
 						name={card.name}
 						startDate={card.startDate}
