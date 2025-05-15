@@ -92,7 +92,7 @@ export const fetchTripsFromUser = async (userId) => {
   }
 };
 
-export const addTrip = async (userId, description, destination, startDate, endDate, name, participants) => {
+export const addTrip = async (userId, description, destination, startDate, endDate, name, participants, tripPic) => {
   try {
     const tripRef = doc(collection(db, "trips"));
 
@@ -104,6 +104,7 @@ export const addTrip = async (userId, description, destination, startDate, endDa
       endDate,
       name,
       participants,
+      tripPic,
     });
     
 

@@ -12,9 +12,14 @@ import latamTour from '../../assets/latamGroup.png';
 import paris from '../../assets/paris.png';
 import newYork from '../../assets/newYork.png';
 import thailand from '../../assets/thailand.png';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Home = () => {
+
+	useEffect(()=>{
+
+	},[])
+
 	const savedList = [
 		{ image: restaurants, label: 'Restaurants' },
 		{ image: activities, label: 'Activities' },
@@ -22,7 +27,7 @@ const Home = () => {
 		{ image: citiesEurope, label: 'Cities of Europe' },
 	];
 
-	const trips = [
+	const tripsBURN = [
 		{ image: latamTour, label: 'Latam Tour', date: 'Jan 16 - May 24/25', numberMembers: 'hola' },
 		{ image: destinations, label: 'Rio Janeiro', date: 'Jan 16 - May 24/25', numberMembers: 'hi' },
 		{ image: paris, label: 'Paris Voyage', date: 'Jan 16 - May 24/25', numberMembers: 'hi' },
