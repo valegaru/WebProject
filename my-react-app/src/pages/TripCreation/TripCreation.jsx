@@ -11,7 +11,7 @@ import './TripCreation.css';
 
 function TripCreation() {
 	const { userId } = useSelector((state) => state.auth);
-	const navigate = useNavigate(); 
+	const navigate = useNavigate();
 
 	const [tripData, setTripData] = useState({
 		name: '',
