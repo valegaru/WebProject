@@ -91,7 +91,6 @@ const ExpenseTracker = () => {
     onClose={() => setShowModal(false)}
     onEventAdded={(newEventId) => {
       console.log('Event added:', newEventId);
-      // Optionally refresh or dispatch
     }}
   />
 )}
