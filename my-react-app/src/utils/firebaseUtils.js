@@ -1,6 +1,15 @@
 import { db } from '../services/firebase';
 import { collection } from 'firebase/firestore';
 import { doc, getDoc, getDocs, addDoc, updateDoc, arrayUnion, query, where, setDoc} from 'firebase/firestore';
+import { orderBy, startAt, endAt } from 'firebase/firestore';
+export const addNewExpense = async ({ uidUser, name, price }) => {
+	const docRef = await addDoc(collection(db, 'expense'), {
+		uidUser,
+		name,
+		price,
+	});
+	console.log('Document written with ID: ', docRef.id);
+};
 
 export const fetchUserData = async (userId) => {
 	try {
@@ -73,31 +82,19 @@ export const updateExpenseEvent = async (tripID, expenseID, date, eventID, updat
 };
 
 export const fetchTripsFromUser = async (userId) => {
-  try {
-    const userRef = doc(db, "users", userId);
-    const tripCollectionRef = collection(userRef, "tripsIDs");
-    const tripSnapshot = await getDocs(tripCollectionRef);
-
-    const tripIds = tripSnapshot.docs.map(doc => doc.id);
-    if (!tripIds.length) {
-      console.log("No trip IDs found for user.");
-      return [];
-    }
-
-    const tripPromises = tripIds.map(async (tripId) => {
-      const tripDoc = await getDoc(doc(db, "trips", tripId));
-      return tripDoc.exists() ? { id: tripId, ...tripDoc.data() } : null;
-    });
-
-    const trips = await Promise.all(tripPromises);
-    const filteredTrips = trips.filter(trip => trip !== null);
-
-    console.log("Fetched trips:", filteredTrips); 
-    return filteredTrips;
-  } catch (error) {
-    console.error("Error fetching trips:", error);
-    return [];
-  }
+	try {
+		const userRef = doc(db, 'users', userId);
+		const tripCollectionRef = collection(userRef, 'tripsIDs');
+		const tripSnapshot = await getDocs(tripCollectionRef);
+		console.log(
+			'fetCHY',
+			tripSnapshot.docs.map((doc) => doc.data())
+		);
+		return tripSnapshot;
+	} catch (error) {
+		console.error('Error fetching trips from user:', error);
+		return [];
+	}
 };
 
 export const addTrip = async (userId, description, destination, startDate, endDate, name, participants, tripPic) => {
@@ -192,6 +189,19 @@ export const getUserProfilePicture = async (userId) => {
   }
 };
 
+export const searchUsersByEmail = async (emailToSearch) => {
+	const usersRef = collection(db, 'users');
+	const q = query(usersRef, orderBy('email'), startAt(emailToSearch), endAt(emailToSearch + '\uf8ff'));
+
+	const querySnapshot = await getDocs(q);
+	const results = [];
+
+	querySnapshot.forEach((doc) => {
+		results.push({ id: doc.id, ...doc.data() });
+	});
+
+	return results;
+};
 // addTrip() = db -> trips -> (add fields: description, destination, startDate, endDate, name, participants[], add collections: expenses, itineraries, addtripid(()=>(db->users(matchUserId)->addTrip id to tripsIDs collection)))
 
 // updateTrip() =

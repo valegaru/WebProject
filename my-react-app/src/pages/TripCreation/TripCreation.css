@@ -1,0 +1,90 @@
+.trip-creation-container {
+	padding: 2rem;
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+.trip-title {
+	text-align: center;
+	margin-bottom: 2rem;
+}
+
+.trip-form {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+.form-group {
+	display: flex;
+	flex-direction: column;
+}
+
+.input,
+.textarea,
+.datepicker {
+	padding: 0.5rem;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 1rem;
+}
+
+.input-file {
+	margin-top: 0.5rem;
+}
+
+.upload-status {
+	font-size: 0.9rem;
+	color: #444;
+}
+
+.image-preview {
+	margin-top: 1rem;
+}
+
+.trip-image {
+	max-width: 100%;
+	border-radius: 8px;
+}
+
+.search-results {
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	list-style: none;
+	padding: 0.5rem;
+	max-height: 200px;
+	overflow-y: auto;
+	margin-top: 0.5rem;
+}
+
+.search-result-item {
+	padding: 0.5rem;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.search-result-item:hover {
+	background-color: #f0f0f0;
+}
+
+.participant-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	margin-top: 1rem;
+}
+
+.submit-button {
+	padding: 0.75rem;
+	font-size: 1rem;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+	background-color: #0056b3;
+}
