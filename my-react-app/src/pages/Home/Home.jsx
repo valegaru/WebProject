@@ -12,9 +12,14 @@ import latamTour from '../../assets/latamGroup.png';
 import paris from '../../assets/paris.png';
 import newYork from '../../assets/newYork.png';
 import thailand from '../../assets/thailand.png';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Home = () => {
+
+	useEffect(()=>{
+
+	},[])
+
 	const savedList = [
 		{ image: restaurants, label: 'Restaurants' },
 		{ image: activities, label: 'Activities' },

@@ -22,11 +22,7 @@ const ExpenseTracker = () => {
   const date = useSelector((state) => state.date.selectedDate);
   const uid = useSelector((state) => state.auth.userId);
   const storeState = useSelector((state) => state);
-  const currency = useSelector((state) => state.currency.currency)
 
-
-  const [individualBudget, setIndividualBudget] = useState(0);
-  const [groupBudget, setGroupBudget] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const addExpense = (id,name,price) => {
@@ -41,23 +37,6 @@ const ExpenseTracker = () => {
     await fetchUserData(uid);
     await fetchTripsFromUser(uid);
 
-    const events = await fetchExpensesDayEvents("xN1RgphfLnpTIm7xoOhu", "Lz9ZchnTEIFCFbPF1onz", date);
-
-    events.forEach((event) => {
-      dispatch(addEvent(event));
-    });
-
-    const individualTotal = events.reduce((sum, event) => {
-    const yourParticipation = event.participants
-      ? Object.values(event.participants).find(p => p.userID === uid)
-      : null;
-      return yourParticipation ? sum + Number(yourParticipation.contribution) : sum;
-    }, 0);
-
-    const groupTotal = events.reduce((sum, event) => sum + Number(event.amount), 0);
-
-    setIndividualBudget(individualTotal);
-    setGroupBudget(groupTotal);
     setLoading(false);
   }
 
@@ -86,8 +65,8 @@ const ExpenseTracker = () => {
           </div>
 
           <div className="budget-section">
-            <BudgetRange label="individual" min={individualBudget} max={individualBudget}/>
-            <BudgetRange label="group" min={groupBudget} max={groupBudget}/>
+            <BudgetRange label="individual" />
+            <BudgetRange label="group" />
 
           </div>
 
