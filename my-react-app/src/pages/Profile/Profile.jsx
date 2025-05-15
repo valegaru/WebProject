@@ -60,20 +60,21 @@ function Profile() {
         const success = await updateUserProfilePicture(user.userId, data.secure_url);
         if (success) {
   			const updatedData = await fetchUserData(user.userId);
-  		if (updatedData) {
-    		setUserData({
-      		username: updatedData.username || '',
-      		email: updatedData.email || '',
-      		profilePicture: updatedData.profilePicture || '',
-    		});
-  		}
-  setUploadStatus('Imagen subida correctamente.');
-}else {
+			
+			if (updatedData) {
+				setUserData({
+					username: updatedData.username || '',
+					email: updatedData.email || '',
+					profilePicture: updatedData.profilePicture || '',
+				});
+			}
+			setUploadStatus('Imagen subida correctamente.');
+		}else {
           setUploadStatus('Error al actualizar la imagen en Firestore.');
         }
-      } else {
-        setUploadStatus('Error al subir la imagen.');
-      }
+		
+	} else {
+        setUploadStatus('Error al subir la imagen.');}
     } catch (err) {
       console.error('Error en Cloudinary:', err);
       setUploadStatus('Error al subir la imagen.');
