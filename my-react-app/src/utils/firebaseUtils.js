@@ -83,13 +83,25 @@ export const updateExpenseEvent = async (tripID, expenseID, date, eventID, updat
 export const fetchTripsFromUser = async (userId) => {
 	try {
 		const userRef = doc(db, 'users', userId);
-		const tripCollectionRef = collection(userRef, 'tripsIDs');
-		const tripSnapshot = await getDocs(tripCollectionRef);
-		console.log(
-			'fetCHY',
-			tripSnapshot.docs.map((doc) => doc.data())
-		);
-		return tripSnapshot;
+		const tripsIdCollectionRef = collection(userRef, 'tripsIDs');
+		const tripsIdSnapshot = await getDocs(tripsIdCollectionRef);
+
+		const tripDataArray = [];
+
+		for (const docSnap of tripsIdSnapshot.docs) {
+			const tripId = docSnap.id;
+			const tripDocRef = doc(db, 'trips', tripId);
+			const tripDoc = await getDoc(tripDocRef);
+
+			if (tripDoc.exists()) {
+				tripDataArray.push({
+					id: tripDoc.id,
+					...tripDoc.data(),
+				});
+			}
+		}
+
+		return tripDataArray;
 	} catch (error) {
 		console.error('Error fetching trips from user:', error);
 		return [];
