@@ -115,7 +115,7 @@ export const addTrip = async (userId, description, destination, startDate, endDa
 
     const tripIDRef = doc(collection(db, `users/${userId}/tripsIDs`));
     await setDoc(tripIDRef, {
-    tripsIDs: tripRef.id,
+    tripID: tripRef.id,
     });
 
     return tripRef.id;
