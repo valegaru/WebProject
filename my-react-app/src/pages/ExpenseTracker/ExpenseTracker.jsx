@@ -26,8 +26,7 @@ const ExpenseTracker = () => {
   const [loading, setLoading] = useState(true);
 
   const addExpense = (id,name,price) => {
-    addNewExpense(id,name,price)
-    console.log("expensed" + id + name + price)
+
   }
 
   useEffect(() => {
@@ -75,8 +74,7 @@ const ExpenseTracker = () => {
 
       <div className="carousel-and-button">
         <DateCarousel/>
-        <CustomButton label="ADD EXPENSE" onClick={() => {
-        addTrip(uid, "Holi", "your mom", date, date, "BRAZIL TRIP", "Just me");}}/>
+        <CustomButton label="ADD EXPENSE" onClick={() => {}}/>
       </div>
 
       <Calendar/></>)}

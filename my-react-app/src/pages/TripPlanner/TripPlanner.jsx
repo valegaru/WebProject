@@ -27,7 +27,7 @@ const Trip = () => {
 
 	const handleClick = (expense) => {
 		console.log("Clicked on expense:", expense);
-		navigate(`/expenseTracker/${tripId}`);};
+		navigate(`/expenseTracker/${tripId}/${expense.id}`);};
 
 	useEffect(() => {
 	const fetchData = async () => {
