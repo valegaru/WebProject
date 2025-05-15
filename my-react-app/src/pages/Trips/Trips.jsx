@@ -4,9 +4,11 @@ import Navbar from '../../components/Navbar/Navbar';
 import Banner from '../../components/Banner/banner';
 import Card from '../../components/Card/Card';
 import bannerimage from '../../assets/bannerimage.png';
-import { fetchUserData } from '../../utils/firebaseUtils';
+import { fetchTripsFromUser, fetchUserData } from '../../utils/firebaseUtils';
 import { getTripsByUserIdFromFirestore } from '../../utils/firebaseUtils';
 import './Trips.css';
+
+
 
 function Trips() {
 	const user = useSelector((state) => state.auth); // igual que en Profile
@@ -40,7 +42,8 @@ function Trips() {
 			if (!userId) return;
 
 			try {
-				const userTrips = await getTripsByUserIdFromFirestore(userId);
+				const userTrips= await fetchTripsFromUser(userId);
+
 				setTrips(userTrips || []);
 			} catch (err) {
 				console.error(err);
