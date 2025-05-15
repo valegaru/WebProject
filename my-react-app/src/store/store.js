@@ -5,7 +5,7 @@ import  CurrencyReducer  from './currencySlice/CurrencySlice';
 import  EventReducer from './eventSlice/EventSlice'
 import  BudgetReducer from './budgetSlice/BudgetSlice'
 import  TripReducer from './tripSlice/TripSlice'
-import  TripReducer from './tripSlice/TripSlice'
+import  TripsReducer from './tripsSlice/TripsSlice'
 import  ExpenseReducer from './expenseSlice/ExpenseSlice'
 import  ExpensesReducer from './expensesSlice/ExpensesSlice'
 
