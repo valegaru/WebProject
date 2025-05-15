@@ -1,64 +1,89 @@
 .simple-card {
-	border-radius: 15px;
-	overflow: hidden;
-	cursor: pointer;
 	width: 180px;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+	border-radius: 0 20px 20px 20px;
+	cursor: pointer;
 	transition: transform 0.2s ease;
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .simple-card:hover {
-	transform: translateY(-5px);
+	transform: translateY(-4px);
 }
 
 .card-img {
 	width: 100%;
 	height: 120px;
 	object-fit: cover;
+
+	border-top-right-radius: 20px;
 }
 
 .card-content {
 	padding: 10px;
-	text-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 .card-title {
-	margin: 5px 0;
-	font-size: 16px;
-	font-weight: bold;
+	background: none;
 }
-
-/* === TRIPS variant === */
+/* === TRIPS VARIANT === */
 .simple-card.trips {
 	background-color: #f9c31f;
-	color: #000;
+	color: black;
+	align-items: flex-start;
+	text-align: left;
 }
 
-.simple-card.trips .card-dates,
-.simple-card.trips .card-description,
-.simple-card.trips .card-participants {
+.trips .card-title {
+	font-weight: 700;
+	font-size: 15px;
+	margin-bottom: 4px;
+	color: black;
+}
+
+.trips .card-dates {
 	font-size: 12px;
-	margin: 2px 0;
+	color: #555;
+	margin-bottom: 6px;
 }
 
-/* === SAVED variant === */
+.trips .card-description {
+	font-size: 13px;
+	margin-bottom: 6px;
+}
+
+.trips .card-participants {
+	font-size: 12px;
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+/* === SAVED VARIANT === */
 .simple-card.saved {
 	background-color: #0077b6;
-	color: #fff;
+	text-align: center;
+	color: white;
 }
 
-.simple-card.saved .card-title {
-	font-size: 14px;
-	margin: 10px 0;
+.saved .card-title {
+	font-weight: 600;
+	font-size: 15px;
 }
 
-/* === MATCHES variant === */
+/* === MATCHES VARIANT === */
 .simple-card.matches {
 	background-color: #913c20;
-	color: #fff;
+	text-align: center;
+	color: white;
 }
 
-.simple-card.matches .card-title {
-	font-size: 14px;
-	margin: 10px 0;
+.matches .card-title {
+	font-weight: 600;
+	font-size: 15px;
 }

@@ -52,7 +52,13 @@ const Card = ({
 	if (variant === 'saved') {
 		return (
 			<div className='simple-card saved' onClick={onClick}>
-				{tripPic && <img src={tripPic} alt={name || 'Saved image'} className='card-img' />}
+				{tripPic && (
+					<img
+						src={tripPic || ' https://visitvalle.travel/wp-content/uploads/2024/12/banner-interna-res.webp'}
+						alt={name || 'Saved image'}
+						className='card-img'
+					/>
+				)}
 				<div className='card-content'>{name && <h2 className='card-title'>{name}</h2>}</div>
 			</div>
 		);
@@ -62,7 +68,16 @@ const Card = ({
 	if (variant === 'matches') {
 		return (
 			<div className='simple-card matches' onClick={onClick}>
-				{tripPic && <img src={tripPic} alt={name || 'Match image'} className='card-img' />}
+				{tripPic && (
+					<img
+						src={
+							tripPic ||
+							'https://media.istockphoto.com/id/1497396873/es/foto/listo-para-comenzar-mis-vacaciones-en-la-playa.jpg?s=612x612&w=0&k=20&c=26T_8jyLnZA2XOOMYgMhMTZJzXLjHa1ZsR9YiCivnDg='
+						}
+						alt={name || 'Match image'}
+						className='card-img'
+					/>
+				)}
 				<div className='card-content'>{name && <h2 className='card-title'>{name}</h2>}</div>
 			</div>
 		);
