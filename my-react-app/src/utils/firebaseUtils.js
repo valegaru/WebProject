@@ -92,7 +92,7 @@ export const fetchTripsFromUser = async (userId) => {
     const trips = await Promise.all(tripPromises);
     const filteredTrips = trips.filter(trip => trip !== null);
 
-    console.log("Fetched trips:", filteredTrips); // ✅ Log actual fetched trip data
+    console.log("Fetched trips:", filteredTrips); 
     return filteredTrips;
   } catch (error) {
     console.error("Error fetching trips:", error);
