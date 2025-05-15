@@ -108,6 +108,22 @@ export const fetchTripsFromUser = async (userId) => {
 	}
 };
 
+export const fetchTripsById = async (tripId) => {
+	try {
+		const tripDocRef = doc(db, 'trips', tripId);
+		const tripDoc = await getDoc(tripDocRef);
+
+		if (!tripDoc.exists()) {
+			console.log('No trip to fetch');
+			return null; 
+		}
+
+		return tripDoc;
+	} catch (error) {
+		console.error('Error fetching trip', error);
+		return null; 
+	}
+};
 export const addTrip = async (userId, description, destination, startDate, endDate, name, participants, tripPic) => {
 	try {
 		const tripRef = doc(collection(db, 'trips'));

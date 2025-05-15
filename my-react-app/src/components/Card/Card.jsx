@@ -18,6 +18,7 @@ const Card = ({
 	onClick,
 	variant = 'trips', // 'trips' | 'saved' | 'matches'
 }) => {
+	
 	const handleClick = () => {
 		if (onClick) {
 			onClick(id);
