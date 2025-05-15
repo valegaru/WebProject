@@ -157,6 +157,34 @@ export const getUserNameById = async (userId) => {
   }
 };
 
+
+
+export const updateUserProfilePicture = async (userId, profilePicture) => {
+  try {
+    const userRef = doc(db, 'users', userId);
+    await updateDoc(userRef, { profilePicture });
+    return true;
+  } catch (error) {
+    console.error('Error updating photo URL:', error);
+    return false;
+  }
+};
+
+
+export const getUserProfilePicture = async (userId) => {
+  try {
+    const userRef = doc(db, 'users', userId);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists()) {
+      return userSnap.data().profilePicture || '';
+    }
+    return '';
+  } catch (error) {
+    console.error('Error fetching user photo URL:', error);
+    return '';
+  }
+};
+
 // addTrip() = db -> trips -> (add fields: description, destination, startDate, endDate, name, participants[], add collections: expenses, itineraries, addtripid(()=>(db->users(matchUserId)->addTrip id to tripsIDs collection)))
 
 // updateTrip() =  
