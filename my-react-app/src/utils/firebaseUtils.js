@@ -125,6 +125,19 @@ export const addTrip = async (userId, description, destination, startDate, endDa
   }
 };
 
+export const searchUsersByName = async (nameToSearch) => {
+  const usersRef = collection(db, "users");
+  const q = query(usersRef, where("name", "==", nameToSearch));
+  const querySnapshot = await getDocs(q);
+
+  const results = [];
+  querySnapshot.forEach((doc) => {
+    results.push({ id: doc.id, ...doc.data() });
+  });
+
+  return results;
+}
+
 
 // addTrip() = db -> trips -> (add fields: description, destination, startDate, endDate, name, participants[], add collections: expenses, itineraries, addtripid(()=>(db->users(matchUserId)->addTrip id to tripsIDs collection)))
 
