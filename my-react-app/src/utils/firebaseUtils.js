@@ -165,12 +165,35 @@ export const addTrip = async (userId, description, destination, startDate, endDa
 
 		const tripIDRef = doc(collection(db, `users/${userId}/tripsIDs`));
 		await setDoc(tripIDRef, {
-			tripID: tripRef.id,
+			id: tripIDRef.id,
 		});
 
 		return tripRef.id;
 	} catch (error) {
 		console.error('Error adding trip:', error);
+		return null;
+	}
+};
+
+export const createExpense = async (tripRef, participants, startDate) => {
+	try {
+
+		const existingExpensesSnap = await getDocs(collection(tripRef, 'expenses'));
+		const expenseCount = existingExpensesSnap.size + 1;
+
+	    const expenseRef = doc(collection(tripRef, 'expenses'));
+		await setDoc(expenseRef, {
+			name: `Expense ${expenseCount}`,
+			participants: participants.map(p => p.id || p)
+		});
+
+		const dayRef = doc(collection(expenseRef, 'days'), startDate);
+		await setDoc(dayRef, {});
+
+		return { expenseRef, dayRef };
+
+	} catch (error) {
+		console.error("Error creating expense with day:", error);
 		return null;
 	}
 };
