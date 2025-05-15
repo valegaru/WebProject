@@ -50,6 +50,24 @@ export const fetchExpensesDayEvents = async (tripID, expenseID, date) => {
 	}
 };
 
+export const fetchExpenses = async (tripId) => {
+	try {
+		const tripRef = doc(db, 'trips', tripId);
+		const expensesCollectionRef = collection(tripRef, 'expenses');
+		const snapshot = await getDocs(expensesCollectionRef);
+
+		const expenses = snapshot.docs.map((doc) => ({
+			id: doc.id,
+			...doc.data(),
+		}));
+
+		return expenses;
+	} catch (error) {
+		console.error('Error fetching expenses:', error);
+		return [];
+	}
+};
+
 export const addExpenseEvent = async (tripID, expenseID, date, eventData) => {
 	try {
 		const dayRef = doc(db, 'trips', tripID, 'expenses', expenseID, 'days', date);

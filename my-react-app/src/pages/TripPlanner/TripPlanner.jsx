@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import './tripPlanner.css';
 
 import Navbar from '../../components/Navbar/Navbar';
@@ -14,30 +14,50 @@ import user3 from '../../assets/user3.png';
 import user4 from '../../assets/user4.png';
 import user5 from '../../assets/user5.png';
 import editIcon from '../../assets/editIcon.png';
-import { fetchTripById } from '../../utils/firebaseUtils';
+import { fetchExpenses, fetchTripById } from '../../utils/firebaseUtils';
 
 
 const Trip = () => {
 	const { tripId } = useParams(); 
 	const [trip, setTrip] = useState(null);
+	const [itineraries, setItineraries] = useState([]);
+	const [expenses, setExpenses] = useState([]);
+
+	const navigate = useNavigate()
+
+	const handleClick = (expense) => {
+		console.log("Clicked on expense:", expense);
+		navigate(`/expenseTracker/${tripId}`);};
 
 	useEffect(() => {
-		const fetchData = async () => {
-			const tripDoc = await fetchTripById(tripId);
-			if (tripDoc) {
-				setTrip(tripDoc.data());
-			}
-		};
+	const fetchData = async () => {
+		const tripDoc = await fetchTripById(tripId);
+		const expensesData = await fetchExpenses(tripId);
 
-		if (tripId) {
-			fetchData();
+		if (tripDoc) {
+			setTrip(tripDoc.data());
 		}
+
+		if (expensesData) {
+			const expensesWithClick = expensesData.map((expense) => ({
+				...expense,
+				onClick: () => handleClick(expense), // Pass the expense if needed
+			}));
+
+			setExpenses(expensesWithClick);
+			console.log(expensesWithClick);
+		}
+	};
+
+	if (tripId) {
+		fetchData();
+	}
 	}, [tripId]);
+
 
 	if (!trip) return <p>Loading trip data...</p>;
 
-	const itineraries = trip.itineraries || [];
-	const expenses = trip.expenses || [];
+	
 
 	return (
 		<div className='trip-planner-container'>
@@ -77,7 +97,7 @@ const Trip = () => {
 			</section>
 
 			<section className='section'>
-				<CardList title='Expenses' cardsData={expenses} variantColor='green' />
+				<CardList title='Expenses' cardsData={expenses} variantColor='green' onClick={handleClick} />
 			</section>
 		</div>
 	);
