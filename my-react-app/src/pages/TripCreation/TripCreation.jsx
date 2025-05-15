@@ -54,6 +54,13 @@ function TripCreation() {
 		setSearchResults([]);
 	};
 
+	const removeParticipant = (id) => {
+		setTripData({
+			...tripData,
+			participants: tripData.participants.filter((p) => p.id !== id),
+		});
+	};
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
@@ -127,7 +134,13 @@ function TripCreation() {
 					<label>Participantes agregados:</label>
 					<div>
 						{tripData.participants.map((user) => (
-							<ParticipantCard key={user.id} name={user.username} avatarUrl={user.photoUrl} email={user.email} />
+							<ParticipantCard
+								key={user.id}
+								name={user.username}
+								avatarUrl={user.photoUrl}
+								email={user.email}
+								onRemove={() => removeParticipant(user.id)}
+							/>
 						))}
 					</div>
 
