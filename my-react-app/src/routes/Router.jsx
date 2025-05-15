@@ -57,7 +57,7 @@ const Router = () => {
 					}
 				/>
 				<Route
-					path='/tripPlanner'
+					path='/tripPlanner/:tripId'
 					element={
 						<PrivateRoute>
 							<Trip />
