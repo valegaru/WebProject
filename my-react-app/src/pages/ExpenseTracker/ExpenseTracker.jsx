@@ -37,12 +37,6 @@ const ExpenseTracker = () => {
     await fetchUserData(uid);
     await fetchTripsFromUser(uid);
 
-    const events = await fetchExpensesDayEvents("xN1RgphfLnpTIm7xoOhu", "Lz9ZchnTEIFCFbPF1onz", date);
-
-    events.forEach((event) => {
-      dispatch(addEvent(event));
-    });
-
     setLoading(false);
   }
 

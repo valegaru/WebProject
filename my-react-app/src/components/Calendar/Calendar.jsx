@@ -3,6 +3,7 @@ import { getHour } from "../../utils/getHour";
 import ExpenseCard from "../Expenses/ExpenseCard/ExpenseCard";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import { fetchExpensesDayEvents } from "../../utils/firebaseUtils";
 
 const Calendar = () => {
   const startHour = 12;
@@ -11,6 +12,14 @@ const Calendar = () => {
   const date = useSelector((state) => state.date.selectedDate);
   
   const hoursArray = Array.from({ length: endHour - startHour }, (_, i) => startHour + i);
+  
+  useEffect(()=>{
+    fetchExpensesDayEvents("xN1RgphfLnpTIm7xoOhu", "Lz9ZchnTEIFCFbPF1onz", date);
+    events.forEach((event) => {
+      dispatch(addEvent(event));
+    });
+  },[date])
+  
 
   return (
     <Box
