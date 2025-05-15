@@ -5,8 +5,7 @@ function Trips() {
 	return (
 		<>
 			<Navbar></Navbar>
-			<p>Profile</p>
-      <LogoutButton></LogoutButton>
+			<p>Trips</p>
 		</>
 	);
 }
