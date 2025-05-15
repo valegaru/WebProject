@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { addTrip, searchUsersByName, searchUsersByEmail } from '../../utils/firebaseUtils';
 import LogoutButton from '../../components/LogoutButton/LogoutButton';
 import DatePicker from 'react-datepicker';
@@ -10,6 +11,7 @@ import './TripCreation.css';
 
 function TripCreation() {
 	const { userId } = useSelector((state) => state.auth);
+	const navigate = useNavigate(); 
 
 	const [tripData, setTripData] = useState({
 		name: '',
@@ -20,6 +22,7 @@ function TripCreation() {
 		participants: [],
 		tripPic: '',
 	});
+
 
 	const [searchTerm, setSearchTerm] = useState('');
 	const [searchResults, setSearchResults] = useState([]);
@@ -130,7 +133,9 @@ function TripCreation() {
 
 		if (tripID) {
 			alert('Viaje creado con éxito 🎉');
-			// Limpiar formulario si quieres:
+
+			navigate('/trips');
+			// Limpiar formulario
 			setTripData({
 				name: '',
 				description: '',
