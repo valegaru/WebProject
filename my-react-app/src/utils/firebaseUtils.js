@@ -202,6 +202,17 @@ export const searchUsersByEmail = async (emailToSearch) => {
 
 	return results;
 };
+
+export const getTripsByUserIdFromFirestore = async (userId) => {
+	const q = query(collection(db, 'trips'), where('userId', '==', userId));
+	const querySnapshot = await getDocs(q);
+
+	const trips = [];
+	querySnapshot.forEach((doc) => {
+		trips.push({ id: doc.id, ...doc.data() });
+	});
+	return trips;
+};
 // addTrip() = db -> trips -> (add fields: description, destination, startDate, endDate, name, participants[], add collections: expenses, itineraries, addtripid(()=>(db->users(matchUserId)->addTrip id to tripsIDs collection)))
 
 // updateTrip() =
