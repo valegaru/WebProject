@@ -1,14 +1,6 @@
 import { db } from '../services/firebase';
 import { collection } from 'firebase/firestore';
 import { doc, getDoc, getDocs, addDoc, updateDoc, arrayUnion, query, where, setDoc} from 'firebase/firestore';
-export const addNewExpense= async ({ uidUser, name, price }) => {
-    const docRef = await addDoc(collection(db, 'expense'), {
-      uidUser,
-      name,
-      price
-    });
-    console.log('Document written with ID: ', docRef.id);
-};
 
 export const fetchUserData = async (userId) => {
   try {
