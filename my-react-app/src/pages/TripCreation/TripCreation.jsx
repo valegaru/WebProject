@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { addTrip, searchUsersByName } from '../../utils/firebaseUtils';
+import { addTrip, searchUsersByName, searchUsersByEmail } from '../../utils/firebaseUtils';
 import LogoutButton from '../../components/LogoutButton/LogoutButton';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -36,9 +36,19 @@ function TripCreation() {
 		const value = e.target.value;
 		setSearchTerm(value);
 
-		if (value.length > 2) {
-			const results = await searchUsersByName(value);
-			setSearchResults(results);
+		if (value.length > 1) {
+			const [nameResults, emailResults] = await Promise.all([searchUsersByName(value), searchUsersByEmail(value)]);
+
+			// Combinar sin duplicados (por id)
+			const combined = [...nameResults];
+
+			emailResults.forEach((emailUser) => {
+				if (!combined.some((user) => user.id === emailUser.id)) {
+					combined.push(emailUser);
+				}
+			});
+
+			setSearchResults(combined);
 		} else {
 			setSearchResults([]);
 		}
