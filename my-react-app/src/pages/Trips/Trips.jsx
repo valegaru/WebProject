@@ -87,7 +87,6 @@ function Trips() {
 								endDate={trip.endDate}
 								description={trip.description}
 								participants={trip.participants}
-								onClick={() => (window.location.href = `/tripPlanner/${trip.id}`)}
 							/>
 						))}
 					</div>
