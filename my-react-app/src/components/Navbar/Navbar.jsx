@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
 	AppBar,
@@ -15,8 +15,22 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import './Navbar.css';
 import ProfilePic from '../ProfilePic/ProfilePic';
+import { getUserProfilePicture } from '../../utils/firebaseUtils';
+import { useSelector} from 'react-redux';
 
 const Navbar = () => {
+
+	const uid = useSelector((state) => state.auth.userId)
+	const [profilePic, setProfilePic] = useState()
+
+	useEffect(() => {
+	const fetchProfilePic = async () => {
+		const url = await getUserProfilePicture(uid);
+		setProfilePic(url) 
+	};
+	fetchProfilePic();
+}, []);
+
 	const navigate = useNavigate();
 	const isMobile = useMediaQuery('(max-width:768px)');
 	const [anchorEl, setAnchorEl] = React.useState(null);
@@ -32,6 +46,10 @@ const Navbar = () => {
 	const handleMenuClose = () => {
 		setAnchorEl(null);
 	};
+
+	const profileClick = () => {
+		navigate('/profile')
+	}
 
 	return (
 		<AppBar elevation={0} sx={{ backgroundColor: '#f4e4c5', px: 4, py: 1 }} className='navbar'>
@@ -84,7 +102,8 @@ const Navbar = () => {
 
 					<ProfilePic
 						name='Juan'
-						imgUrl='https://github.com/valegaru/WebProject/blob/main/my-react-app/src/assets/user1.png?raw=true'
+						imgUrl={profilePic}
+						onClick={profileClick}
 					/>
 
 					<Button variant='contained' className='cta-button' onClick={handleCreateTrip}>
