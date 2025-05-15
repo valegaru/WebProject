@@ -77,7 +77,7 @@ function Trips() {
 						{trips.map((trip) => (
 							<Card
 								key={trip.id}
-								tripPic={trip.imageUrl}
+								tripPic={trip.tripPic}
 								name={trip.name}
 								startDate={trip.startDate}
 								endDate={trip.endDate}
