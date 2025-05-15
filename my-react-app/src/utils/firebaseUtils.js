@@ -267,6 +267,22 @@ export const addEventToDay = async (tripID, expenseID, date, eventData) => {
 	}
 };
 
+export const updateEventInDay = async (tripID, expenseID, date, eventID, updatedData) => {
+	try {
+		const tripRef = doc(db, 'trips', tripID);
+		const expenseRef = doc(collection(tripRef, 'expenses'), expenseID);
+		const dayRef = doc(collection(expenseRef, 'days'), date);
+		const eventDocRef = doc(collection(dayRef, 'events'), eventID);
+
+		await updateDoc(eventDocRef, updatedData);
+		console.log('Event updated:', eventID);
+		return true;
+	} catch (error) {
+		console.error('Error updating event:', error);
+		return false;
+	}
+};
+
 // addTrip() = db -> trips -> (add fields: description, destination, startDate, endDate, name, participants[], add collections: expenses, itineraries, addtripid(()=>(db->users(matchUserId)->addTrip id to tripsIDs collection)))
 
 // updateTrip() =
