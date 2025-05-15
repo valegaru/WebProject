@@ -5,8 +5,22 @@ import arrowBlue from '../../assets/arrow-watchMore-blue.svg';
 import arrowYellow from '../../assets/arrow-watchMore-yellow.svg';
 import arrowTerra from '../../assets/arrow-watchMore-red.svg';
 import arrowGreen from '../../assets/arrow-watchMore-green.png';
+import { createExpense } from '../../utils/firebaseUtils';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { doc } from 'firebase/firestore';
+import { db } from '../../services/firebase';
+
 
 const CardList = ({ title, cardsData, variantColor = 'default' }) => {
+
+	const date = useSelector((state)=> state.date.selectedDate)
+	const {tripId} = useParams()
+
+	const handleClickPlus = () => {
+	const tripRef = doc(db, 'trips', tripId); 
+	createExpense(tripRef, [], date); 
+};
 	let arrowIcon;
 
 	switch (variantColor) {
@@ -27,7 +41,7 @@ const CardList = ({ title, cardsData, variantColor = 'default' }) => {
 		<div className={`card-list-container ${variantColor}`}>
 			<div className='header-buttons'>
 				<h2 className='title'>{title}</h2>
-				<button className='circle-btn'>+</button>
+				<button className='circle-btn' onClick={() => handleClickPlus()}>+</button>
 			</div>
 
 			<div className='cards-section'>
@@ -47,7 +61,7 @@ const CardList = ({ title, cardsData, variantColor = 'default' }) => {
 
 				<div className='watch-more'>
 					<button className='arrow-btn'>
-						<img src={arrowIcon} alt='watch more' className='arrow-image' />
+						<img src={arrowIcon} alt='watch more' className='arrow-image' onClick={() => console.log("AROW")}/>
 					</button>
 				</div>
 			</div>
