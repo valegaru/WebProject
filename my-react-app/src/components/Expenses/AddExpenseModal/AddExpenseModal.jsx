@@ -49,6 +49,8 @@ const AddEventModal = ({ tripID, expenseID, date, onClose, onEventAdded }) => {
   return (
     <div className="modal-overlay">
       <div className="modal">
+        <h3>Modal for use in development only</h3>
+        <h3>Intended only for testing purposes</h3>
         <h2>Add Event</h2>
         <form onSubmit={handleSubmit}>
           <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" required />
