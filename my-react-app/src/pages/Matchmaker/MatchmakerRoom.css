@@ -31,6 +31,9 @@ body {
 	.matchmaker-room-container {
 		display: flex;
 		flex-direction: column; /* Pone los elementos en una columna */
+		width: 70vh;
+		justify-content: center;
+		align-items: center;
 	}
 
 	.main-content {

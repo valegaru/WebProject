@@ -35,3 +35,10 @@ body {
 	padding: 0;
 }
 
+
+@media (max-width: 768px) {
+	.matchmaker-wrapper {
+		align-items: start;
+		justify-content: left;
+}
+}

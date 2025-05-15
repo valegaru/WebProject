@@ -117,10 +117,15 @@ p {
 	.info-label {
 		width: 500px !important;
 	}
+	.card-label,
+	.card-img,
+	.trip-info {
+		width: 250px !important;
+	}
 
 	.trip-info {
 		flex-direction: column;
-		gap: 0.4rem;
+		/* gap: 0.4rem; */
 		text-align: left;
 	}
 
@@ -133,7 +138,7 @@ p {
 	.members {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
+		/* gap: 0.5rem; */
 	}
 
 	.trip-icon {
@@ -143,5 +148,9 @@ p {
 	.trip-label,
 	.info-date {
 		width: 100px;
+	}
+
+	.custom-card.custom-card .saved {
+		gap: 0.2rem;
 	}
 }

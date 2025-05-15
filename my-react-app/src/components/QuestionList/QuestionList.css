@@ -1,7 +1,7 @@
 .question-list-container {
 	padding: 2rem;
 	background-color: #fdf7ed;
-	width: 100%;
+	width: 100vw;
 	box-sizing: border-box;
 }
 
@@ -15,9 +15,15 @@
 	.questions-grid {
 		grid-template-columns: 1fr;
 	}
+
+	.question-list-container {
+		width: 90vh;
+	}
 }
 
-hr{
-  margin-bottom: 1rem;
-  margin-top: 1rem;
+hr {
+	margin-bottom: 1rem;
+	margin-top: 1rem;
 }
+
+

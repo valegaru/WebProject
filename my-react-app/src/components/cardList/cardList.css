@@ -128,7 +128,8 @@
 		scroll-snap-align: start;
 	}
 
-	.card-list-container.green {
+	.card-list-container.green,
+	.card-list-container.saved, .card-list-container.trips, .card-list-container.matches {
 		width: 550px;
 	}
 

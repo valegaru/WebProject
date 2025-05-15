@@ -87,7 +87,7 @@
 	.navbar {
 		flex-direction: row;
 		justify-content: space-between;
-		width: 100vh !important;
+		width: 80vh !important;
 	}
 
 	.logo-container {
