@@ -108,7 +108,7 @@ export const fetchTripsFromUser = async (userId) => {
 	}
 };
 
-export const fetchTripsById = async (tripId) => {
+export const fetchTripById = async (tripId) => {
 	try {
 		const tripDocRef = doc(db, 'trips', tripId);
 		const tripDoc = await getDoc(tripDocRef);
