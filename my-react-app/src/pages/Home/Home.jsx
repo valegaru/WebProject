@@ -15,8 +15,11 @@ import thailand from '../../assets/thailand.png';
 
 import { useSelector } from 'react-redux';
 import { fetchTripsFromUser } from '../../utils/firebaseUtils';
+import { useNavigate } from 'react-router-dom';
+
 
 const Home = () => {
+	const navigate = useNavigate();
 	const uid = useSelector((state) => state.auth.userId);
 	const name = useSelector((state) => state.auth.username);
 
@@ -34,7 +37,7 @@ const Home = () => {
 				endDate: trip.endDate,
 				description: trip.description || '',
 				participants: trip.participants || [],
-				onClick: () => console.log(`Clicked on trip: ${trip.id}`)
+				onClick: () => navigate(`/TripPlanner/${trip.id}`)
 			}));
 			setTrips(formattedTrips);
 		};

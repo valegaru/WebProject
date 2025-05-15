@@ -7,11 +7,13 @@ import bannerimage from '../../assets/bannerimage.png';
 import { fetchTripsFromUser, fetchUserData } from '../../utils/firebaseUtils';
 import { getTripsByUserIdFromFirestore } from '../../utils/firebaseUtils';
 import './Trips.css';
+import { useNavigate } from 'react-router-dom';
 
 
 
 function Trips() {
 	const user = useSelector((state) => state.auth); // igual que en Profile
+	const navigate = useNavigate()
 
 	const [userId, setUserId] = useState('');
 	const [trips, setTrips] = useState([]);
@@ -87,6 +89,7 @@ function Trips() {
 								endDate={trip.endDate}
 								description={trip.description}
 								participants={trip.participants}
+								onClick= {() => navigate(`/TripPlanner/${trip.id}`)}
 							/>
 						))}
 					</div>
