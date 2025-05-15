@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { addEventToDay } from '../../../utils/firebaseUtils'
-import './Modal.css'; 
+import './AddExpenseModal.css'; 
 
 const AddEventModal = ({ tripID, expenseID, date, onClose, onEventAdded }) => {
   const [title, setTitle] = useState('');
@@ -26,7 +26,7 @@ const AddEventModal = ({ tripID, expenseID, date, onClose, onEventAdded }) => {
     const newEvent = {
       amount,
       endTime,
-      id: Date.now(), // or use a better ID strategy
+      id: Date.now(), 
       participants,
       startTime,
       status,
@@ -35,7 +35,7 @@ const AddEventModal = ({ tripID, expenseID, date, onClose, onEventAdded }) => {
 
     const result = await addEventToDay(tripID, expenseID, date, newEvent);
     if (result) {
-      onEventAdded && onEventAdded(result); // notify parent if needed
+      onEventAdded && onEventAdded(result); 
       onClose();
     }
   };
