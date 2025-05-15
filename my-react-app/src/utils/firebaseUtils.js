@@ -143,36 +143,44 @@ export const fetchTripById = async (tripId) => {
 	}
 };
 
+const formatDate = (date) => {
+  if (typeof date === 'string') return date.slice(0, 10);
+  return date.toISOString().slice(0, 10);
+};
+
 export const addTrip = async (userId, description, destination, startDate, endDate, name, participants, tripPic) => {
-	try {
-		const tripRef = doc(collection(db, 'trips'));
+  try {
+    const formattedStartDate = formatDate(startDate);
+    const formattedEndDate = formatDate(endDate);
 
-		await setDoc(tripRef, {
-			userId,
-			description,
-			destination,
-			startDate,
-			endDate,
-			name,
-			participants,
-			tripPic,
-		});
+    const tripRef = doc(collection(db, 'trips'));
 
-		await createExpense(tripRef, participants, startDate);
+    await setDoc(tripRef, {
+      userId,
+      description,
+      destination,
+      startDate: formattedStartDate,
+      endDate: formattedEndDate,
+      name,
+      participants,
+      tripPic,
+    });
 
-		const itineraryRef = doc(collection(tripRef, 'itinerary'));
-		await setDoc(itineraryRef, {});
+    await createExpense(tripRef, participants, formattedStartDate);
 
-		const tripIDRef = doc(db, `users/${userId}/tripsIDs/${tripRef.id}`);
-		await setDoc(tripIDRef, {
-			id: tripRef.id,
-		});
+    const itineraryRef = doc(collection(tripRef, 'itinerary'));
+    await setDoc(itineraryRef, {});
 
-		return tripRef.id;
-	} catch (error) {
-		console.error('Error adding trip:', error);
-		return null;
-	}
+    const tripIDRef = doc(db, `users/${userId}/tripsIDs/${tripRef.id}`);
+    await setDoc(tripIDRef, {
+      id: tripRef.id,
+    });
+
+    return tripRef.id;
+  } catch (error) {
+    console.error('Error adding trip:', error);
+    return null;
+  }
 };
 
 export const createExpense = async (tripRef, participants, startDate) => {

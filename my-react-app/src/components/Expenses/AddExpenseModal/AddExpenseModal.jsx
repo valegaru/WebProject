@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
 import { addEventToDay } from '../../../utils/firebaseUtils'
 import './AddExpenseModal.css'; 
+import { useDispatch } from 'react-redux';
+import { addEvent } from '../../../store/eventSlice/EventSlice';
 
 const AddEventModal = ({ tripID, expenseID, date, onClose, onEventAdded }) => {
-  const [title, setTitle] = useState('');
-  const [amount, setAmount] = useState('');
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
-  const [status, setStatus] = useState('incomplete');
-  const [participants, setParticipants] = useState([{ contribution: '', userID: '' }]);
+
+    const dispatch = useDispatch()
+
+    const [title, setTitle] = useState('');
+    const [amount, setAmount] = useState('');
+    const [startTime, setStartTime] = useState('');
+    const [endTime, setEndTime] = useState('');
+    const [status, setStatus] = useState('incomplete');
+    const [participants, setParticipants] = useState([{ contribution: '', userID: '' }]);
 
   const handleParticipantChange = (index, field, value) => {
     const updated = [...participants];
@@ -35,8 +40,9 @@ const AddEventModal = ({ tripID, expenseID, date, onClose, onEventAdded }) => {
 
     const result = await addEventToDay(tripID, expenseID, date, newEvent);
     if (result) {
-      onEventAdded && onEventAdded(result); 
-      onClose();
+        dispatch(addEvent(newEvent))
+        onEventAdded && onEventAdded(result); 
+        onClose();
     }
   };
 
