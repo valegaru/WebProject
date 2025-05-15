@@ -5,36 +5,35 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchExpensesDayEvents } from "../../utils/firebaseUtils";
 import { addEvent, clearEvents } from "../../store/eventSlice/EventSlice";
+import { useParams } from "react-router-dom"; 
 
 const Calendar = () => {
-
   const dispatch = useDispatch();
+  const { tripId, expenseId } = useParams(); 
   const startHour = 12;
   const endHour = 17;
   const events = useSelector((state) => state.events.events);
   const date = useSelector((state) => state.date.selectedDate);
-  
+
   const hoursArray = Array.from({ length: endHour - startHour }, (_, i) => startHour + i);
-  
+
   useEffect(() => {
-  const loadDayEvents = async () => {
-    dispatch(clearEvents()); 
+    const loadDayEvents = async () => {
+      dispatch(clearEvents());
 
-    const fetchedEvents = await fetchExpensesDayEvents(
-      "xN1RgphfLnpTIm7xoOhu",
-      "Lz9ZchnTEIFCFbPF1onz",
-      date
-    );
+      const fetchedEvents = await fetchExpensesDayEvents(tripId, expenseId, date); 
 
-    if (fetchedEvents) {
-      fetchedEvents.forEach((event) => {
-        dispatch(addEvent(event)); 
-      });
+      if (fetchedEvents) {
+        fetchedEvents.forEach((event) => {
+          dispatch(addEvent(event));
+        });
+      }
+    };
+
+    if (expenseId && tripId) {
+      loadDayEvents();
     }
-  };
-
-  loadDayEvents();
-}, [date, dispatch]);   
+  }, [date, dispatch, expenseId, tripId]); 
 
   return (
     <Box
