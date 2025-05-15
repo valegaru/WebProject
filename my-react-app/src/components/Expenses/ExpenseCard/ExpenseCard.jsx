@@ -3,26 +3,31 @@ import { Box } from "@mui/material";
 import ProfileInfo from "../ProfileInfo/ProfileInfo";
 import "./ExpenseCard.css";
 import { useSelector } from "react-redux";
+import { getUserProfilePicture } from "../../../utils/firebaseUtils";
 
 const ExpenseCard = ({ title, amount, participants }) => {
   const currency = useSelector((state) => state.currency.currency);
   const [status, setStatus] = useState("missing");
+  const [profilePics, setProfilePics] = useState({});
 
   useEffect(() => {
-    const numericAmount = Number(amount);
+  const fetchPics = async () => {
+    const picMap = {};
+    await Promise.all(
+      Object.values(participants || {}).map(async (p) => {
+        console.log("Fetching profile picture for participant:", p);
+        const url = await getUserProfilePicture(p.userID); 
+        console.log(`Fetched URL for ${p.name} (${p.userID}):`, url);
+        picMap[p.userID] = url; 
+      })
+    );
+    setProfilePics(picMap);
+  };
 
-    if (!participants || isNaN(numericAmount)) return;
+  if (participants) fetchPics();
+}, [participants]);
 
-    let totalContribution = 0;
 
-    Object.values(participants).forEach((participant) => {
-      const contribution = Number(participant.contribution || 0);
-      totalContribution += contribution;
-    });
-
-    const newStatus = totalContribution >= numericAmount ? "complete" : "missing";
-    setStatus(newStatus);
-  }, [participants, amount]);
 
   return (
     <div className={`expense-card ${status}`}>
@@ -40,7 +45,7 @@ const ExpenseCard = ({ title, amount, participants }) => {
           <ProfileInfo
             key={index}
             name={p.name}
-            imgUrl={p.imgUrl}
+            imgUrl={profilePics[p.userID] || ""}
             contribution={p.contribution}
           />
         ))}
