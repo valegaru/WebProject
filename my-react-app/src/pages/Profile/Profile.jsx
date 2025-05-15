@@ -98,33 +98,37 @@ function Profile() {
 	return (
 		<>
 			<Navbar />
-			<div className="profile-page">
-				<div className="profile-card">
-					<h2 className="profile-title">Tu Perfil</h2>
+			<div className='profile-page'>
+				<div className='profile-card'>
+					<h2 className='profile-title'>Tu Perfil</h2>
 
 					{loading ? (
 						<p>Cargando perfil...</p>
 					) : error ? (
-						<p className="profile-error">{error}</p>
+						<p className='profile-error'>{error}</p>
 					) : (
 						<>
-							<div className="profile-avatar">
-								<img src={userData.photoUrl || defaultImage} alt="Foto de perfil" />
+							<div className='profile-avatar'>
+								<img src={userData.photoUrl || defaultImage} alt='Foto de perfil' />
 							</div>
 
 							<input
-								type="file"
-								accept="image/*"
+								type='file'
+								accept='image/*'
 								onChange={handleImageUpload}
 								disabled={uploading}
-								className="profile-input-file"
+								className='profile-input-file'
 							/>
 
-							{uploading && <p className="profile-status">Subiendo imagen...</p>}
-							{uploadStatus && <p className="profile-status">{uploadStatus}</p>}
+							{uploading && <p className='profile-status'>Subiendo imagen...</p>}
+							{uploadStatus && <p className='profile-status'>{uploadStatus}</p>}
 
-							<p className="profile-info"><strong>Usuario:</strong> {userData.username}</p>
-							<p className="profile-info"><strong>Email:</strong> {userData.email}</p>
+							<p className='profile-info'>
+								<strong>Usuario:</strong> {userData.username}
+							</p>
+							<p className='profile-info'>
+								<strong>Email:</strong> {userData.email}
+							</p>
 
 							<div style={{ marginTop: '1.5rem' }}>
 								<LogoutButton />
