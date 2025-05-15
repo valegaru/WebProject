@@ -250,6 +250,23 @@ export const getTripsByUserIdFromFirestore = async (userId) => {
 	const snapshot = await getDocs(q);
 	return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
+
+export const addEventToDay = async (tripID, expenseID, date, eventData) => {
+	try {
+		const tripRef = doc(db, 'trips', tripID);
+		const expenseRef = doc(collection(tripRef, 'expenses'), expenseID);
+		const dayRef = doc(collection(expenseRef, 'days'), date);
+		const eventsCollection = collection(dayRef, 'events');
+
+		const newDocRef = await addDoc(eventsCollection, eventData);
+		console.log('Event added with ID:', newDocRef.id);
+		return newDocRef.id;
+	} catch (error) {
+		console.error('Error adding event:', error);
+		return null;
+	}
+};
+
 // addTrip() = db -> trips -> (add fields: description, destination, startDate, endDate, name, participants[], add collections: expenses, itineraries, addtripid(()=>(db->users(matchUserId)->addTrip id to tripsIDs collection)))
 
 // updateTrip() =
