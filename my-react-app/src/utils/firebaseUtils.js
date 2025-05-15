@@ -20,6 +20,7 @@ export const fetchUserData = async (userId) => {
   }
 };
 
+
 export const fetchExpensesDayEvents = async (tripID, expenseID, date) => {
     try {
       const tripRef = doc(db, "trips", tripID);

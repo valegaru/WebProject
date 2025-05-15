@@ -8,14 +8,14 @@ const expenseSlice = createSlice({
   name: 'expense',
   initialState,
   reducers: {
-    setTripId: (state, action) => {
+    setExpenseId: (state, action) => {
       state.expenseId = action.payload;
     },
-    clearTripId: (state) => {
+    clearExpenseId: (state) => {
       state.expenseId = null;
     },
   },
 });
 
-export const { setTripId, clearTripId } = expenseSlice.actions;
+export const { setExpenseIdId, clearExpenseId } = expenseSlice.actions;
 export default expenseSlice.reducer;

@@ -44,10 +44,6 @@ const Home = () => {
 		{ image: newYork, label: 'New York' },
 	];
 
-	const storeState = useSelector((state) => state);
-	useEffect(() => {
-		console.log('Redux Store:', JSON.stringify(storeState, null, 2));
-	}, []);
 
 	return (
 		<div className='home-container'>
