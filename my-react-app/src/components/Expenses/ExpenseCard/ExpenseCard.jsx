@@ -1,8 +1,12 @@
 import { Box } from "@mui/material";
 import ProfileInfo from "../ProfileInfo/ProfileInfo";
 import "./ExpenseCard.css";
+import { useSelector } from "react-redux";
 
-const ExpenseCard = ({ title, amount, status, currency, participants }) => {
+const ExpenseCard = ({ title, amount, status, participants }) => {
+
+  const currency = useSelector((state) => state.currency.currency)
+
   return (
     <div className={`expense-card ${status}`}>
       <div className="left-content">
@@ -21,7 +25,6 @@ const ExpenseCard = ({ title, amount, status, currency, participants }) => {
             name={p.name}
             imgUrl={p.imgUrl}
             contribution={p.contribution}
-            currency={currency}
           />
         ))}
       </Box>

@@ -17,7 +17,6 @@ const Login = () => {
 		try {
 			const userCredential = await signInWithEmailAndPassword(auth, email, password);
 			const user = userCredential.user;
-			dispatch(setUserId(user.uid));
 			navigate('/home');
 		} catch (error) {
 			setError('Correo o contraseña incorrectos');

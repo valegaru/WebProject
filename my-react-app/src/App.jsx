@@ -10,106 +10,20 @@ import MatchmakerQuestions from './pages/Matchmaker/MatchmakerQuestions.jsx';
 import MatchmakerRoom from './pages/Matchmaker/MatchmakerRoom.jsx';
 import MatchmakerSelection from './pages/Matchmaker/MatchmakerSelection.jsx';
 import MatchmakerResults from './pages/Matchmaker/MatchmakerResults.jsx';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import { store } from './store/store.js';
 import Register from './pages/Register/Register.jsx';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute.jsx';
 import Profile from './pages/Profile/Profile.jsx';
 import TripCreation from './pages/TripCreation/TripCreation.jsx';
+import { onAuthStateChanged } from 'firebase/auth';
+import { clearUserId, setUserId } from './store/auth/AuthSlice.jsx';
+import Router from './routes/Router.jsx';
 
 const App = () => {
 	return (
 		<Provider store={store}>
-			<BrowserRouter>
-				<Routes>
-					{/* Públicas */}
-					<Route path='/' element={<Landing />} />
-					<Route path='/login' element={<Login />} />
-					<Route path='/register' element={<Register />} />
-
-					{/* Privadas */}
-					<Route
-						path='/home'
-						element={
-							<PrivateRoute>
-								<Home />
-							</PrivateRoute>
-						}
-					/>
-					<Route
-						path='/tripPlanner'
-						element={
-							<PrivateRoute>
-								<Trip />
-							</PrivateRoute>
-						}
-					/>
-					<Route
-						path='/matchmaker'
-						element={
-							<PrivateRoute>
-								<Matchmaker />
-							</PrivateRoute>
-						}
-					/>
-					<Route
-						path='/room'
-						element={
-							<PrivateRoute>
-								<MatchmakerRoom />
-							</PrivateRoute>
-						}
-					/>
-					<Route
-						path='/matchselection'
-						element={
-							<PrivateRoute>
-								<MatchmakerSelection />
-							</PrivateRoute>
-						}
-					/>
-					<Route
-						path='/results'
-						element={
-							<PrivateRoute>
-								<MatchmakerResults />
-							</PrivateRoute>
-						}
-					/>
-					<Route
-						path='/questions'
-						element={
-							<PrivateRoute>
-								<MatchmakerQuestions />
-							</PrivateRoute>
-						}
-					/>
-					<Route
-						path='/expenseTracker'
-						element={
-							<PrivateRoute>
-								<ExpenseTracker />
-							</PrivateRoute>
-						}
-					/>
-					<Route
-						path='/profile'
-						element={
-							<PrivateRoute>
-								< Profile />
-							</PrivateRoute>
-						}
-					/>
-					<Route
-						path='/tripcreation'
-						element={
-							<PrivateRoute>
-								< TripCreation />
-							</PrivateRoute>
-						}
-					/>
-				</Routes>
-			</BrowserRouter>
+			<Router></Router>
 		</Provider>
 	);
 };

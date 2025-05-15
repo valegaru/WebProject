@@ -42,10 +42,24 @@ const Navbar = () => {
 					{!isMobile && <p className='nav-title'>Postal Trip</p>}
 				</Box>
 
-				{/* Navigation links (hidden in mobile) */}
+				{/* Navigation links (hidden in mobile)
 				{!isMobile && (
 					<Stack direction='row' spacing={5} alignItems='center'>
 						<NavLink to='/' className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
+							Home
+						</NavLink>
+						<NavLink to='/tripPlanner' className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
+							Trips
+						</NavLink>
+						<NavLink to='/matchmaker' className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
+							Destination Matchmaker
+						</NavLink>
+					</Stack>
+				)} */}
+
+				{!isMobile && (
+					<Stack direction='row' spacing={5} alignItems='center'>
+						<NavLink to='/home' className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
 							Home
 						</NavLink>
 						<NavLink to='/tripPlanner' className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>

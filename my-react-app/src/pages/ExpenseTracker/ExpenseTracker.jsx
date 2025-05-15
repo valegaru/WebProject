@@ -8,29 +8,21 @@ import BudgetRange from "../../components/Expenses/BudgetRange/BudgetRange";
 import Calendar from "../../components/Calendar/Calendar";
 import CurrencyToggleButton from "../../components/CurrencyToggleButton/CurrencyToggleButton";
 import { Typography } from "@mui/material";
-import { addNewExpense, fetchUserData } from "../../utils/firebaseUtils";
+import { addTrip, fetchExpensesDayEvents, fetchTripsFromUser, fetchUserData } from "../../utils/firebaseUtils";
 import { useSelector } from "react-redux";
 import { auth } from "../../services/firebase";
-import { fetchTripsFromUser } from "../../utils/tripsUtils";
-import { fetchExpensesDayEvents } from "../../utils/expensesUtils";
 import { addEvent } from "../../store/eventSlice/EventSlice";
 
 
-function ExpenseTracker() {
+
+const ExpenseTracker = () => {
   const dispatch = useDispatch();
 
-  const [currency, setCurrency] = useState("COP");
-  const [selectedDate, setSelectedDate] = useState(""); 
   const events = useSelector((state) => state.events);
-  const date = useSelector((state) => state.date);
-  const uid = useSelector((state) => state.auth.user);
-  const uidBURN = "G5ZH4Tqp0QTNLDUNkYwNQOaNCZa2"
+  const date = useSelector((state) => state.date.selectedDate);
+  const uid = useSelector((state) => state.auth.userId);
   const storeState = useSelector((state) => state);
 
-
-
-  const [individualBudget, setIndividualBudget] = useState(0);
-  const [groupBudget, setGroupBudget] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const addExpense = (id,name,price) => {
@@ -42,27 +34,9 @@ function ExpenseTracker() {
   const loadData = async () => {
     console.log("Redux Store:", JSON.stringify(storeState, null, 2));
     
-    await fetchUserData(uidBURN);
-    await fetchTripsFromUser(uidBURN);
+    await fetchUserData(uid);
+    await fetchTripsFromUser(uid);
 
-    const events = await fetchExpensesDayEvents("xN1RgphfLnpTIm7xoOhu", "Lz9ZchnTEIFCFbPF1onz", "2025-04-07");
-
-    events.forEach((event) => {
-      dispatch(addEvent(event));
-    });
-
-    const individualTotal = events.reduce((sum, event) => {
-    const yourParticipation = event.participants
-      ? Object.values(event.participants).find(p => p.userID === uidBURN)
-      : null;
-      return yourParticipation ? sum + Number(yourParticipation.contribution) : sum;
-    }, 0);
-
-    const groupTotal = events.reduce((sum, event) => sum + Number(event.amount), 0);
-
-    setIndividualBudget(individualTotal);
-    setGroupBudget(groupTotal);
-    setSelectedDate(date);
     setLoading(false);
   }
 
@@ -87,12 +61,12 @@ function ExpenseTracker() {
               }}
               >Paris Voyage Expense</Typography>
 
-            <CurrencyToggleButton currency={currency} setCurrency={setCurrency}/>
+            <CurrencyToggleButton/>
           </div>
 
           <div className="budget-section">
-            <BudgetRange label="individual" min={individualBudget} max={individualBudget} currency={currency}/>
-            <BudgetRange label="group" min={groupBudget} max={groupBudget} currency={currency}/>
+            <BudgetRange label="individual" />
+            <BudgetRange label="group" />
 
           </div>
 
@@ -100,11 +74,12 @@ function ExpenseTracker() {
       
 
       <div className="carousel-and-button">
-        <DateCarousel onDateChange={setSelectedDate} />
-        <CustomButton label="ADD EXPENSE" onClick={() => addExpense({ uidUser: "e", name: "22", price: "er" })}/>
+        <DateCarousel/>
+        <CustomButton label="ADD EXPENSE" onClick={() => {
+        addTrip(uid, "Holi", "your mom", date, date, "BRAZIL TRIP", "Just me");}}/>
       </div>
 
-      <Calendar currency={currency} /></>)}
+      <Calendar/></>)}
       
 
     </>

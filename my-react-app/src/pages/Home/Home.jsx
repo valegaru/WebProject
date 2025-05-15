@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Home.css';
 import Navbar from '../../components/Navbar/Navbar';
 import CardList from '../../components/cardList/CardList';
@@ -12,21 +12,37 @@ import latamTour from '../../assets/latamGroup.png';
 import paris from '../../assets/paris.png';
 import newYork from '../../assets/newYork.png';
 import thailand from '../../assets/thailand.png';
+
 import { useSelector } from 'react-redux';
+import { fetchTripsFromUser } from '../../utils/firebaseUtils';
 
 const Home = () => {
+	const uid = useSelector((state) => state.auth.userId);
+	const name = useSelector((state) => state.auth.username);
+
+	const [trips, setTrips] = useState([]);
+
+	useEffect(() => {
+		const loadTrips = async () => {
+			if (!uid) return;
+			const fetchedTrips = await fetchTripsFromUser(uid);
+			const formattedTrips = fetchedTrips.map(trip => ({
+			image: destinations,
+			label: trip.name || trip.title || 'Unnamed Trip',
+			date: `${trip.startDate || '??'} - ${trip.endDate || '??'}`,
+			numberMembers: trip.participants?.length || 1,
+		}));
+			setTrips(formattedTrips);
+		};
+
+		loadTrips();
+	}, [uid]);
+
 	const savedList = [
 		{ image: restaurants, label: 'Restaurants' },
 		{ image: activities, label: 'Activities' },
 		{ image: destinations, label: 'Destinations' },
 		{ image: citiesEurope, label: 'Cities of Europe' },
-	];
-
-	const trips = [
-		{ image: latamTour, label: 'Latam Tour', date: 'Jan 16 - May 24/25', numberMembers: 'hola' },
-		{ image: destinations, label: 'Rio Janeiro', date: 'Jan 16 - May 24/25', numberMembers: 'hi' },
-		{ image: paris, label: 'Paris Voyage', date: 'Jan 16 - May 24/25', numberMembers: 'hi' },
-		{ image: newYork, label: 'New York', date: 'Jan 16 - May 24/25', numberMembers: 'hi' },
 	];
 
 	const matches = [
@@ -36,11 +52,6 @@ const Home = () => {
 		{ image: newYork, label: 'New York' },
 	];
 
-	const storeState = useSelector((state) => state);
-	useEffect(() => {
-		console.log('Redux Store:', JSON.stringify(storeState, null, 2));
-	}, []);
-
 	return (
 		<div className='home-container'>
 			<Navbar />
@@ -49,7 +60,7 @@ const Home = () => {
 				<input type='text' placeholder='Search for a location' className='search-bar' />
 			</div>
 
-			<h2 className='home-title'>Hi, Juan!</h2>
+			<h2 className='home-title'>Hi, {name}</h2>
 
 			<div className='section'>
 				<CardList title='Saved list' cardsData={savedList} variantColor='saved' />
