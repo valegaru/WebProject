@@ -41,7 +41,7 @@ const Trip = () => {
 		if (expensesData) {
 			const expensesWithClick = expensesData.map((expense) => ({
 				...expense,
-				onClick: () => handleClick(expense), // Pass the expense if needed
+				onClick: () => handleClick(expense), 
 			}));
 
 			setExpenses(expensesWithClick);

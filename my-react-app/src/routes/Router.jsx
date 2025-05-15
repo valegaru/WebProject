@@ -105,7 +105,7 @@ const Router = () => {
 					}
 				/>
 				<Route
-					path='/expenseTracker'
+					path='/expenseTracker/:expenseId'
 					element={
 						<PrivateRoute>
 							<ExpenseTracker />
