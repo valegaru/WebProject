@@ -1,150 +1,64 @@
-.custom-card {
-	width: 244px;
-	border-radius: 0px 32px 0px 0px;
+.simple-card {
+	border-radius: 15px;
 	overflow: hidden;
 	cursor: pointer;
-	transition: transform 0.2s;
-	display: flex;
-	flex-direction: column;
-	background-color: var(--card-color);
-	color: var(--color, #000000);
+	width: 180px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	transition: transform 0.2s ease;
 }
 
-.custom-card:hover {
-	transform: scale(1.03);
+.simple-card:hover {
+	transform: translateY(-5px);
 }
 
 .card-img {
-	width: 20vw;
-	height: 198px;
+	width: 100%;
+	height: 120px;
 	object-fit: cover;
 }
 
-/* SAVED & MATCHES */
-.card-label {
-	background-color: var(--card-color);
-	color: var(--color, #ffffff);
+.card-content {
+	padding: 10px;
 	text-align: center;
-	padding: 0.6rem;
-	font-weight: 600;
-	border-bottom-left-radius: 20px;
-	border-bottom-right-radius: 20px;
-	margin-top: -4px;
 }
 
-/* TRIPS VARIANT */
-.trip-info {
-	background-color: var(--card-color);
-	color: #000000;
-	padding: 0.6rem;
-	border-bottom-left-radius: 20px;
-	border-bottom-right-radius: 20px;
-	margin-top: -4px;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
+.card-title {
+	margin: 5px 0;
+	font-size: 16px;
+	font-weight: bold;
 }
 
-.text-info {
-	display: flex;
-	flex-direction: column;
+/* === TRIPS variant === */
+.simple-card.trips {
+	background-color: #f9c31f;
+	color: #000;
 }
 
-.trip-label {
-	font-weight: 600;
-	font-size: 1rem;
-	margin-bottom: 0.2rem;
+.simple-card.trips .card-dates,
+.simple-card.trips .card-description,
+.simple-card.trips .card-participants {
+	font-size: 12px;
+	margin: 2px 0;
 }
 
-.trip-dates {
-	font-size: 0.9rem;
-	color: #444;
+/* === SAVED variant === */
+.simple-card.saved {
+	background-color: #0077b6;
+	color: #fff;
 }
 
-.members {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
+.simple-card.saved .card-title {
+	font-size: 14px;
+	margin: 10px 0;
 }
 
-.numberMembers {
-	font-weight: 500;
-	font-size: 0.9rem;
+/* === MATCHES variant === */
+.simple-card.matches {
+	background-color: #913c20;
+	color: #fff;
 }
 
-.trip-icon {
-	width: 24px;
-	height: 24px;
-}
-
-/* INFO CARDS: EXPENSES & ITINERARY */
-.info-card {
-	display: flex;
-	align-items: center;
-	gap: 0.8rem;
-	padding: 1rem;
-	border-radius: 0 16px 16px 16px;
-	background-color: var(--card-color);
-}
-
-.info-label {
-	display: flex;
-	flex-direction: column;
-}
-
-.info-date {
-	font-size: 0.85rem;
-	color: #333;
-}
-
-.custom-card.saved {
-	--card-color: #127eb0;
-	--color: #ffffff;
-}
-
-.custom-card.trips {
-	--card-color: #ecbe15;
-}
-
-.custom-card.green {
-	--card-color: #f4e4c5;
-}
-
-.custom-card.matches {
-	--card-color: #a44819;
-	--color: #ffffff;
-}
-
-/* MOBILE */
-@media screen and (max-width: 768px) {
-	.custom-card {
-		width: 100%;
-		border-radius: 0 16px 16px 16px;
-		margin-bottom: 1rem;
-	}
-
-	.card-img {
-		height: 160px;
-	}
-
-	.card-label,
-	.trip-info {
-		padding: 0.8rem;
-		font-size: 0.9rem;
-		border-radius: 0 0 16px 16px;
-	}
-
-	.trip-info {
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 0.4rem;
-	}
-
-	.members {
-		align-self: flex-end;
-	}
-
-	.info-card {
-		padding: 0.8rem;
-	}
+.simple-card.matches .card-title {
+	font-size: 14px;
+	margin: 10px 0;
 }

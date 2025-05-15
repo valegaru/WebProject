@@ -76,6 +76,7 @@ function Trips() {
 					<div className='trips-grid'>
 						{trips.map((trip) => (
 							<Card
+								variant='trips'
 								key={trip.id}
 								tripPic={trip.tripPic}
 								name={trip.name}
