@@ -61,7 +61,7 @@ const ExpenseTracker = () => {
               fontSize: "1.5rem", 
               color: "#3F4C1C",
               }}
-              >Paris Voyage Expense</Typography>
+              >Expenses</Typography>
 
             <CurrencyToggleButton/>
           </div>

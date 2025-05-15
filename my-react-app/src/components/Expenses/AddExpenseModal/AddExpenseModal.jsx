@@ -51,14 +51,13 @@ const AddEventModal = ({ tripID, expenseID, date, onClose, onEventAdded }) => {
       <div className="modal">
         <h3>Modal for use in development only</h3>
         <h3>Intended only for testing purposes</h3>
-        <h2>Add Event</h2>
         <form onSubmit={handleSubmit}>
           <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" required />
           <input value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Amount" required />
           <input value={startTime} onChange={(e) => setStartTime(e.target.value)} placeholder="Start Time (e.g. 12:00)" required />
           <input value={endTime} onChange={(e) => setEndTime(e.target.value)} placeholder="End Time (e.g. 13:00)" required />
           <select value={status} onChange={(e) => setStatus(e.target.value)}>
-            <option value="incomplete">Incomplete</option>
+            <option value="missing">Missing</option>
             <option value="complete">Complete</option>
           </select>
 

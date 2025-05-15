@@ -1,11 +1,28 @@
+import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import ProfileInfo from "../ProfileInfo/ProfileInfo";
 import "./ExpenseCard.css";
 import { useSelector } from "react-redux";
 
-const ExpenseCard = ({ title, amount, status, participants }) => {
+const ExpenseCard = ({ title, amount, participants }) => {
+  const currency = useSelector((state) => state.currency.currency);
+  const [status, setStatus] = useState("missing");
 
-  const currency = useSelector((state) => state.currency.currency)
+  useEffect(() => {
+    const numericAmount = Number(amount);
+
+    if (!participants || isNaN(numericAmount)) return;
+
+    let totalContribution = 0;
+
+    Object.values(participants).forEach((participant) => {
+      const contribution = Number(participant.contribution || 0);
+      totalContribution += contribution;
+    });
+
+    const newStatus = totalContribution >= numericAmount ? "complete" : "missing";
+    setStatus(newStatus);
+  }, [participants, amount]);
 
   return (
     <div className={`expense-card ${status}`}>
@@ -13,7 +30,7 @@ const ExpenseCard = ({ title, amount, status, participants }) => {
         <p className="expense-card-title">{title}</p>
 
         <Box sx={{ display: "flex", alignItems: "center", gap: "8px", flexDirection: "row" }}>
-          <p className="expense-card-amount">{amount.toLocaleString()} {currency}</p>
+          <p className="expense-card-amount">{Number(amount).toLocaleString()} {currency}</p>
           <p className="expense-card-status">{status}</p>
         </Box>
       </div>
