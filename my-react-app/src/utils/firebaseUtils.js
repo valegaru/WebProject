@@ -1,6 +1,7 @@
 import { db } from '../services/firebase';
 import { collection } from 'firebase/firestore';
 import { doc, getDoc, getDocs, addDoc, updateDoc, arrayUnion, query, where, setDoc } from 'firebase/firestore';
+import { orderBy, startAt, endAt } from 'firebase/firestore';
 export const addNewExpense = async ({ uidUser, name, price }) => {
 	const docRef = await addDoc(collection(db, 'expense'), {
 		uidUser,
@@ -143,10 +144,11 @@ export const searchUsersByName = async (nameToSearch) => {
 
 export const searchUsersByEmail = async (emailToSearch) => {
 	const usersRef = collection(db, 'users');
-	const q = query(usersRef, where('email', '==', emailToSearch));
-	const querySnapshot = await getDocs(q);
+	const q = query(usersRef, orderBy('email'), startAt(emailToSearch), endAt(emailToSearch + '\uf8ff'));
 
+	const querySnapshot = await getDocs(q);
 	const results = [];
+
 	querySnapshot.forEach((doc) => {
 		results.push({ id: doc.id, ...doc.data() });
 	});

@@ -36,7 +36,7 @@ function TripCreation() {
 		const value = e.target.value;
 		setSearchTerm(value);
 
-		if (value.length > 1) {
+		if (value.length >= 1) {
 			const [nameResults, emailResults] = await Promise.all([searchUsersByName(value), searchUsersByEmail(value)]);
 
 			// Combinar sin duplicados (por id)
