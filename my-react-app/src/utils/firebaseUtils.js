@@ -77,10 +77,25 @@ export const fetchTripsFromUser = async (userId) => {
     const userRef = doc(db, "users", userId);
     const tripCollectionRef = collection(userRef, "tripsIDs");
     const tripSnapshot = await getDocs(tripCollectionRef);
-    console.log("fetCHY", tripSnapshot.docs.map(doc => doc.data()));
-    return tripSnapshot;
+
+    const tripIds = tripSnapshot.docs.map(doc => doc.id);
+    if (!tripIds.length) {
+      console.log("No trip IDs found for user.");
+      return [];
+    }
+
+    const tripPromises = tripIds.map(async (tripId) => {
+      const tripDoc = await getDoc(doc(db, "trips", tripId));
+      return tripDoc.exists() ? { id: tripId, ...tripDoc.data() } : null;
+    });
+
+    const trips = await Promise.all(tripPromises);
+    const filteredTrips = trips.filter(trip => trip !== null);
+
+    console.log("Fetched trips:", filteredTrips); // ✅ Log actual fetched trip data
+    return filteredTrips;
   } catch (error) {
-    console.error("Error fetching trips from user:", error);
+    console.error("Error fetching trips:", error);
     return [];
   }
 };
