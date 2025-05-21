@@ -16,6 +16,7 @@ import thailand from '../../assets/thailand.png';
 import { useSelector } from 'react-redux';
 import { fetchTripsFromUser } from '../../utils/firebaseUtils';
 import { useNavigate } from 'react-router-dom';
+import Map from '../../components/Map/Map';
 
 
 const Home = () => {
@@ -62,10 +63,7 @@ const Home = () => {
 	return (
 		<div className='home-container'>
 			<Navbar />
-			<div className='map-section'>
-				<img src={mapImage} alt='World Map' className='map-image' />
-				<input type='text' placeholder='Search for a location' className='search-bar' />
-			</div>
+			<Map></Map>
 
 			<h2 className='home-title'>Hi, {name}</h2>
 
