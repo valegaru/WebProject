@@ -17,6 +17,7 @@
     "@mui/icons-material": "^7.0.1",
     "@mui/material": "^7.0.1",
     "@reduxjs/toolkit": "^2.8.1",
+    "@vis.gl/react-google-maps": "^1.5.2",
     "firebase": "^11.6.1",
     "lucide-react": "^0.487.0",
     "react": "^19.0.0",
