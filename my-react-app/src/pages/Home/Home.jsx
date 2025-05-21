@@ -16,7 +16,7 @@ import thailand from '../../assets/thailand.png';
 import { useSelector } from 'react-redux';
 import { fetchTripsFromUser } from '../../utils/firebaseUtils';
 import { useNavigate } from 'react-router-dom';
-import Map from '../../components/Map/Map';
+import MapComponent from '../../components/MapComponent/MapComponent';
 
 
 const Home = () => {
@@ -63,7 +63,7 @@ const Home = () => {
 	return (
 		<div className='home-container'>
 			<Navbar />
-			<Map></Map>
+			<MapComponent></MapComponent>
 
 			<h2 className='home-title'>Hi, {name}</h2>
 
