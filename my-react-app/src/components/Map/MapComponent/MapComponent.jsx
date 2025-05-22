@@ -1,4 +1,5 @@
 import { APIProvider, Map } from "@vis.gl/react-google-maps";
+import PoiMarkers from "../PoiMarker/PoiMarkers";
 
 const MapComponent = () => {
     return(
@@ -10,7 +11,10 @@ const MapComponent = () => {
             defaultZoom={3}
             gestureHandling={'greedy'}
             disableDefaultUI={true}
-        />
+            mapId={"3559db7569081dbf973e4ebf"}
+        >
+            <PoiMarkers></PoiMarkers> 
+        </Map>
     </APIProvider>
     </>
     )

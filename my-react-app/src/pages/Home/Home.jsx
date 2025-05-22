@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux';
 import { fetchTripsFromUser } from '../../utils/firebaseUtils';
 import { useNavigate } from 'react-router-dom';
 import MapComponent from '../../components/Map/MapComponent/MapComponent';
+import PoiMarkers from '../../components/Map/PoiMarker/PoiMarkers';
 
 
 const Home = () => {
@@ -63,7 +64,8 @@ const Home = () => {
 	return (
 		<div className='home-container'>
 			<Navbar />
-			<MapComponent></MapComponent>
+			<MapComponent>
+			</MapComponent>
 
 			<h2 className='home-title'>Hi, {name}</h2>
 
