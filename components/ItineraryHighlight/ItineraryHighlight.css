@@ -1,0 +1,56 @@
+.itinerary-highlight {
+	border-radius: 16px;
+	padding: 16px 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	font-family: sans-serif;
+	width: fit-content;
+	max-width: 100%;
+}
+
+.itinerary-highlight.primary {
+	background-color: #a54b1b;
+	color: white;
+}
+
+.itinerary-highlight.secondary {
+	background-color: white;
+	border: 2px solid black;
+	color: black;
+}
+
+.title-row {
+	display: flex;
+	justify-content: space-between;
+	font-weight: bold;
+	font-size: 16px;
+}
+
+.boost {
+	color: #a54b1b;
+	font-weight: bold;
+}
+
+.info-row {
+	display: flex;
+	gap: 16px;
+	align-items: center;
+	font-size: 14px;
+}
+
+.people {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.title {
+	font-weight: bold;
+	font-size: 16px;
+	color: white; /* default for primary */
+}
+
+.itinerary-highlight.secondary .title {
+	color: black;
+}

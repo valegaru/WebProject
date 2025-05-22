@@ -1,0 +1,30 @@
+.testimonial-card {
+	display: flex;
+	align-items: center;
+	background: #fff;
+	border-radius: 0rem 1.5rem 1.5rem 1.5rem;
+	padding: 1.2rem 1.5rem;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.testimonial-avatar {
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+	object-fit: cover;
+	margin-right: 1rem;
+	border: 3px solid #4a7c2f;
+}
+
+.testimonial-content h4 {
+	margin: 0;
+	font-weight: bold;
+	color: #1e1e1e;
+}
+
+.testimonial-content p {
+	margin-top: 0.3rem;
+	font-size: 0.95rem;
+	color: #444;
+	line-height: 1.4;
+}

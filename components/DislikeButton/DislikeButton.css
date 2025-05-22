@@ -1,0 +1,17 @@
+#dislike {
+	background-color: #a44c1f;
+	color: white;
+	border: none;
+	border-radius: 9999px;
+	width: 64px;
+	height: 64px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: background-color 0.2s ease;
+	cursor: pointer;
+}
+
+#dislike:hover {
+	background-color: #873d18;
+}
