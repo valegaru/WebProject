@@ -16,7 +16,7 @@ import thailand from '../../assets/thailand.png';
 import { useSelector } from 'react-redux';
 import { fetchTripsFromUser } from '../../utils/firebaseUtils';
 import { useNavigate } from 'react-router-dom';
-import MapComponent from '../../components/MapComponent/MapComponent';
+import MapComponent from '../../components/Map/MapComponent/MapComponent';
 
 
 const Home = () => {
