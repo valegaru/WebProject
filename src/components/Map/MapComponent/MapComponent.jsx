@@ -13,14 +13,15 @@ const MapComponent = () => {
     }
 
     const handleMapClick = (mapInfo) => {
-        if (mapInfo) {
-            const lat = mapInfo.location.lat
-            const lng = mapInfo.location.lng
-            setDialogLocation(lat,lng);
-            setSelectedLocation(lat,lng);
+        if (mapInfo && mapInfo.detail && mapInfo.detail.latLng) {
+            const lat = mapInfo.detail.latLng.lat;
+            const lng = mapInfo.detail.latLng.lng;
+            
+            setDialogLocation({ lat, lng });
+            setSelectedLocation({ lat, lng });
             setShowDialog(true);
         } else {
-            console.log("NO LOCATION SPECIFIED")
+            console.log("NO LOCATION SPECIFIED", mapInfo);
         }
     }
 
