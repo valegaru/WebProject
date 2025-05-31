@@ -27,15 +27,6 @@ const MapComponent = () => {
 
     return(
     <>
-    {showDialog && (
-
-    <InfoWindow position={dialogLocation}>
-        <button className="app-button" onClick={onAddLocation}>
-        Add this location
-        </button>
-    </InfoWindow>
-    )}
-
     <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
         <Map
             style={{width: '100vw', height: '50vh'}}
@@ -47,6 +38,15 @@ const MapComponent = () => {
             onClick={(mapInfo)=>handleMapClick(mapInfo)}
         >
             <PoiMarkers locationInfo={selectedLocation}></PoiMarkers> 
+
+            {showDialog && (
+            <InfoWindow position={dialogLocation}>
+                <button className="app-button" onClick={onAddLocation}>
+                    Add this location
+                </button>
+            </InfoWindow>
+            )}
+
         </Map>
     </APIProvider>
     </>
