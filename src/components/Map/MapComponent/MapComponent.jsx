@@ -2,22 +2,24 @@ import { APIProvider, InfoWindow, Map } from "@vis.gl/react-google-maps";
 import PoiMarkers from "../PoiMarker/PoiMarkers";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { fetchLocationData } from "../../../utils/googleMapsUtils";
 import { addTrip } from "../../../utils/firebaseUtils";
 
 
 const MapComponent = () => {
-
+    // Get user data from Redux store
     const uid = useSelector((state) => state.auth.userId);
     const name = useSelector((state) => state.auth.username);
     
     const [selectedLocation, setSelectedLocation] = useState();
     const [showDialog, setShowDialog] = useState(false);
     const [dialogLocation, setDialogLocation] = useState("");
-    const [locationPhotos, setLocationPhotos] = useState([]);
+    const [locationPhoto, setLocationPhoto] = useState(null);
     const [loadingPhotos, setLoadingPhotos] = useState(false);
     const [placeDetails, setPlaceDetails] = useState(null);
     const [isAddingTrip, setIsAddingTrip] = useState(false);
 
+    // Trip form state
     const [tripForm, setTripForm] = useState({
         name: "",
         description: "",
@@ -41,11 +43,13 @@ const MapComponent = () => {
         setIsAddingTrip(true);
 
         try {
+            // Use the place name as destination, or coordinates if no place name
             const destination = placeDetails ? 
                 `${placeDetails.name}, ${placeDetails.address}` : 
                 `${dialogLocation.lat}, ${dialogLocation.lng}`;
 
-            const tripPic = locationPhotos.length > 0 ? locationPhotos[0] : null;
+            // Use the first photo as trip picture, or null if no photos
+            const tripPic = locationPhoto || null;
 
             const tripId = await addTrip(
                 uid,
@@ -91,6 +95,7 @@ const MapComponent = () => {
     };
 
     const handleParticipantsChange = (value) => {
+        // Split by comma and trim whitespace
         const participantsList = value.split(',').map(p => p.trim()).filter(p => p.length > 0);
         setTripForm(prev => ({
             ...prev,
@@ -98,83 +103,35 @@ const MapComponent = () => {
         }));
     };
 
+    // Function to fetch location data using the utility function
     const fetchLocationPhotos = async (lat, lng) => {
         setLoadingPhotos(true);
-        setLocationPhotos([]);
+        setLocationPhoto(null);
         setPlaceDetails(null);
 
-        try {
-            if (!window.google || !window.google.maps || !window.google.maps.places) {
-                console.error('Google Maps Places API not loaded');
-                setLoadingPhotos(false);
-                return;
-            }
-
-            const { Place } = window.google.maps.places;
-            
-            const request = {
-                fields: ['displayName', 'photos', 'formattedAddress', 'rating', 'id'],
-                locationRestriction: {
-                    center: { lat: lat, lng: lng },
-                    radius: 100.0,
-                },
-                includedTypes: ['tourist_attraction', 'restaurant', 'lodging', 'store', 'park'],
-                maxResultCount: 3,
-            };
-
-            const { places } = await Place.searchNearby(request);
-            
-            if (places && places.length > 0) {
-                let placeWithPhotos = null;
-                
-                for (const place of places) {
-                    if (place.photos && place.photos.length > 0) {
-                        placeWithPhotos = place;
-                        break;
-                    }
-                }
-                
-                const selectedPlace = placeWithPhotos || places[0];
-                
-                setPlaceDetails({
-                    name: selectedPlace.displayName,
-                    address: selectedPlace.formattedAddress,
-                    rating: selectedPlace.rating
-                });
-
-                if (selectedPlace.displayName && !tripForm.name) {
-                    setTripForm(prev => ({
-                        ...prev,
-                        name: `Trip to ${selectedPlace.displayName}`
-                    }));
-                }
-
-                if (selectedPlace.photos && selectedPlace.photos.length > 0) {
-                    try {
-                        const photoUrls = [];
-                        const photo = selectedPlace.photos[0];
-                        
-                        await new Promise(resolve => setTimeout(resolve, 500));
-                        
-                        const photoUrl = photo.getURI({ 
-                            maxWidth: 200, 
-                            maxHeight: 150 
-                        });
-                        
-                        photoUrls.push(photoUrl);
-                        setLocationPhotos(photoUrls);
-                    } catch (photoError) {
-                        console.warn('Photo loading failed (rate limited):', photoError);
-                    }
-                }
-            }
-            
-            setLoadingPhotos(false);
-
-        } catch (error) {
-            console.error('Error fetching photos:', error);
-            setLoadingPhotos(false);
+        const { placeDetails: fetchedPlaceDetails, photoUrl, error } = await fetchLocationData(lat, lng);
+        
+        if (error) {
+            console.error('Error fetching location data:', error);
         }
+
+        if (fetchedPlaceDetails) {
+            setPlaceDetails(fetchedPlaceDetails);
+            
+            // Auto-fill trip name with place name if available and form name is empty
+            if (fetchedPlaceDetails.name && !tripForm.name) {
+                setTripForm(prev => ({
+                    ...prev,
+                    name: `Trip to ${fetchedPlaceDetails.name}`
+                }));
+            }
+        }
+
+        if (photoUrl) {
+            setLocationPhoto(photoUrl);
+        }
+
+        setLoadingPhotos(false);
     };
 
     const handleMapClick = (mapInfo) => {
@@ -186,6 +143,7 @@ const MapComponent = () => {
             setSelectedLocation({ lat, lng });
             setShowDialog(true);
             
+            // Reset form when clicking new location
             setTripForm({
                 name: "",
                 description: "",
@@ -194,6 +152,7 @@ const MapComponent = () => {
                 participants: []
             });
             
+            // Fetch photos for this location
             fetchLocationPhotos(lat, lng);
         } else {
             console.log("NO LOCATION SPECIFIED", mapInfo);
@@ -237,19 +196,16 @@ const MapComponent = () => {
                                 <p>Loading photos...</p>
                             ) : (
                                 <div style={{ marginBottom: '15px' }}>
-                                    {locationPhotos.length > 0 ? (
+                                    {locationPhoto ? (
                                         <div className="photos-section">
-                                            <p className="photos-label">Photos:</p>
-                                            <div className="photos-grid">
-                                                {locationPhotos.map((photoUrl, index) => (
-                                                    <img 
-                                                        key={index}
-                                                        src={photoUrl} 
-                                                        alt={`Location ${index + 1}`}
-                                                        className="location-photo"
-                                                        style={{ width: '100%', maxWidth: '200px', height: 'auto' }}
-                                                    />
-                                                ))}
+                                            <p className="photos-label">Photo:</p>
+                                            <div className="photo-container">
+                                                <img 
+                                                    src={locationPhoto} 
+                                                    alt="Location"
+                                                    className="location-photo"
+                                                    style={{ width: '100%', maxWidth: '280px', height: 'auto', borderRadius: '8px' }}
+                                                />
                                             </div>
                                         </div>
                                     ) : (
