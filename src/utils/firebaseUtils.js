@@ -235,6 +235,30 @@ export const createExpense = async (tripRef, participants, startDate) => {
 	}
 };
 
+export const createItinerary= async (tripRef, participants, startDate) => {
+	try {
+		const dateOnly = new Date(startDate).toISOString().split('T')[0]; 
+
+		const existingItinerariesSnap = await getDocs(collection(tripRef, 'itinerary'));
+		const itineraryCount = existingItinerariesSnap.size + 1;
+
+		const itineraryRef = doc(collection(tripRef, 'itinerary'));
+		await setDoc(itineraryRef, {
+			name: `Itinerary ${itineraryCount}`,
+			participants: participants.map(p => p.id || p)
+		});
+
+		const dayRef = doc(collection(itineraryRef, 'days'), dateOnly);
+		await setDoc(dayRef, {});
+
+		return { itineraryRef, dayRef };
+
+	} catch (error) {
+		console.error("Error creating itinerary with day:", error);
+		return null;
+	}
+};
+
 export const searchUsersByName = async (nameToSearch) => {
 	const usersRef = collection(db, 'users');
 	const q = query(usersRef, where('username', '==', nameToSearch));
