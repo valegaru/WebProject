@@ -14,7 +14,7 @@ import user3 from '../../assets/user3.png';
 import user4 from '../../assets/user4.png';
 import user5 from '../../assets/user5.png';
 import editIcon from '../../assets/editIcon.png';
-import { fetchExpenses, fetchTripById } from '../../utils/firebaseUtils';
+import { fetchExpenses, fetchItineraries, fetchTripById } from '../../utils/firebaseUtils';
 
 
 const Trip = () => {
@@ -33,6 +33,7 @@ const Trip = () => {
 	const fetchData = async () => {
 		const tripDoc = await fetchTripById(tripId);
 		const expensesData = await fetchExpenses(tripId);
+		const itinerariesData = await fetchItineraries(tripId)
 
 		if (tripDoc) {
 			setTrip(tripDoc.data());
@@ -46,6 +47,16 @@ const Trip = () => {
 
 			setExpenses(expensesWithClick);
 			console.log(expensesWithClick);
+		}
+
+		if (itinerariesData) {
+			const itineraries = itinerariesData.map((itinerary) => ({
+				...itinerary,
+				onClick: () => handleClick(itinerary), 
+			}));
+
+			setItineraries(itineraries);
+			console.log(itineraries);
 		}
 	};
 
