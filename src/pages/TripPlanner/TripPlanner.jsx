@@ -25,9 +25,13 @@ const Trip = () => {
 
 	const navigate = useNavigate()
 
-	const handleClick = (expense) => {
+	const handleExpenseClick = (expense) => {
 		console.log("Clicked on expense:", expense);
 		navigate(`/expenseTracker/${tripId}/${expense.id}`);};
+	
+	const handleItineraryClick = (itinerary) => {
+		console.log("Clicked on itinerary:", itinerary);
+		navigate(`/itinerary/${tripId}/${itinerary.id}`);};
 
 	useEffect(() => {
 	const fetchData = async () => {
@@ -42,7 +46,7 @@ const Trip = () => {
 		if (expensesData) {
 			const expensesWithClick = expensesData.map((expense) => ({
 				...expense,
-				onClick: () => handleClick(expense), 
+				onClick: () => handleExpenseClick(expense), 
 			}));
 
 			setExpenses(expensesWithClick);
@@ -52,7 +56,7 @@ const Trip = () => {
 		if (itinerariesData) {
 			const itineraries = itinerariesData.map((itinerary) => ({
 				...itinerary,
-				onClick: () => handleClick(itinerary), 
+				onClick: () => handleItineraryClick(itinerary), 
 			}));
 
 			setItineraries(itineraries);
@@ -104,11 +108,11 @@ const Trip = () => {
 			</section>
 
 			<section className='section'>
-				<CardList title='Itineraries' cardsData={itineraries} variantColor='green' />
+				<CardList title='Itineraries' cardsData={itineraries} variantColor='green' onClick={handleItineraryClick}/>
 			</section>
 
 			<section className='section'>
-				<CardList title='Expenses' cardsData={expenses} variantColor='green' onClick={handleClick} />
+				<CardList title='Expenses' cardsData={expenses} variantColor='green' onClick={handleExpenseClick} />
 			</section>
 		</div>
 	);
