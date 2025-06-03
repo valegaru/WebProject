@@ -7,7 +7,6 @@ import { addTrip } from "../../../utils/firebaseUtils";
 
 
 const MapComponent = () => {
-    // Get user data from Redux store
     const uid = useSelector((state) => state.auth.userId);
     const name = useSelector((state) => state.auth.username);
     
@@ -19,7 +18,6 @@ const MapComponent = () => {
     const [placeDetails, setPlaceDetails] = useState(null);
     const [isAddingTrip, setIsAddingTrip] = useState(false);
 
-    // Trip form state
     const [tripForm, setTripForm] = useState({
         name: "",
         description: "",
