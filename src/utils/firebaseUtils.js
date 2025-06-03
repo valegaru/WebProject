@@ -68,6 +68,24 @@ export const fetchExpenses = async (tripId) => {
 	}
 };
 
+export const fetchItineraries = async (tripId) => {
+	try {
+		const tripRef = doc(db, 'trips', tripId);
+		const itineraryCollectionRef = collection(tripRef, 'itinerary');
+		const snapshot = await getDocs(itineraryCollectionRef);
+
+		const itineraries = snapshot.docs.map((doc) => ({
+			id: doc.id,
+			...doc.data(),
+		}));
+
+		return itineraries;
+	} catch (error) {
+		console.error('Error fetching itineraries:', error);
+		return [];
+	}
+};
+
 export const addExpenseEvent = async (tripID, expenseID, date, eventData) => {
 	try {
 		const dayRef = doc(db, 'trips', tripID, 'expenses', expenseID, 'days', date);
