@@ -211,14 +211,14 @@ export const addTrip = async (userId, description, destination, startDate, endDa
   }
 };
 
-export const createExpense = async (tripRef, participants, startDate) => {
+export const createExpense = async (tripRef, participants, startDate, sharedId) => {
 	try {
 		const dateOnly = new Date(startDate).toISOString().split('T')[0]; 
 
 		const existingExpensesSnap = await getDocs(collection(tripRef, 'expenses'));
 		const expenseCount = existingExpensesSnap.size + 1;
 
-		const expenseRef = doc(collection(tripRef, 'expenses'));
+		const expenseRef = doc(tripRef, 'expenses', sharedId);
 		await setDoc(expenseRef, {
 			name: `Expense ${expenseCount}`,
 			participants: participants.map(p => p.id || p)
@@ -235,14 +235,14 @@ export const createExpense = async (tripRef, participants, startDate) => {
 	}
 };
 
-export const createItinerary= async (tripRef, participants, startDate) => {
+export const createItinerary= async (tripRef, participants, startDate, sharedId) => {
 	try {
 		const dateOnly = new Date(startDate).toISOString().split('T')[0]; 
 
 		const existingItinerariesSnap = await getDocs(collection(tripRef, 'itinerary'));
 		const itineraryCount = existingItinerariesSnap.size + 1;
 
-		const itineraryRef = doc(collection(tripRef, 'itinerary'));
+		const itineraryRef = doc(tripRef, 'itinerary', sharedId);
 		await setDoc(itineraryRef, {
 			name: `Itinerary ${itineraryCount}`,
 			participants: participants.map(p => p.id || p)
@@ -258,6 +258,11 @@ export const createItinerary= async (tripRef, participants, startDate) => {
 		return null;
 	}
 };
+
+export const sharedIdGenerator = (tripRef) => {
+	const sharedId = doc(collection(tripRef, 'expenses')).id;
+	return sharedId;
+}
 
 export const searchUsersByName = async (nameToSearch) => {
 	const usersRef = collection(db, 'users');
@@ -366,6 +371,8 @@ export const updateEventInDay = async (tripID, expenseID, date, eventID, updated
 		return false;
 	}
 };
+
+
 
 // addTrip() = db -> trips -> (add fields: description, destination, startDate, endDate, name, participants[], add collections: expenses, itineraries, addtripid(()=>(db->users(matchUserId)->addTrip id to tripsIDs collection)))
 
