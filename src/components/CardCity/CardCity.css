@@ -86,6 +86,7 @@
 }
 
 .description-section {
+<<<<<<< HEAD
 	width: 800px;
 }
 
@@ -224,6 +225,8 @@
 }
 
 .description-section {
+=======
+>>>>>>> main
 	max-width: 300px;
 }
 
@@ -244,8 +247,11 @@
 	gap: 3rem;
 	margin-top: 2rem;
 }
+<<<<<<< HEAD
 
 @media (max-width: 768px) {
 	.card-city {
 	}
 } */
+=======
+>>>>>>> main

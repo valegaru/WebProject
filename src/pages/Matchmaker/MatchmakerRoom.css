@@ -1,5 +1,9 @@
 .matchmaker-room-container {
+<<<<<<< HEAD
 	margin-top: 100px;
+=======
+  margin-top:100px;
+>>>>>>> main
 	background-color: #fdf7ed; /* color de fondo */
 	min-height: 100vh; /* ocupa toda la altura */
 	width: 100vw; /* ocupa toda la anchura */
@@ -20,6 +24,7 @@ body {
 }
 
 .main-content {
+<<<<<<< HEAD
 	display: grid;
 	grid-template-columns: 2fr 1fr;
 	gap: 10rem;
@@ -78,12 +83,15 @@ body {
 }
 
 .main-content {
+=======
+>>>>>>> main
 	flex: 1;
 	display: grid;
 	grid-template-columns: 2fr 1fr;
 	gap: 10rem;
 	align-items: flex-start;
 }
+<<<<<<< HEAD
 
 @media (max-width: 768px) {
 	.matchmaker-room-container {
@@ -112,3 +120,5 @@ body {
 		order: 2 !important;
 	}
 } */
+=======
+>>>>>>> main

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Navbar general estilos */
 .navbar {
 	background-color: #f4e4c5;
@@ -122,6 +123,9 @@
 	}
 }
 /* .navbar {
+=======
+.navbar {
+>>>>>>> main
   background-color: #f4e4c5;
   border: 1px solid #647e37;
   display: flex;
@@ -192,6 +196,7 @@
 
 .cta-button:hover {
   background-color: #586f2f !important;
+<<<<<<< HEAD
 } */
 
 /* .navbar {
@@ -266,3 +271,6 @@
 .cta-button:hover {
 	background-color: #586f2f !important;
 } */
+=======
+}
+>>>>>>> main

@@ -19,7 +19,6 @@ import TripCreation from './pages/TripCreation/TripCreation.jsx';
 import { onAuthStateChanged } from 'firebase/auth';
 import { clearUserId, setUserId } from './store/auth/AuthSlice.jsx';
 import Router from './routes/Router.jsx';
-
 const App = () => {
 	return (
 		<Provider store={store}>

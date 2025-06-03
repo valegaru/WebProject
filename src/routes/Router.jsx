@@ -20,6 +20,7 @@ import { clearUserId, setUserId } from '../store/auth/AuthSlice';
 import { useEffect } from 'react';
 import { getUserNameById } from '../utils/firebaseUtils';
 
+<<<<<<< HEAD
 
 
 const Router = () => {
@@ -134,3 +135,127 @@ const Router = () => {
 )}
 
 export default Router;
+=======
+import Trips from '../pages/Trips/Trips';
+
+const Router = () => {
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const username = await getUserNameById(user.uid);
+      dispatch(setUserId({ uid: user.uid, email: user.email, username }));
+    } else {
+      dispatch(clearUserId());
+    }
+  });
+
+  return () => unsubscribe(); 
+}, [dispatch]);
+
+
+	return (
+		<BrowserRouter>
+			<Routes>
+				{/* Públicas */}
+				<Route path='/' element={<Landing />} />
+				<Route path='/login' element={<Login />} />
+				<Route path='/register' element={<Register />} />
+
+				{/* Privadas */}
+				<Route
+					path='/home'
+					element={
+						<PrivateRoute>
+							<Home />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path='/tripPlanner/:tripId'
+					element={
+						<PrivateRoute>
+							<Trip />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path='/matchmaker'
+					element={
+						<PrivateRoute>
+							<Matchmaker />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path='/room'
+					element={
+						<PrivateRoute>
+							<MatchmakerRoom />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path='/matchselection'
+					element={
+						<PrivateRoute>
+							<MatchmakerSelection />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path='/results'
+					element={
+						<PrivateRoute>
+							<MatchmakerResults />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path='/questions'
+					element={
+						<PrivateRoute>
+							<MatchmakerQuestions />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path='/expenseTracker/:tripId/:expenseId'
+					element={
+						<PrivateRoute>
+							<ExpenseTracker />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path='/profile'
+					element={
+						<PrivateRoute>
+							<Profile />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path='/tripcreation'
+					element={
+						<PrivateRoute>
+							<TripCreation />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path='/trips'
+					element={
+						<PrivateRoute>
+							<Trips />
+						</PrivateRoute>
+					}
+				/>
+			</Routes>
+		</BrowserRouter>
+	);
+};
+
+export default Router;
+>>>>>>> main

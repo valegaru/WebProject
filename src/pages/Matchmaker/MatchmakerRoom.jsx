@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
+=======
+>>>>>>> main
 import './MatchmakerRoom.css';
 import Navbar from '../../components/Navbar/Navbar';
 import StepsProgressBar from '../../components/StepsProgressBar/StepsProgressBar';
@@ -15,6 +18,7 @@ const participants = [
 ];
 
 function MatchmakerRoom() {
+<<<<<<< HEAD
 	// Estado para manejar la media query
 	const [isMobile, setIsMobile] = useState(false);
 
@@ -50,6 +54,20 @@ function MatchmakerRoom() {
 
 					{/* Lista de participantes */}
 					<ParticipantList className={`participants ${isMobile ? 'order-3' : ''}`} participants={participants} />
+=======
+	return (
+		<>
+			<Navbar />
+			<div className="matchmaker-room-container">
+				<StepsProgressBar currentStep={1} />
+				<div className="main-content">
+					<ParticipantList participants={participants} />
+					<RoomInfoPanel
+						code="135783"
+						qrImage="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg"
+						buttonRoute="/questions"
+					/>
+>>>>>>> main
 				</div>
 			</div>
 		</>
@@ -57,6 +75,7 @@ function MatchmakerRoom() {
 }
 
 export default MatchmakerRoom;
+<<<<<<< HEAD
 
 // import './MatchmakerRoom.css';
 // import Navbar from '../../components/Navbar/Navbar';
@@ -94,3 +113,5 @@ export default MatchmakerRoom;
 // }
 
 // export default MatchmakerRoom;
+=======
+>>>>>>> main

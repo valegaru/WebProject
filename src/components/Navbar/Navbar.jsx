@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React from 'react';
+=======
+import React, { useEffect, useState } from 'react';
+>>>>>>> main
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
 	AppBar,
@@ -15,14 +19,37 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import './Navbar.css';
 import ProfilePic from '../ProfilePic/ProfilePic';
+<<<<<<< HEAD
 
 const Navbar = () => {
+=======
+import { getUserProfilePicture } from '../../utils/firebaseUtils';
+import { useSelector} from 'react-redux';
+
+const Navbar = () => {
+
+	const uid = useSelector((state) => state.auth.userId)
+	const [profilePic, setProfilePic] = useState()
+
+	useEffect(() => {
+	const fetchProfilePic = async () => {
+		const url = await getUserProfilePicture(uid);
+		setProfilePic(url) 
+	};
+	fetchProfilePic();
+}, []);
+
+>>>>>>> main
 	const navigate = useNavigate();
 	const isMobile = useMediaQuery('(max-width:768px)');
 	const [anchorEl, setAnchorEl] = React.useState(null);
 
 	const handleCreateTrip = () => {
+<<<<<<< HEAD
 		navigate('/expenseTracker');
+=======
+		navigate('/tripcreation');
+>>>>>>> main
 	};
 
 	const handleMenuOpen = (event) => {
@@ -33,15 +60,26 @@ const Navbar = () => {
 		setAnchorEl(null);
 	};
 
+<<<<<<< HEAD
 	return (
 		<AppBar elevation={0} sx={{ backgroundColor: '#f4e4c5', px: 4, py: 1 }} className='navbar'>
 			<Toolbar disableGutters sx={{ justifyContent: 'space-between', width: '100%' }}>
 				{/* Logo and title (changes order in mobile) */}
+=======
+	const profileClick = () => {
+		navigate('/profile')
+	}
+
+	return (
+		<AppBar elevation={0} sx={{ backgroundColor: '#f4e4c5', px: 4, py: 1 }} className='navbar'>
+			<Toolbar disableGutters sx={{ justifyContent: 'space-between', width: '100%' }}>
+>>>>>>> main
 				<Box className='logo-container'>
 					<img src='/src/assets/logo.png' className='logo-image' />
 					{!isMobile && <p className='nav-title'>Postal Trip</p>}
 				</Box>
 
+<<<<<<< HEAD
 				{/* Navigation links (hidden in mobile)
 				{!isMobile && (
 					<Stack direction='row' spacing={5} alignItems='center'>
@@ -57,12 +95,18 @@ const Navbar = () => {
 					</Stack>
 				)} */}
 
+=======
+>>>>>>> main
 				{!isMobile && (
 					<Stack direction='row' spacing={5} alignItems='center'>
 						<NavLink to='/home' className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
 							Home
 						</NavLink>
+<<<<<<< HEAD
 						<NavLink to='/tripPlanner' className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
+=======
+						<NavLink to='/trips' className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
+>>>>>>> main
 							Trips
 						</NavLink>
 						<NavLink to='/matchmaker' className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
@@ -71,9 +115,13 @@ const Navbar = () => {
 					</Stack>
 				)}
 
+<<<<<<< HEAD
 				{/* Right items stack */}
 				<Stack direction='row' spacing={2} alignItems='center'>
 					{/* Mobile Menu and Profile */}
+=======
+				<Stack direction='row' spacing={2} alignItems='center'>
+>>>>>>> main
 					{isMobile && (
 						<>
 							<IconButton
@@ -82,7 +130,10 @@ const Navbar = () => {
 								onClick={handleMenuOpen}
 								aria-controls='mobile-menu'
 								aria-haspopup='true'
+<<<<<<< HEAD
 								sx={{ order: 1 }} // Position it first in mobile
+=======
+>>>>>>> main
 							>
 								<MenuIcon sx={{ color: '#647e37', fontSize: 32 }} />
 							</IconButton>
@@ -91,13 +142,18 @@ const Navbar = () => {
 								<MenuItem onClick={handleMenuClose} component={NavLink} to='/home'>
 									Home
 								</MenuItem>
+<<<<<<< HEAD
 								<MenuItem onClick={handleMenuClose} component={NavLink} to='/tripPlanner'>
+=======
+								<MenuItem onClick={handleMenuClose} component={NavLink} to='/trips'>
+>>>>>>> main
 									Trips
 								</MenuItem>
 								<MenuItem onClick={handleMenuClose} component={NavLink} to='/matchmaker'>
 									Destination Matchmaker
 								</MenuItem>
 							</Menu>
+<<<<<<< HEAD
 
 							<ProfilePic
 								name='Juan'
@@ -128,6 +184,20 @@ const Navbar = () => {
 							</Button>
 						</>
 					)}
+=======
+						</>
+					)}
+
+					<ProfilePic
+						name='Juan'
+						imgUrl={profilePic}
+						onClick={profileClick}
+					/>
+
+					<Button variant='contained' className='cta-button' onClick={handleCreateTrip}>
+						Create New Trip
+					</Button>
+>>>>>>> main
 				</Stack>
 			</Toolbar>
 		</AppBar>
@@ -135,6 +205,7 @@ const Navbar = () => {
 };
 
 export default Navbar;
+<<<<<<< HEAD
 
 // import React from 'react';
 // import { NavLink, useNavigate } from 'react-router-dom';
@@ -242,3 +313,5 @@ export default Navbar;
 // };
 
 // export default Navbar;
+=======
+>>>>>>> main
