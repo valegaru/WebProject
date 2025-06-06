@@ -5,17 +5,52 @@ const SearchBar = ({ onLocationSelect, googleMapsApiKey }) => {
   const [predictions, setPredictions] = useState([]);
   const [showPredictions, setShowPredictions] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleMapsReady, setIsGoogleMapsReady] = useState(false);
   const autocompleteService = useRef(null);
   const placesService = useRef(null);
   const searchInputRef = useRef(null);
 
+  // Function to check if Google Maps API is ready
+  const checkGoogleMapsReady = () => {
+    return window.google && 
+           window.google.maps && 
+           window.google.maps.places && 
+           window.google.maps.places.AutocompleteService &&
+           window.google.maps.places.PlacesService;
+  };
+
   useEffect(() => {
-    if (window.google && window.google.maps) {
-      autocompleteService.current = new window.google.maps.places.AutocompleteService();
-      const dummyMap = new window.google.maps.Map(document.createElement('div'));
-      placesService.current = new window.google.maps.places.PlacesService(dummyMap);
-    }
-  }, []);
+    const initializeServices = () => {
+      if (checkGoogleMapsReady()) {
+        autocompleteService.current = new window.google.maps.places.AutocompleteService();
+        const dummyMap = new window.google.maps.Map(document.createElement('div'));
+        placesService.current = new window.google.maps.places.PlacesService(dummyMap);
+        setIsGoogleMapsReady(true);
+        return;
+      }
+
+      // If not ready, check again after a short delay
+      setTimeout(initializeServices, 100);
+    };
+
+    // Start checking immediately
+    initializeServices();
+
+    // Also listen for the Google Maps API load event as backup
+    const handleGoogleMapsLoad = () => {
+      if (checkGoogleMapsReady() && !isGoogleMapsReady) {
+        initializeServices();
+      }
+    };
+
+    // Listen for the global google maps ready event
+    window.addEventListener('google-maps-api-loaded', handleGoogleMapsLoad);
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener('google-maps-api-loaded', handleGoogleMapsLoad);
+    };
+  }, [isGoogleMapsReady]);
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
@@ -27,25 +62,29 @@ const SearchBar = ({ onLocationSelect, googleMapsApiKey }) => {
       return;
     }
 
-    if (autocompleteService.current) {
-      setIsLoading(true);
-      autocompleteService.current.getPlacePredictions(
-        {
-          input: value,
-          types: ['establishment', 'geocode'],
-        },
-        (predictions, status) => {
-          setIsLoading(false);
-          if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions) {
-            setPredictions(predictions.slice(0, 5));
-            setShowPredictions(true);
-          } else {
-            setPredictions([]);
-            setShowPredictions(false);
-          }
-        }
-      );
+    // Only proceed if Google Maps is ready and services are initialized
+    if (!isGoogleMapsReady || !autocompleteService.current) {
+      console.warn('Google Maps API not ready yet');
+      return;
     }
+
+    setIsLoading(true);
+    autocompleteService.current.getPlacePredictions(
+      {
+        input: value,
+        types: ['establishment', 'geocode'],
+      },
+      (predictions, status) => {
+        setIsLoading(false);
+        if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions) {
+          setPredictions(predictions.slice(0, 5));
+          setShowPredictions(true);
+        } else {
+          setPredictions([]);
+          setShowPredictions(false);
+        }
+      }
+    );
   };
 
   const handlePredictionSelect = (prediction) => {
@@ -53,34 +92,37 @@ const SearchBar = ({ onLocationSelect, googleMapsApiKey }) => {
     setShowPredictions(false);
     setPredictions([]);
 
-    if (placesService.current) {
-      setIsLoading(true);
-      placesService.current.getDetails(
-        {
-          placeId: prediction.place_id,
-          fields: ['geometry', 'name', 'formatted_address', 'rating', 'photos']
-        },
-        (place, status) => {
-          setIsLoading(false);
-          if (status === window.google.maps.places.PlacesServiceStatus.OK && place) {
-            const location = {
-              lat: place.geometry.location.lat(),
-              lng: place.geometry.location.lng(),
-              placeDetails: {
-                name: place.name,
-                address: place.formatted_address,
-                rating: place.rating,
-                photos: place.photos
-              }
-            };
-            onLocationSelect(location);
-          } else {
-            console.error('Error getting place details:', status);
-            alert('Error getting location details. Please try again.');
-          }
-        }
-      );
+    if (!isGoogleMapsReady || !placesService.current) {
+      console.warn('Google Maps API not ready yet');
+      return;
     }
+
+    setIsLoading(true);
+    placesService.current.getDetails(
+      {
+        placeId: prediction.place_id,
+        fields: ['geometry', 'name', 'formatted_address', 'rating', 'photos']
+      },
+      (place, status) => {
+        setIsLoading(false);
+        if (status === window.google.maps.places.PlacesServiceStatus.OK && place) {
+          const location = {
+            lat: place.geometry.location.lat(),
+            lng: place.geometry.location.lng(),
+            placeDetails: {
+              name: place.name,
+              address: place.formatted_address,
+              rating: place.rating,
+              photos: place.photos
+            }
+          };
+          onLocationSelect(location);
+        } else {
+          console.error('Error getting place details:', status);
+          alert('Error getting location details. Please try again.');
+        }
+      }
+    );
   };
 
   const handleKeyPress = (e) => {
@@ -108,10 +150,9 @@ const SearchBar = ({ onLocationSelect, googleMapsApiKey }) => {
       style={{ 
         position: 'relative', 
         zIndex: 1000,
-        // KEY FIX: Add pointer-events: none to the container
         pointerEvents: 'none',
-        width: 'fit-content', // Constrain container to actual content size
-        margin: '0 auto' // Center the search bar
+        width: 'fit-content',
+        margin: '0 auto'
       }}
     >
       <div 
@@ -120,7 +161,6 @@ const SearchBar = ({ onLocationSelect, googleMapsApiKey }) => {
           position: 'relative', 
           width: '100%', 
           maxWidth: '400px',
-          // KEY FIX: Re-enable pointer events for the actual search elements
           pointerEvents: 'auto'
         }}
       >
@@ -130,7 +170,8 @@ const SearchBar = ({ onLocationSelect, googleMapsApiKey }) => {
             value={searchValue}
             onChange={handleSearchChange}
             onKeyPress={handleKeyPress}
-            placeholder="Search for a location..."
+            placeholder={isGoogleMapsReady ? "Search for a location..." : "Loading..."}
+            disabled={!isGoogleMapsReady}
             style={{
               width: '100%',
               padding: '12px 45px 12px 15px',
@@ -140,11 +181,14 @@ const SearchBar = ({ onLocationSelect, googleMapsApiKey }) => {
               outline: 'none',
               boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
               transition: 'all 0.3s ease',
-              backgroundColor: 'white'
+              backgroundColor: isGoogleMapsReady ? 'white' : '#f5f5f5',
+              cursor: isGoogleMapsReady ? 'text' : 'not-allowed'
             }}
             onFocus={(e) => {
-              e.target.style.borderColor = '#007bff';
-              e.target.style.boxShadow = '0 4px 15px rgba(0,123,255,0.2)';
+              if (isGoogleMapsReady) {
+                e.target.style.borderColor = '#007bff';
+                e.target.style.boxShadow = '0 4px 15px rgba(0,123,255,0.2)';
+              }
             }}
             onBlur={(e) => {
               if (!showPredictions) {
@@ -161,7 +205,7 @@ const SearchBar = ({ onLocationSelect, googleMapsApiKey }) => {
             color: '#666',
             pointerEvents: 'none'
           }}>
-            {isLoading ? (
+            {isLoading || !isGoogleMapsReady ? (
               <div style={{
                 width: '20px',
                 height: '20px',
@@ -226,6 +270,8 @@ const SearchBar = ({ onLocationSelect, googleMapsApiKey }) => {
           </div>
         )}
       </div>
+      
+  
     </div>
   );
 };
