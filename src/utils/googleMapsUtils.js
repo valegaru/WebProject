@@ -1,3 +1,144 @@
+class GooglePlacesRateLimiter {
+    constructor() {
+        this.queue = [];
+        this.processing = false;
+        this.lastRequestTime = 0;
+        this.minDelay = 1000;
+        this.maxRetries = 3;
+        this.backoffMultiplier = 2;
+    }
+
+    async addToQueue(requestFn) {
+        return new Promise((resolve, reject) => {
+            this.queue.push({ requestFn, resolve, reject, retries: 0 });
+            this.processQueue();
+        });
+    }
+
+    async processQueue() {
+        if (this.processing || this.queue.length === 0) {
+            return;
+        }
+
+        this.processing = true;
+
+        while (this.queue.length > 0) {
+            const { requestFn, resolve, reject, retries } = this.queue.shift();
+            
+            try {
+                const timeSinceLastRequest = Date.now() - this.lastRequestTime;
+                if (timeSinceLastRequest < this.minDelay) {
+                    await new Promise(r => setTimeout(r, this.minDelay - timeSinceLastRequest));
+                }
+
+                this.lastRequestTime = Date.now();
+                const result = await requestFn();
+                resolve(result);
+                
+                await new Promise(r => setTimeout(r, 200));
+                
+            } catch (error) {
+                if (error.status === 429 && retries < this.maxRetries) {
+                    const delay = this.minDelay * Math.pow(this.backoffMultiplier, retries);
+                    console.warn(`Rate limited, retrying in ${delay}ms (attempt ${retries + 1})`);
+                    
+                    await new Promise(r => setTimeout(r, delay));
+                    
+                    this.queue.unshift({ requestFn, resolve, reject, retries: retries + 1 });
+                } else {
+                    reject(error);
+                }
+            }
+        }
+
+        this.processing = false;
+    }
+}
+
+
+const rateLimiter = new GooglePlacesRateLimiter();
+
+
+const loadPhotoWithRateLimit = async (photo) => {
+    try {
+        console.log('Adding photo request to rate-limited queue...');
+        
+        const resolutions = [
+            { maxWidth: 400, maxHeight: 300, name: 'medium' }, 
+            { maxWidth: 200, maxHeight: 150, name: 'low' },
+            { maxWidth: 800, maxHeight: 600, name: 'high' }
+        ];
+        
+        for (const resolution of resolutions) {
+            try {
+                const photoUrl = await rateLimiter.addToQueue(async () => {
+                    console.log(`Attempting ${resolution.name}-res photo...`);
+                    const url = photo.getURI(resolution);
+                    console.log(`Generated ${resolution.name}-res URL:`, url);
+                    return url;
+                });
+                
+                const isValid = await rateLimiter.addToQueue(async () => {
+                    return await validateImageUrlSafe(photoUrl);
+                });
+                
+                if (isValid) {
+                    console.log(`${resolution.name}-res photo validated successfully`);
+                    return photoUrl;
+                } else {
+                    console.warn(`${resolution.name}-res photo failed validation`);
+                }
+            } catch (error) {
+                console.warn(`${resolution.name}-res photo failed:`, error);
+                continue;
+            }
+        }
+        
+        return null;
+    } catch (error) {
+        console.error('Rate-limited photo loading failed:', error);
+        return null;
+    }
+};
+
+const validateImageUrlSafe = (url) => {
+    return new Promise((resolve) => {
+        const img = new Image();
+        const timeout = setTimeout(() => {
+            console.warn('Image validation timeout');
+            resolve(false);
+        }, 8000); 
+        
+        img.onload = () => {
+            clearTimeout(timeout);
+            console.log('Image validation successful');
+            resolve(true);
+        };
+        
+        img.onerror = (error) => {
+            clearTimeout(timeout);
+            console.warn('Image validation failed:', error);
+            resolve(false);
+        };
+        
+        img.src = url;
+    });
+};
+
+const loadPhotoWithoutValidation = async (photo) => {
+    try {
+        console.log('Loading photo without validation (to avoid rate limits)...');
+        
+        const url = photo.getURI({ maxWidth: 400, maxHeight: 300 });
+        console.log('Generated photo URL:', url);
+        
+        return url;
+    } catch (error) {
+        console.error('Photo URL generation failed:', error);
+        return null;
+    }
+};
+
 export const fetchLocationData = async (lat, lng) => {
     try {
         if (!window.google || !window.google.maps || !window.google.maps.places || !window.google.maps.places.Place) {
@@ -10,7 +151,6 @@ export const fetchLocationData = async (lat, lng) => {
         }
 
         const { Place } = window.google.maps.places;
-        
         let places = [];
         
         try {
@@ -35,46 +175,33 @@ export const fetchLocationData = async (lat, lng) => {
                     'church',
                     'library'
                 ],
-                maxResultCount: 10,
+                maxResultCount: 5, 
             };
 
             console.log('Searching for places near:', lat, lng);
-            const response = await Place.searchNearby(request);
+            
+            const response = await rateLimiter.addToQueue(async () => {
+                return await Place.searchNearby(request);
+            });
+            
             places = response.places || [];
             
             if (places.length === 0) {
+                console.log('No places found, trying broader search...');
                 const broaderRequest = {
                     ...request,
                     locationRestriction: {
                         center: { lat: lat, lng: lng },
-                        radius: 500.0, 
+                        radius: 500.0,
                     },
-                    includedTypes: [
-                        'tourist_attraction',
-                        'restaurant',
-                        'store',
-                        'park'
-                    ]
+                    includedTypes: ['restaurant', 'store'], // Fewer types
+                    maxResultCount: 3
                 };
                 
-                console.log('Trying broader search...');
-                const broaderResponse = await Place.searchNearby(broaderRequest);
+                const broaderResponse = await rateLimiter.addToQueue(async () => {
+                    return await Place.searchNearby(broaderRequest);
+                });
                 places = broaderResponse.places || [];
-            }
-
-            if (places.length === 0) {
-                const evenBroaderRequest = {
-                    ...request,
-                    locationRestriction: {
-                        center: { lat: lat, lng: lng },
-                        radius: 1000.0, 
-                    },
-                    includedTypes: ['restaurant'],
-                };
-                
-                console.log('Trying even broader search with restaurants only...');
-                const evenBroaderResponse = await Place.searchNearby(evenBroaderRequest);
-                places = evenBroaderResponse.places || [];
             }
             
         } catch (searchError) {
@@ -85,24 +212,7 @@ export const fetchLocationData = async (lat, lng) => {
         if (places && places.length > 0) {
             console.log(`Found ${places.length} places`);
             
-            let selectedPlace = null;
-            
-            selectedPlace = places.find(place => 
-                place.photos && place.photos.length > 0 && 
-                place.rating && place.rating >= 4.0
-            );
-            
-            if (!selectedPlace) {
-                selectedPlace = places.find(place => place.photos && place.photos.length > 0);
-            }
-            
-            if (!selectedPlace) {
-                selectedPlace = places.find(place => place.rating && place.rating >= 4.0);
-            }
-            
-            if (!selectedPlace) {
-                selectedPlace = places[0];
-            }
+            const selectedPlace = places.find(place => place.photos && place.photos.length > 0) || places[0];
             
             console.log('Selected place:', selectedPlace.displayName);
             
@@ -114,45 +224,14 @@ export const fetchLocationData = async (lat, lng) => {
 
             let photoUrl = null;
             if (selectedPlace.photos && selectedPlace.photos.length > 0) {
+                console.log('Photos available, attempting to load with rate limiting...');
+                
                 try {
-                    console.log('Attempting to load photo...');
+                    photoUrl = await loadPhotoWithoutValidation(selectedPlace.photos[0]);
                     
-                    await new Promise(resolve => setTimeout(resolve, 200));
-                    
-                    const photo = selectedPlace.photos[0];
-                    
-                    try {
-                        photoUrl = photo.getURI({ 
-                            maxWidth: 800, 
-                            maxHeight: 600 
-                        });
-                        console.log('High-res photo loaded successfully');
-                    } catch (highResError) {
-                        console.warn('High-res photo failed, trying medium:', highResError);
-                        try {
-                            photoUrl = photo.getURI({ 
-                                maxWidth: 400, 
-                                maxHeight: 300 
-                            });
-                            console.log('Medium-res photo loaded successfully');
-                        } catch (medResError) {
-                            console.warn('Medium-res photo failed, trying low:', medResError);
-                            try {
-                                photoUrl = photo.getURI({ 
-                                    maxWidth: 200, 
-                                    maxHeight: 150 
-                                });
-                                console.log('Low-res photo loaded successfully');
-                            } catch (lowResError) {
-                                console.warn('All photo resolutions failed:', lowResError);
-                            }
-                        }
-                    }
                 } catch (photoError) {
-                    console.warn('Photo loading completely failed:', photoError);
+                    console.warn('Photo loading failed:', photoError);
                 }
-            } else {
-                console.log('No photos available for this place');
             }
 
             return {
@@ -165,18 +244,10 @@ export const fetchLocationData = async (lat, lng) => {
             console.log('No places found, trying reverse geocoding...');
             
             try {
-                let geocodeResult = null;
-                
-                if (window.google.maps.geocoding && window.google.maps.geocoding.Geocoder) {
-                    const geocoder = new window.google.maps.geocoding.Geocoder();
-                    const response = await geocoder.geocode({
-                        location: { lat, lng }
-                    });
-                    geocodeResult = response.results[0];
-                } else {
-                    const geocoder = new window.google.maps.Geocoder();
-                    geocodeResult = await new Promise((resolve, reject) => {
-                        const timeoutId = setTimeout(() => reject(new Error('Geocoding timeout')), 5000);
+                const geocoder = new window.google.maps.Geocoder();
+                const geocodeResult = await rateLimiter.addToQueue(async () => {
+                    return new Promise((resolve, reject) => {
+                        const timeoutId = setTimeout(() => reject(new Error('Geocoding timeout')), 8000);
                         
                         geocoder.geocode({ 
                             location: { lat, lng } 
@@ -189,7 +260,7 @@ export const fetchLocationData = async (lat, lng) => {
                             }
                         });
                     });
-                }
+                });
 
                 if (geocodeResult) {
                     const addressComponents = geocodeResult.formatted_address.split(',');
@@ -216,7 +287,6 @@ export const fetchLocationData = async (lat, lng) => {
                 rating: null
             };
 
-            console.log('Using coordinate-based fallback');
             return {
                 placeDetails,
                 photoUrl: null,
@@ -239,167 +309,16 @@ export const fetchLocationData = async (lat, lng) => {
     }
 };
 
-export const checkPlacesAPIAvailability = () => {
-    const hasOldAPI = !!(window.google?.maps?.places?.PlacesService);
-    const hasNewAPI = !!(window.google?.maps?.places?.Place);
-    
+export const clearRateLimiterQueue = () => {
+    rateLimiter.queue = [];
+    rateLimiter.processing = false;
+    console.log('Rate limiter queue cleared');
+};
+
+export const getRateLimiterStatus = () => {
     return {
-        hasOldAPI,
-        hasNewAPI,
-        recommendation: hasNewAPI ? 'Use new API' : hasOldAPI ? 'Use old API' : 'No API available'
+        queueLength: rateLimiter.queue.length,
+        processing: rateLimiter.processing,
+        lastRequestTime: rateLimiter.lastRequestTime
     };
-};
-
-export const getSupportedPlaceTypes = () => {
-    return [
-        'accounting',
-        'airport',
-        'amusement_park',
-        'aquarium',
-        'art_gallery',
-        'atm',
-        'bakery',
-        'bank',
-        'bar',
-        'beauty_salon',
-        'bicycle_store',
-        'book_store',
-        'bowling_alley',
-        'bus_station',
-        'cafe',
-        'campground',
-        'car_dealer',
-        'car_rental',
-        'car_repair',
-        'car_wash',
-        'casino',
-        'cemetery',
-        'church',
-        'city_hall',
-        'clothing_store',
-        'convenience_store',
-        'courthouse',
-        'dentist',
-        'department_store',
-        'doctor',
-        'drugstore',
-        'electrician',
-        'electronics_store',
-        'embassy',
-        'fire_station',
-        'florist',
-        'funeral_home',
-        'furniture_store',
-        'gas_station',
-        'gym',
-        'hair_care',
-        'hardware_store',
-        'hindu_temple',
-        'home_goods_store',
-        'hospital',
-        'insurance_agency',
-        'jewelry_store',
-        'laundry',
-        'lawyer',
-        'library',
-        'light_rail_station',
-        'liquor_store',
-        'local_government_office',
-        'locksmith',
-        'lodging',
-        'meal_delivery',
-        'meal_takeaway',
-        'mosque',
-        'movie_rental',
-        'movie_theater',
-        'moving_company',
-        'museum',
-        'night_club',
-        'painter',
-        'park',
-        'parking',
-        'pet_store',
-        'pharmacy',
-        'physiotherapist',
-        'plumber',
-        'police',
-        'post_office',
-        'primary_school',
-        'real_estate_agency',
-        'restaurant',
-        'roofing_contractor',
-        'rv_park',
-        'school',
-        'secondary_school',
-        'shoe_store',
-        'shopping_mall',
-        'spa',
-        'stadium',
-        'storage',
-        'store',
-        'subway_station',
-        'supermarket',
-        'synagogue',
-        'taxi_stand',
-        'tourist_attraction',
-        'train_station',
-        'transit_station',
-        'travel_agency',
-        'university',
-        'veterinary_care',
-        'zoo'
-    ];
-};
-
-export const fetchLocationDataSimple = async (lat, lng) => {
-    try {
-        console.log('Using simple geocoding approach...');
-        
-        if (!window.google?.maps?.Geocoder) {
-            throw new Error('Google Maps Geocoder not available');
-        }
-
-        const geocoder = new window.google.maps.Geocoder();
-        
-        const result = await new Promise((resolve, reject) => {
-            const timeoutId = setTimeout(() => {
-                reject(new Error('Geocoding timeout'));
-            }, 5000);
-            
-            geocoder.geocode({ 
-                location: { lat, lng } 
-            }, (results, status) => {
-                clearTimeout(timeoutId);
-                if (status === 'OK' && results && results.length > 0) {
-                    resolve(results[0]);
-                } else {
-                    reject(new Error(`Geocoding failed: ${status}`));
-                }
-            });
-        });
-
-        const addressComponents = result.formatted_address.split(',');
-        
-        return {
-            placeDetails: {
-                name: addressComponents[0]?.trim() || 'Unknown Location',
-                address: result.formatted_address,
-                rating: null
-            },
-            photoUrl: null, 
-            error: null
-        };
-        
-    } catch (error) {
-        console.error('Simple location fetch failed:', error);
-        return {
-            placeDetails: {
-                name: `Location (${lat.toFixed(4)}, ${lng.toFixed(4)})`,
-                address: 'Address unavailable',
-                rating: null
-            },
-            photoUrl: null,
-            error: error.message
-        };
-    }
 };
