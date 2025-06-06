@@ -8,6 +8,7 @@ import  TripReducer from './tripSlice/TripSlice'
 import  TripsReducer from './tripsSlice/TripsSlice'
 import  ExpenseReducer from './expenseSlice/ExpenseSlice'
 import  ExpensesReducer from './expensesSlice/ExpensesSlice'
+import  MapInfoReducer from './mapInfo/MapInfo'
 
 export const store = configureStore({
   reducer: {
@@ -20,5 +21,6 @@ export const store = configureStore({
     expense: ExpenseReducer,
     expenses: ExpensesReducer,
     budget: BudgetReducer,
+    mapInfo: MapInfoReducer,
   }
 });

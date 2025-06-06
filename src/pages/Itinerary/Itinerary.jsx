@@ -1,17 +1,20 @@
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import Navbar from "../../components/Navbar/Navbar"
 import { useEffect, useState } from "react"
 import { fetchUserData } from "../../utils/firebaseUtils"
 import MapComponent from "../../components/Map/MapComponent/MapComponent"
+import { setMapType } from "../../store/mapInfo/MapInfo"
 
 const Itinerary = () => {
 
+    const dispatch = useDispatch()
     const uid = useSelector((state) => state.auth.userId);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const loadingFunction = async () => {
             await fetchUserData(uid);
+            dispatch(setMapType("itinerary"))
             setLoading(true);
         }
 

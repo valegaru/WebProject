@@ -1,16 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { addTrip } from "../../../utils/firebaseUtils";
+import { useSelector } from "react-redux";
+import { fetchLocationData } from "../../../utils/googleMapsUtils";
 
 const MapForm = ({ 
     uid, 
-    placeDetails, 
     dialogLocation, 
-    locationPhoto, 
     onTripAdded, 
     onCancel,
     initialTripName = "" 
 }) => {
+    const mapType = useSelector((state) => state.mapInfo.type);
+
     const [isAddingTrip, setIsAddingTrip] = useState(false);
+    const [loadingLocationData, setLoadingLocationData] = useState(false);
+    const [placeDetails, setPlaceDetails] = useState(null);
+    const [locationPhoto, setLocationPhoto] = useState(null);
     const [MapForm, setMapForm] = useState({
         name: initialTripName,
         description: "",
@@ -18,6 +23,56 @@ const MapForm = ({
         endDate: "",
         participants: []
     });
+
+    // Fetch location data when dialogLocation changes
+    useEffect(() => {
+        if (dialogLocation && dialogLocation.lat && dialogLocation.lng) {
+            fetchLocationInfo(dialogLocation.lat, dialogLocation.lng);
+        }
+    }, [dialogLocation]);
+
+    // Update trip name when initialTripName changes
+    useEffect(() => {
+        if (initialTripName && !MapForm.name) {
+            setMapForm(prev => ({
+                ...prev,
+                name: initialTripName
+            }));
+        }
+    }, [initialTripName, MapForm.name]);
+
+    const fetchLocationInfo = async (lat, lng) => {
+        setLoadingLocationData(true);
+        setLocationPhoto(null);
+        setPlaceDetails(null);
+
+        try {
+            const { placeDetails: fetchedPlaceDetails, photoUrl, error } = await fetchLocationData(lat, lng);
+
+            if (error) {
+                console.error('Error fetching location data:', error);
+            }
+
+            if (fetchedPlaceDetails) {
+                setPlaceDetails(fetchedPlaceDetails);
+                // Update trip name if not already set
+                if (fetchedPlaceDetails.name && !MapForm.name) {
+                    setMapForm(prev => ({
+                        ...prev,
+                        name: `Trip to ${fetchedPlaceDetails.name}`
+                    }));
+                }
+            }
+
+            if (photoUrl) {
+                setLocationPhoto(photoUrl);
+            }
+        } catch (error) {
+            console.error('Error fetching location info:', error);
+        } finally {
+            setLoadingLocationData(false);
+        }
+    };
 
     const handleFormChange = (field, value) => {
         setMapForm(prev => ({
@@ -90,16 +145,44 @@ const MapForm = ({
         }
     };
 
-    if (initialTripName && !MapForm.name) {
-        setMapForm(prev => ({
-            ...prev,
-            name: initialTripName
-        }));
-    }
-
     return (
         <div className="trip-form" style={{ marginBottom: '15px' }}>
             <h4>Create Trip</h4>
+            
+            {/* Location Information Section */}
+            {loadingLocationData ? (
+                <div style={{ marginBottom: '15px', textAlign: 'center' }}>
+                    <p>Loading location data...</p>
+                </div>
+            ) : (
+                placeDetails && (
+                    <div className="place-details" style={{ marginBottom: '15px', padding: '10px', backgroundColor: '#f8f9fa', borderRadius: '4px' }}>
+                        <h5 className="place-name" style={{ margin: '0 0 5px 0' }}>{placeDetails.name}</h5>
+                        {placeDetails.rating && (
+                            <p className="place-rating" style={{ margin: '0 0 5px 0', fontSize: '14px' }}>
+                                Rating: {placeDetails.rating}/5 ⭐
+                            </p>
+                        )}
+                        <p className="place-address" style={{ margin: '0', fontSize: '14px', color: '#666' }}>
+                            {placeDetails.address}
+                        </p>
+                        {locationPhoto && (
+                            <div style={{ marginTop: '10px' }}>
+                                <img 
+                                    src={locationPhoto} 
+                                    alt="Location" 
+                                    style={{ 
+                                        width: '100%', 
+                                        maxWidth: '280px', 
+                                        height: 'auto', 
+                                        borderRadius: '4px' 
+                                    }} 
+                                />
+                            </div>
+                        )}
+                    </div>
+                )
+            )}
             
             <div style={{ marginBottom: '10px' }}>
                 <label>Trip Name *</label>
@@ -155,27 +238,29 @@ const MapForm = ({
             </div>
 
             <div style={{ display: 'flex', gap: '10px' }}>
-                <button 
-                    className="app-button" 
-                    onClick={onAddTrip}
-                    disabled={isAddingTrip}
-                    style={{ 
-                        flex: 1,
-                        padding: '10px',
-                        backgroundColor: isAddingTrip ? '#ccc' : '#007bff',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: isAddingTrip ? 'not-allowed' : 'pointer'
-                    }}
-                >
-                    {isAddingTrip ? 'Adding Trip...' : 'Add Trip'}
-                </button>
+                {mapType === "trip" && (
+                    <button
+                        className="app-button" 
+                        onClick={onAddTrip}
+                        disabled={isAddingTrip || loadingLocationData}
+                        style={{ 
+                            flex: 1,
+                            padding: '10px',
+                            backgroundColor: (isAddingTrip || loadingLocationData) ? '#ccc' : '#007bff',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: (isAddingTrip || loadingLocationData) ? 'not-allowed' : 'pointer'
+                        }}
+                    >
+                        {isAddingTrip ? 'Adding Trip...' : 'Add Trip'}
+                    </button>
+                )}
                 
                 {onCancel && (
                     <button 
                         onClick={onCancel}
-                        disabled={isAddingTrip}
+                        disabled={isAddingTrip || loadingLocationData}
                         style={{ 
                             flex: 1,
                             padding: '10px',
@@ -183,7 +268,7 @@ const MapForm = ({
                             color: 'white',
                             border: 'none',
                             borderRadius: '4px',
-                            cursor: isAddingTrip ? 'not-allowed' : 'pointer'
+                            cursor: (isAddingTrip || loadingLocationData) ? 'not-allowed' : 'pointer'
                         }}
                     >
                         Cancel
