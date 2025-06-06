@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { addEventToDay, searchUsersByName, searchUsersByEmail } from '../../../utils/firebaseUtils';
+import { addEventToDay } from '../../../utils/firebaseUtils';
 import './AddExpenseModal.css';
 import { useDispatch } from 'react-redux';
 import { addEvent } from '../../../store/eventSlice/EventSlice';
+import ParticipantManager from '../../ParticipantManager/ParticipantManager';
 
 const AddEventModal = ({ tripID, expenseID, date, onClose, onEventAdded }) => {
   const dispatch = useDispatch();
@@ -13,56 +14,35 @@ const AddEventModal = ({ tripID, expenseID, date, onClose, onEventAdded }) => {
   const [endTime, setEndTime] = useState('');
   const [status, setStatus] = useState('incomplete');
 
-  const [participants, setParticipants] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  const [selectedParticipants, setSelectedParticipants] = useState([]);
+  const [participantContributions, setParticipantContributions] = useState({});
 
-  const handleSearchChange = async (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-
-    if (value.length >= 1) {
-      const [nameResults, emailResults] = await Promise.all([
-        searchUsersByName(value),
-        searchUsersByEmail(value),
-      ]);
-
-      const combined = [...nameResults];
-      emailResults.forEach((emailUser) => {
-        if (!combined.some((user) => user.id === emailUser.id)) {
-          combined.push(emailUser);
-        }
-      });
-
-      setSearchResults(combined);
-    } else {
-      setSearchResults([]);
-    }
+  const handleParticipantsChange = (newParticipants) => {
+    setSelectedParticipants(newParticipants);
+    
+    // Remove contributions for participants that are no longer selected
+    const newContributions = {};
+    newParticipants.forEach(participant => {
+      newContributions[participant.id] = participantContributions[participant.id] || '';
+    });
+    setParticipantContributions(newContributions);
   };
 
-  const addParticipant = (user) => {
-    const alreadyAdded = participants.some((p) => p.userID === user.id);
-    if (!alreadyAdded) {
-      setParticipants([...participants, { userID: user.id, contribution: '' }]);
-    }
-    setSearchTerm('');
-    setSearchResults([]);
-  };
-
-  const handleParticipantChange = (index, field, value) => {
-    const updated = [...participants];
-    updated[index][field] = value;
-    setParticipants(updated);
-  };
-
-  const removeParticipant = (index) => {
-    const updated = [...participants];
-    updated.splice(index, 1);
-    setParticipants(updated);
+  const handleContributionChange = (participantId, contribution) => {
+    setParticipantContributions({
+      ...participantContributions,
+      [participantId]: contribution
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Convert participants to the format expected by the backend
+    const participants = selectedParticipants.map(participant => ({
+      userID: participant.id,
+      contribution: participantContributions[participant.id] || ''
+    }));
 
     const newEvent = {
       amount,
@@ -87,49 +67,64 @@ const AddEventModal = ({ tripID, expenseID, date, onClose, onEventAdded }) => {
       <div className="modal">
         <h3>Add Event</h3>
         <form onSubmit={handleSubmit}>
-          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" required />
-          <input value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Amount" required />
-          <input value={startTime} onChange={(e) => setStartTime(e.target.value)} placeholder="Start Time (e.g. 12:00)" required />
-          <input value={endTime} onChange={(e) => setEndTime(e.target.value)} placeholder="End Time (e.g. 13:00)" required />
+          <input 
+            value={title} 
+            onChange={(e) => setTitle(e.target.value)} 
+            placeholder="Title" 
+            required 
+          />
+          <input 
+            value={amount} 
+            onChange={(e) => setAmount(e.target.value)} 
+            placeholder="Amount" 
+            required 
+          />
+          <input 
+            value={startTime} 
+            onChange={(e) => setStartTime(e.target.value)} 
+            placeholder="Start Time (e.g. 12:00)" 
+            required 
+          />
+          <input 
+            value={endTime} 
+            onChange={(e) => setEndTime(e.target.value)} 
+            placeholder="End Time (e.g. 13:00)" 
+            required 
+          />
           <select value={status} onChange={(e) => setStatus(e.target.value)}>
             <option value="incomplete">Incomplete</option>
             <option value="complete">Complete</option>
           </select>
 
-          <div className="form-group">
-            <label>Search Participants:</label>
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={handleSearchChange}
-              placeholder="Search by name or email"
-            />
-            {searchResults.length > 0 && (
-              <ul className="search-results">
-                {searchResults.map((user) => (
-                  <li key={user.id} onClick={() => addParticipant(user)} className="search-result-item">
-                    {user.username} ({user.email})
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+          <ParticipantManager
+            participants={selectedParticipants}
+            onParticipantsChange={handleParticipantsChange}
+          />
 
-          {participants.map((p, index) => (
-            <div key={index} className="participant-row">
-              <input
-                type="text"
-                placeholder="Contribution"
-                value={p.contribution}
-                onChange={(e) => handleParticipantChange(index, 'contribution', e.target.value)}
-              />
-              <span>User ID: {p.userID}</span>
-              <button type="button" onClick={() => removeParticipant(index)}>Remove</button>
+          {selectedParticipants.length > 0 && (
+            <div className="contributions-section">
+              <h4>Participant Contributions:</h4>
+              {selectedParticipants.map((participant) => (
+                <div key={participant.id} className="participant-contribution-row">
+                  <span className="participant-name">
+                    {participant.username} ({participant.email})
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="Contribution"
+                    value={participantContributions[participant.id] || ''}
+                    onChange={(e) => handleContributionChange(participant.id, e.target.value)}
+                    className="contribution-input"
+                  />
+                </div>
+              ))}
             </div>
-          ))}
+          )}
 
-          <button type="submit">Add Event</button>
-          <button type="button" onClick={onClose}>Cancel</button>
+          <div className="modal-buttons">
+            <button type="submit">Add Event</button>
+            <button type="button" onClick={onClose}>Cancel</button>
+          </div>
         </form>
       </div>
     </div>
