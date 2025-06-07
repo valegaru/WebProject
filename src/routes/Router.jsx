@@ -7,7 +7,7 @@ import Home from '../pages/Home/Home';
 import Trip from '../pages/TripPlanner/TripPlanner';
 import Matchmaker from '../pages/Matchmaker/Matchmaker';
 import MatchmakerResults from '../pages/Matchmaker/MatchmakerResults';
-import MatchmakerQuestions from '../pages/Matchmaker/MatchmakerQuestions';
+// import MatchmakerQuestions from '../pages/Matchmaker/MatchmakerQuestions';
 import MatchmakerRoom from '../pages/Matchmaker/MatchmakerRoom';
 import MatchmakerSelection from '../pages/Matchmaker/MatchmakerSelection';
 import ExpenseTracker from '../pages/ExpenseTracker/ExpenseTracker';
@@ -27,18 +27,17 @@ const Router = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-  const unsubscribe = onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      const username = await getUserNameById(user.uid);
-      dispatch(setUserId({ uid: user.uid, email: user.email, username }));
-    } else {
-      dispatch(clearUserId());
-    }
-  });
+		const unsubscribe = onAuthStateChanged(auth, async (user) => {
+			if (user) {
+				const username = await getUserNameById(user.uid);
+				dispatch(setUserId({ uid: user.uid, email: user.email, username }));
+			} else {
+				dispatch(clearUserId());
+			}
+		});
 
-  return () => unsubscribe(); 
-}, [dispatch]);
-
+		return () => unsubscribe();
+	}, [dispatch]);
 
 	return (
 		<BrowserRouter>
@@ -97,14 +96,14 @@ const Router = () => {
 						</PrivateRoute>
 					}
 				/>
-				<Route
+				{/* <Route
 					path='/questions'
 					element={
 						<PrivateRoute>
 							<MatchmakerQuestions />
 						</PrivateRoute>
 					}
-				/>
+				/> */}
 				<Route
 					path='/expenseTracker/:tripId/:expenseId'
 					element={

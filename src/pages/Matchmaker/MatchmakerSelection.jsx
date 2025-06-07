@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 import CardCity from '../../components/CardCity/CardCity';
-import { db } from '../../firebase-config';
+import { db } from '../../services/firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import './MatchmakerSelection.css';
 

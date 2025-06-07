@@ -1,7 +1,8 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../../firebase-config';
+import { db } from '../../services/firebase';
+
 import './MatchmakerResults.css';
 
 function MatchmakerResults() {

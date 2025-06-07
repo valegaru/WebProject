@@ -7,42 +7,42 @@
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { db } from '../../firebase-config';
+import { db } from '../../services/firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import QRCode from 'react-qr-code';
 
 function MatchmakerRoom() {
-  const [roomId, setRoomId] = useState('');
-  const navigate = useNavigate();
+	const [roomId, setRoomId] = useState('');
+	const navigate = useNavigate();
 
-  const handleCreateRoom = async () => {
-    const newRoom = await addDoc(collection(db, 'rooms'), {
-      destinations: ['París', 'Tokio', 'Roma', 'Nueva York'],
-      createdAt: new Date()
-    });
-    setRoomId(newRoom.id);
-  };
+	const handleCreateRoom = async () => {
+		const newRoom = await addDoc(collection(db, 'rooms'), {
+			destinations: ['París', 'Tokio', 'Roma', 'Nueva York'],
+			createdAt: new Date(),
+		});
+		setRoomId(newRoom.id);
+	};
 
-  const roomLink = `${window.location.origin}/selection/${roomId}`;
+	const roomLink = `${window.location.origin}/matchselection/${roomId}`;
 
-  return (
-    <div className="room-container">
-      <h2>Matchmaker</h2>
-      <button onClick={handleCreateRoom}>Crear Sala</button>
-      {roomId && (
-        <div style={{ background: 'white', padding: '16px', marginTop: '20px' }}>
-          <p>Comparte este código QR con los participantes:</p>
-          <QRCode value={roomLink} size={256} />
-          <p>O comparte este enlace: <a href={roomLink}>{roomLink}</a></p>
-        </div>
-      )}
-    </div>
-  );
+	return (
+		<div className='room-container'>
+			<h2>Matchmaker</h2>
+			<button onClick={handleCreateRoom}>Crear Sala</button>
+			{roomId && (
+				<div style={{ background: 'white', padding: '16px', marginTop: '20px' }}>
+					<p>Comparte este código QR con los participantes:</p>
+					<QRCode value={roomLink} size={256} />
+					<p>
+						O comparte este enlace: <a href={roomLink}>{roomLink}</a>
+					</p>
+				</div>
+			)}
+		</div>
+	);
 }
 
 export default MatchmakerRoom;
-
-
 
 // const participants = [
 // 	{ name: 'Juanito', avatarUrl: 'https://randomuser.me/api/portraits/men/1.jpg' },

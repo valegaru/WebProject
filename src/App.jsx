@@ -6,7 +6,7 @@ import ExpenseTracker from './pages/ExpenseTracker/ExpenseTracker';
 import './App.css';
 import Login from './pages/Login/Login.jsx';
 import Landing from './pages/landing/landing';
-import MatchmakerQuestions from './pages/Matchmaker/MatchmakerQuestions.jsx';
+// import MatchmakerQuestions from './pages/Matchmaker/MatchmakerQuestions.jsx';
 import MatchmakerRoom from './pages/Matchmaker/MatchmakerRoom.jsx';
 import MatchmakerSelection from './pages/Matchmaker/MatchmakerSelection.jsx';
 import MatchmakerResults from './pages/Matchmaker/MatchmakerResults.jsx';
