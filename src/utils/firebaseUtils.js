@@ -86,23 +86,77 @@ export const fetchItineraries = async (tripId) => {
 	}
 };
 
+// Helper function to convert Firestore Timestamps to JavaScript Dates
+export const convertTimestampsToDate = (data) => {
+  if (!data || typeof data !== 'object') return data;
+  
+  const converted = { ...data };
+  
+  // List of common timestamp field names
+  const timestampFields = ['createdAt', 'updatedAt', 'start', 'end', 'date', 'timestamp'];
+  
+  timestampFields.forEach(field => {
+    if (converted[field] && typeof converted[field].toDate === 'function') {
+      converted[field] = converted[field].toDate();
+    }
+  });
+  
+  // Handle nested objects
+  Object.keys(converted).forEach(key => {
+    if (converted[key] && typeof converted[key] === 'object' && !Array.isArray(converted[key]) && !(converted[key] instanceof Date)) {
+      converted[key] = convertTimestampsToDate(converted[key]);
+    }
+  });
+  
+  return converted;
+};
+
+// Updated fetchExpenseEvents using the helper
 export const fetchExpenseEvents = async (tripID, expenseID) => {
 	try {
+		console.log('🔍 Starting fetchExpenseEvents with:', { tripID, expenseID });
+		
+		if (!tripID || !expenseID) {
+			console.log('❌ Missing required parameters:', { tripID, expenseID });
+			return [];
+		}
+		
 		const tripRef = doc(db, 'trips', tripID);
 		const expenseRef = doc(collection(tripRef, 'expenses'), expenseID);
 		const eventsCollection = collection(expenseRef, 'events');
-
-		const snapshot = await getDocs(eventsCollection);
-
-		const events = snapshot.docs.map((doc) => ({
-			id: doc.id,
-			...doc.data(),
-		}));
 		
-		console.log('Events for expense:', events);
+		console.log('🔎 Attempting to fetch events from Firestore...');
+		const snapshot = await getDocs(eventsCollection);
+		
+		console.log('📊 Snapshot received. Empty?', snapshot.empty);
+		console.log('📊 Number of docs in snapshot:', snapshot.size);
+		
+		if (snapshot.empty) {
+			console.log('⚠️ No events found in the collection');
+			console.log('🔗 Collection path:', `trips/${tripID}/expenses/${expenseID}/events`);
+			return [];
+		}
+		
+		const events = snapshot.docs.map((doc) => {
+			const data = doc.data();
+			console.log('📄 Processing document:', doc.id, data);
+			
+			// Convert all Firestore Timestamps to JavaScript Dates
+			const processedData = convertTimestampsToDate(data);
+			
+			return {
+				id: doc.id,
+				...processedData,
+			};
+		});
+		
+		console.log('✅ Events fetched successfully:', events.length, 'events');
+		console.log('📋 Events data:', events);
 		return events;
 	} catch (error) {
-		console.error('Error fetching expense events:', error);
+		console.error('💥 Error in fetchExpenseEvents:', error);
+		console.error('💥 Error message:', error.message);
+		console.error('💥 Error code:', error.code);
 		return [];
 	}
 };
@@ -466,6 +520,7 @@ export const updateEventInDay = async (tripID, expenseID, date, eventID, updated
 		return false;
 	}
 };
+
 
 
 

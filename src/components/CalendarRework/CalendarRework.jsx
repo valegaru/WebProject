@@ -6,16 +6,15 @@ import ExpenseCard from '../Expenses/ExpenseCard/ExpenseCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearEvents, setError, setEvents, setLoading } from '../../store/eventSlice/EventSlice';
 import { fetchExpenseEvents } from '../../utils/firebaseUtils';
+import { useParams } from 'react-router-dom';
 
 const localizer = momentLocalizer(moment);
 
-
 const CalendarRework = () => {
 
-  const tripID = useSelector((state) => state.trip.tripId)
-  const expenseID = useSelector((state) => state.expense.expenseId)
-  console.log(tripID)
-  console.log(expenseID)
+  const { tripId, expenseId } = useParams();
+  console.log(tripId)
+  console.log(expenseId)
   const dispatch = useDispatch();
   const { events, loading, error } = useSelector((state) => state.events);
   const [view, setView] = useState('month');
@@ -23,14 +22,14 @@ const CalendarRework = () => {
 
   useEffect(() => {
     const loadEvents = async () => {
-      if (!tripID || !expenseID) return;
+      if (!tripId || !expenseId) return;
       
       dispatch(setLoading(true));
       dispatch(setError(null));
       
       try {
         // Fetch events from Firebase
-        const fetchedEvents = await fetchExpenseEvents(tripID, expenseID);
+        const fetchedEvents = await fetchExpenseEvents(tripId, expenseId);
         
         // Transform events to match calendar format
         const calendarEvents = fetchedEvents.map(event => ({
@@ -52,7 +51,7 @@ const CalendarRework = () => {
     };
 
     loadEvents();
-  }, [tripID, expenseID, dispatch]);
+  }, [tripId, expenseId, dispatch]);
 
   // Custom event component
   const EventComponent = ({ event }) => (
@@ -84,13 +83,13 @@ const CalendarRework = () => {
 
   // Handle refresh events
   const handleRefresh = async () => {
-    if (!tripID || !expenseID) return;
+    if (!tripId || !expenseId) return;
     
     dispatch(setLoading(true));
     dispatch(setError(null));
     
     try {
-      const fetchedEvents = await fetchExpenseEvents(tripID, expenseID);
+      const fetchedEvents = await fetchExpenseEvents(tripId, expenseId);
       
       const calendarEvents = fetchedEvents.map(event => ({
         ...event,
