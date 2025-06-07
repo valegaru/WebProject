@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { addEventToDay } from '../../../utils/firebaseUtils';
+import { addExpenseEvent } from '../../../utils/firebaseUtils';
 import './AddExpenseModal.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addEvent } from '../../../store/eventSlice/EventSlice';
 import ParticipantManager from '../../ParticipantManager/ParticipantManager';
 
@@ -9,18 +9,46 @@ const AddEventModal = ({ tripID, expenseID, date, onClose, onEventAdded }) => {
   const dispatch = useDispatch();
 
   const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
+  const [category, setCategory] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
+  const [location, setLocation] = useState('');
+  const [tags, setTags] = useState('');
+  const currency = useSelector((state) => state.currency.currency)
+  const [paymentMethod, setPaymentMethod] = useState('');
   const [status, setStatus] = useState('incomplete');
+  const [notes, setNotes] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const [selectedParticipants, setSelectedParticipants] = useState([]);
   const [participantContributions, setParticipantContributions] = useState({});
 
+  const categoryOptions = [
+    'Food & Dining',
+    'Transportation',
+    'Accommodation',
+    'Entertainment',
+    'Shopping',
+    'Healthcare',
+    'Education',
+    'Utilities',
+    'Other'
+  ];
+
+  const paymentMethods = [
+    'Cash',
+    'Credit Card',
+    'Debit Card',
+    'Bank Transfer',
+    'Digital Wallet',
+    'Other'
+  ];
+
   const handleParticipantsChange = (newParticipants) => {
     setSelectedParticipants(newParticipants);
-    
-    // Remove contributions for participants that are no longer selected
     const newContributions = {};
     newParticipants.forEach(participant => {
       newContributions[participant.id] = participantContributions[participant.id] || '';
@@ -35,65 +63,231 @@ const AddEventModal = ({ tripID, expenseID, date, onClose, onEventAdded }) => {
     });
   };
 
+  const createDateTime = (dateString, timeString) => {
+    if (!timeString) return null;
+    const [hours, minutes] = timeString.split(':');
+    const dateTime = new Date(dateString);
+    dateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+    return dateTime;
+  };
+
+  const validateForm = () => {
+    if (!title.trim()) {
+      setError('Title is required');
+      return false;
+    }
+    if (!amount || parseFloat(amount) <= 0) {
+      setError('Valid amount is required');
+      return false;
+    }
+    if (!startTime) {
+      setError('Start time is required');
+      return false;
+    }
+    if (endTime && startTime >= endTime) {
+      setError('End time must be after start time');
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
 
-    // Convert participants to the format expected by the backend
-    const participants = selectedParticipants.map(participant => ({
-      userID: participant.id,
-      contribution: participantContributions[participant.id] || ''
-    }));
+    if (!validateForm()) return;
 
-    const newEvent = {
-      amount,
-      endTime,
-      id: Date.now(),
-      participants,
-      startTime,
-      status,
-      title,
-    };
+    setLoading(true);
 
-    const result = await addEventToDay(tripID, expenseID, date, newEvent);
-    if (result) {
-      dispatch(addEvent(newEvent));
-      onEventAdded && onEventAdded(result);
-      onClose();
+    try {
+      // Convert participants to the format expected by the backend
+      const participants = selectedParticipants.map(participant => ({
+        userID: participant.id,
+        username: participant.username,
+        email: participant.email,
+        contribution: participantContributions[participant.id] || ''
+      }));
+
+      // Create start and end DateTime objects
+      const startDateTime = createDateTime(date, startTime);
+      const endDateTime = endTime ? createDateTime(date, endTime) : startDateTime;
+
+      // Prepare event data for Firebase
+      const eventData = {
+        title: title.trim(),
+        description: description.trim(),
+        amount: parseFloat(amount),
+        category: category,
+        start: startDateTime,
+        end: endDateTime,
+        location: location.trim(),
+        tags: tags ? tags.split(',').map(tag => tag.trim()).filter(tag => tag) : [],
+        currency: currency,
+        paymentMethod: paymentMethod,
+        status: status,
+        notes: notes.trim(),
+        participants: participants,
+        tripID: tripID,
+        expenseID: expenseID,
+        date: date // Keep original date for reference
+      };
+
+      // Add to Firebase using the new utility function
+      const eventId = await addExpenseEvent(tripID, expenseID, eventData);
+      
+      if (eventId) {
+        // Create event object for Redux (compatible with calendar)
+        const calendarEvent = {
+          id: eventId,
+          title: title,
+          start: startDateTime,
+          end: endDateTime,
+          amount: parseFloat(amount),
+          category: category,
+          status: status,
+          participants: participants,
+          location: location,
+          description: description,
+          tags: eventData.tags,
+          currency: currency,
+          paymentMethod: paymentMethod,
+          notes: notes,
+          tripID: tripID,
+          expenseID: expenseID,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        };
+
+        // Add to Redux store
+        dispatch(addEvent(calendarEvent));
+        
+        // Call callback if provided
+        onEventAdded && onEventAdded(calendarEvent);
+        
+        // Close modal
+        onClose();
+      } else {
+        setError('Failed to save event. Please try again.');
+      }
+    } catch (err) {
+      console.error('Error saving event:', err);
+      setError('An error occurred while saving the event.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <h3>Add Event</h3>
+        <h3>Add Expense Event</h3>
+        
+        {error && (
+          <div style={{
+            backgroundColor: '#fee2e2',
+            color: '#dc2626',
+            padding: '12px',
+            borderRadius: '4px',
+            marginBottom: '16px',
+            border: '1px solid #fecaca'
+          }}>
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit}>
-          <input 
-            value={title} 
-            onChange={(e) => setTitle(e.target.value)} 
-            placeholder="Title" 
-            required 
+          <div className="form-row">
+            <input 
+              value={title} 
+              onChange={(e) => setTitle(e.target.value)} 
+              placeholder="Title *" 
+              required 
+            />
+            <input 
+              type="number"
+              value={amount} 
+              onChange={(e) => setAmount(e.target.value)} 
+              placeholder="Amount *" 
+              min="0"
+              step="0.01"
+              required 
+            />
+          </div>
+
+          <div className="form-row">
+            <select 
+              value={category} 
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              <option value="">Select Category</option>
+              {categoryOptions.map(cat => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
+            
+            <select 
+              value={currency} 
+              onChange={(e) => setCurrency(e.target.value)}
+            >
+              <option value="USD">USD</option>
+              <option value="EUR">EUR</option>
+              <option value="GBP">GBP</option>
+              <option value="JPY">JPY</option>
+              <option value="COP">COP</option>
+            </select>
+          </div>
+
+          <div className="form-row">
+            <input 
+              type="time"
+              value={startTime} 
+              onChange={(e) => setStartTime(e.target.value)} 
+              placeholder="Start Time *" 
+              required 
+            />
+            <input 
+              type="time"
+              value={endTime} 
+              onChange={(e) => setEndTime(e.target.value)} 
+              placeholder="End Time" 
+            />
+          </div>
+
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Description"
+            rows="3"
           />
+
+          <div className="form-row">
+            <input 
+              value={location} 
+              onChange={(e) => setLocation(e.target.value)} 
+              placeholder="Location" 
+            />
+            <select 
+              value={paymentMethod} 
+              onChange={(e) => setPaymentMethod(e.target.value)}
+            >
+              <option value="">Payment Method</option>
+              {paymentMethods.map(method => (
+                <option key={method} value={method}>{method}</option>
+              ))}
+            </select>
+          </div>
+
           <input 
-            value={amount} 
-            onChange={(e) => setAmount(e.target.value)} 
-            placeholder="Amount" 
-            required 
+            value={tags} 
+            onChange={(e) => setTags(e.target.value)} 
+            placeholder="Tags (comma-separated)" 
           />
-          <input 
-            value={startTime} 
-            onChange={(e) => setStartTime(e.target.value)} 
-            placeholder="Start Time (e.g. 12:00)" 
-            required 
-          />
-          <input 
-            value={endTime} 
-            onChange={(e) => setEndTime(e.target.value)} 
-            placeholder="End Time (e.g. 13:00)" 
-            required 
-          />
+
           <select value={status} onChange={(e) => setStatus(e.target.value)}>
             <option value="incomplete">Incomplete</option>
             <option value="complete">Complete</option>
+            <option value="pending">Pending</option>
+            <option value="cancelled">Cancelled</option>
           </select>
 
           <ParticipantManager
@@ -121,9 +315,31 @@ const AddEventModal = ({ tripID, expenseID, date, onClose, onEventAdded }) => {
             </div>
           )}
 
+          <textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder="Additional notes..."
+            rows="3"
+          />
+
           <div className="modal-buttons">
-            <button type="submit">Add Event</button>
-            <button type="button" onClick={onClose}>Cancel</button>
+            <button 
+              type="submit" 
+              disabled={loading}
+              style={{
+                backgroundColor: loading ? '#9ca3af' : undefined,
+                cursor: loading ? 'not-allowed' : 'pointer'
+              }}
+            >
+              {loading ? 'Saving...' : 'Add Event'}
+            </button>
+            <button 
+              type="button" 
+              onClick={onClose}
+              disabled={loading}
+            >
+              Cancel
+            </button>
           </div>
         </form>
       </div>
