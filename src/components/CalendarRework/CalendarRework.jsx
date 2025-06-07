@@ -10,11 +10,41 @@ import { useParams } from 'react-router-dom';
 
 const localizer = momentLocalizer(moment);
 
-const CalendarRework = () => {
+// Utility function to round events to hour boundaries
+const roundToHourBoundaries = (events) => {
+  return events.map(event => {
+    if (!event.start || !event.end) {
+      return event;
+    }
 
+    const originalStart = new Date(event.start);
+    const originalEnd = new Date(event.end);
+
+    // Round start time DOWN to hour boundary (9:20 -> 9:00)
+    const displayStart = new Date(originalStart);
+    displayStart.setMinutes(0, 0, 0);
+
+    // Round end time UP to next hour boundary (12:40 -> 13:00)
+    const displayEnd = new Date(originalEnd);
+    if (displayEnd.getMinutes() > 0 || displayEnd.getSeconds() > 0) {
+      displayEnd.setHours(displayEnd.getHours() + 1);
+    }
+    displayEnd.setMinutes(0, 0, 0);
+
+    return {
+      ...event,
+      // Store original times for display in ExpenseCard
+      originalStart,
+      originalEnd,
+      // Set rounded times for calendar layout
+      start: displayStart,
+      end: displayEnd
+    };
+  });
+};
+
+const CalendarRework = () => {
   const { tripId, expenseId } = useParams();
-  console.log(tripId)
-  console.log(expenseId)
   const dispatch = useDispatch();
   const { events, loading, error } = useSelector((state) => state.events);
   const [view, setView] = useState('month');
@@ -41,7 +71,7 @@ const CalendarRework = () => {
         
         // Set events in Redux store
         dispatch(setEvents(calendarEvents));
-        console.log(calendarEvents, "logedd")
+        console.log(calendarEvents, "logged")
       } catch (err) {
         console.error('Error loading events:', err);
         dispatch(setError('Failed to load events'));
@@ -53,9 +83,14 @@ const CalendarRework = () => {
     loadEvents();
   }, [tripId, expenseId, dispatch]);
 
+  // Process events with hour boundaries
+  const hourBoundaryEvents = useMemo(() => {
+    return roundToHourBoundaries(events);
+  }, [events]);
+
   // Custom event component
   const EventComponent = ({ event }) => (
-    <ExpenseCard event={event} view={view} />
+    <ExpenseCard event={event} />
   );
 
   // Custom event style getter
@@ -110,7 +145,7 @@ const CalendarRework = () => {
     <div style={{ height: '600px', padding: '20px' }}>
       <div style={{ marginBottom: '20px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-          <h2 style={{ margin: 0 }}>Expense Calendar</h2>
+          <h2 style={{ margin: 0 }}>Hour-Spanning Expense Calendar</h2>
           <button
             onClick={handleRefresh}
             disabled={loading}
@@ -183,7 +218,8 @@ const CalendarRework = () => {
         </div>
         
         <div style={{ fontSize: '14px', color: '#666' }}>
-          Showing {events.length} event{events.length !== 1 ? 's' : ''}
+          Showing {hourBoundaryEvents.length} event{hourBoundaryEvents.length !== 1 ? 's' : ''} 
+          {hourBoundaryEvents.length > 0 && ' (rounded to hour boundaries)'}
         </div>
       </div>
 
@@ -201,7 +237,7 @@ const CalendarRework = () => {
       ) : (
         <Calendar
           localizer={localizer}
-          events={events}
+          events={hourBoundaryEvents} // Use hour-boundary events
           startAccessor="start"
           endAccessor="end"
           view={view}
