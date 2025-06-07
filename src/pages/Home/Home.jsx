@@ -18,7 +18,7 @@ import { fetchTripsFromUser } from '../../utils/firebaseUtils';
 import { useNavigate } from 'react-router-dom';
 import MapComponent from '../../components/Map/MapComponent/MapComponent';
 import PoiMarkers from '../../components/Map/PoiMarker/PoiMarkers';
-import CardList from '../../components/cardList/CardList';
+import CardList from '../../components/CardList/CardList';
 
 
 const Home = () => {

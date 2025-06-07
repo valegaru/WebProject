@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import './tripPlanner.css';
 
 import Navbar from '../../components/Navbar/Navbar';
-import CardList from '../../components/cardList/CardList';
+import CardList from '../../components/CardList/CardList';
 
 import expenseImg from '../../assets/expense.png';
 import itineraryImg from '../../assets/itinerary.png';
