@@ -348,10 +348,19 @@ export const addTrip = async (userId, description, destination, startDate, endDa
     const itineraryRef = doc(collection(tripRef, 'itinerary'));
     await setDoc(itineraryRef, {});
 
-    const tripIDRef = doc(db, `users/${userId}/tripsIDs/${tripRef.id}`);
-    await setDoc(tripIDRef, {
+    const creatorTripIDRef = doc(db, `users/${userId}/tripsIDs/${tripRef.id}`);
+    await setDoc(creatorTripIDRef, {
       id: tripRef.id,
     });
+
+    const participantPromises = participants.map(async (participantId) => {
+      const participantTripIDRef = doc(db, `users/${participantId}/tripsIDs/${tripRef.id}`);
+      await setDoc(participantTripIDRef, {
+        id: tripRef.id,
+      });
+    });
+
+    await Promise.all(participantPromises);
 
     return tripRef.id;
   } catch (error) {
