@@ -81,7 +81,7 @@ const Router = () => {
 					}
 				/>
 				<Route
-					path='/matchselection'
+					path='/matchselection/:roomId'
 					element={
 						<PrivateRoute>
 							<MatchmakerSelection />
@@ -89,7 +89,7 @@ const Router = () => {
 					}
 				/>
 				<Route
-					path='/results'
+					path='/results/:roomId'
 					element={
 						<PrivateRoute>
 							<MatchmakerResults />
