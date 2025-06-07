@@ -1,19 +1,58 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import ExpenseCard from '../Expenses/ExpenseCard/ExpenseCard';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { clearEvents, setError, setEvents, setLoading } from '../../store/eventSlice/EventSlice';
+import { fetchExpenseEvents } from '../../utils/firebaseUtils';
 
 const localizer = momentLocalizer(moment);
 
-const CalendarRework = () => {  
 
-  const dispatch = useDispatch()
-  const events = useSelector((state) => state.events);
+const CalendarRework = () => {
+
+  const tripID = useSelector((state) => state.trip.tripId)
+  const expenseID = useSelector((state) => state.expense.expenseId)
+  console.log(tripID)
+  console.log(expenseID)
+  const dispatch = useDispatch();
+  const { events, loading, error } = useSelector((state) => state.events);
   const [view, setView] = useState('month');
   const [date, setDate] = useState(new Date());
+
+  useEffect(() => {
+    const loadEvents = async () => {
+      if (!tripID || !expenseID) return;
+      
+      dispatch(setLoading(true));
+      dispatch(setError(null));
+      
+      try {
+        // Fetch events from Firebase
+        const fetchedEvents = await fetchExpenseEvents(tripID, expenseID);
+        
+        // Transform events to match calendar format
+        const calendarEvents = fetchedEvents.map(event => ({
+          ...event,
+          start: event.start ? new Date(event.start) : new Date(),
+          end: event.end ? new Date(event.end) : new Date(),
+          title: event.title || event.name || 'Expense Event'
+        }));
+        
+        // Set events in Redux store
+        dispatch(setEvents(calendarEvents));
+        console.log(calendarEvents, "logedd")
+      } catch (err) {
+        console.error('Error loading events:', err);
+        dispatch(setError('Failed to load events'));
+      } finally {
+        dispatch(setLoading(false));
+      }
+    };
+
+    loadEvents();
+  }, [tripID, expenseID, dispatch]);
 
   // Custom event component
   const EventComponent = ({ event }) => (
@@ -43,10 +82,65 @@ const CalendarRework = () => {
       localizer.format(end, 'HH:mm', culture)
   }), []);
 
+  // Handle refresh events
+  const handleRefresh = async () => {
+    if (!tripID || !expenseID) return;
+    
+    dispatch(setLoading(true));
+    dispatch(setError(null));
+    
+    try {
+      const fetchedEvents = await fetchExpenseEvents(tripID, expenseID);
+      
+      const calendarEvents = fetchedEvents.map(event => ({
+        ...event,
+        start: event.start ? new Date(event.start) : new Date(),
+        end: event.end ? new Date(event.end) : new Date(),
+        title: event.title || event.name || 'Expense Event'
+      }));
+      
+      dispatch(setEvents(calendarEvents));
+    } catch (err) {
+      dispatch(setError('Failed to refresh events'));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
   return (
     <div style={{ height: '600px', padding: '20px' }}>
       <div style={{ marginBottom: '20px' }}>
-        <h2 style={{ marginBottom: '10px' }}>Expense Calendar</h2>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+          <h2 style={{ margin: 0 }}>Expense Calendar</h2>
+          <button
+            onClick={handleRefresh}
+            disabled={loading}
+            style={{
+              padding: '8px 16px',
+              backgroundColor: '#10b981',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              opacity: loading ? 0.6 : 1
+            }}
+          >
+            {loading ? 'Loading...' : 'Refresh'}
+          </button>
+        </div>
+        
+        {error && (
+          <div style={{
+            padding: '10px',
+            backgroundColor: '#fee2e2',
+            color: '#dc2626',
+            borderRadius: '4px',
+            marginBottom: '10px'
+          }}>
+            {error}
+          </div>
+        )}
+        
         <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
           <button 
             onClick={() => setView('month')}
@@ -88,29 +182,46 @@ const CalendarRework = () => {
             Day
           </button>
         </div>
+        
+        <div style={{ fontSize: '14px', color: '#666' }}>
+          Showing {events.length} event{events.length !== 1 ? 's' : ''}
+        </div>
       </div>
 
-      <Calendar
-        localizer={localizer}
-        events={mockExpenses}
-        startAccessor="start"
-        endAccessor="end"
-        view={view}
-        onView={setView}
-        date={date}
-        onNavigate={setDate}
-        components={{
-          event: EventComponent
-        }}
-        eventPropGetter={eventStyleGetter}
-        formats={formats}
-        style={{ height: '500px' }}
-        step={30}
-        timeslots={2}
-        min={new Date(2025, 0, 1, 6, 0)} // 6 AM
-        max={new Date(2025, 0, 1, 23, 0)} // 11 PM
-        dayLayoutAlgorithm="no-overlap"
-      />
+      {loading && events.length === 0 ? (
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center', 
+          height: '500px',
+          fontSize: '16px',
+          color: '#666'
+        }}>
+          Loading events...
+        </div>
+      ) : (
+        <Calendar
+          localizer={localizer}
+          events={events}
+          startAccessor="start"
+          endAccessor="end"
+          view={view}
+          onView={setView}
+          date={date}
+          onNavigate={setDate}
+          components={{
+            event: EventComponent
+          }}
+          eventPropGetter={eventStyleGetter}
+          formats={formats}
+          style={{ height: '500px' }}
+          step={30}
+          timeslots={2}
+          min={new Date(2025, 0, 1, 6, 0)} // 6 AM
+          max={new Date(2025, 0, 1, 23, 0)} // 11 PM
+          dayLayoutAlgorithm="no-overlap"
+        />
+      )}
     </div>
   );
 };
