@@ -1,6 +1,8 @@
+//, arrayUnion
+
 import { db } from '../services/firebase';
 import { collection } from 'firebase/firestore';
-import { doc, getDoc, getDocs, addDoc, updateDoc, arrayUnion, query, where, setDoc } from 'firebase/firestore';
+import { doc, getDoc, getDocs, addDoc, updateDoc, query, where, setDoc } from 'firebase/firestore';
 import { orderBy, startAt, endAt } from 'firebase/firestore';
 export const addNewExpense = async ({ uidUser, name, price }) => {
 	const docRef = await addDoc(collection(db, 'expense'), {
@@ -123,15 +125,14 @@ const fetchTripIds = async (userId) => {
 		const tripsIdSnapshot = await getDocs(tripsIdCollectionRef);
 
 		return tripsIdSnapshot;
-
 	} catch (error) {
-		console.error(error)
+		console.error(error);
 	}
-}
+};
 
 export const fetchTripsFromUser = async (userId) => {
 	try {
-		const tripsIDs = await fetchTripIds(userId)
+		const tripsIDs = await fetchTripIds(userId);
 		const tripDataArray = [];
 
 		for (const docSnap of tripsIDs.docs) {
@@ -161,59 +162,59 @@ export const fetchTripById = async (tripId) => {
 
 		if (!tripDoc.exists()) {
 			console.log('No trip to fetch');
-			return null; 
+			return null;
 		}
 
 		return tripDoc;
 	} catch (error) {
 		console.error('Error fetching trip', error);
-		return null; 
+		return null;
 	}
 };
 
 const formatDate = (date) => {
-  if (typeof date === 'string') return date.slice(0, 10);
-  return date.toISOString().slice(0, 10);
+	if (typeof date === 'string') return date.slice(0, 10);
+	return date.toISOString().slice(0, 10);
 };
 
 export const addTrip = async (userId, description, destination, startDate, endDate, name, participants, tripPic) => {
-  try {
-    const formattedStartDate = formatDate(startDate);
-    const formattedEndDate = formatDate(endDate);
+	try {
+		const formattedStartDate = formatDate(startDate);
+		const formattedEndDate = formatDate(endDate);
 
-    const tripRef = doc(collection(db, 'trips'));
+		const tripRef = doc(collection(db, 'trips'));
 
-    await setDoc(tripRef, {
-      userId,
-      description,
-      destination,
-      startDate: formattedStartDate,
-      endDate: formattedEndDate,
-      name,
-      participants,
-      tripPic,
-    });
+		await setDoc(tripRef, {
+			userId,
+			description,
+			destination,
+			startDate: formattedStartDate,
+			endDate: formattedEndDate,
+			name,
+			participants,
+			tripPic,
+		});
 
-    await createExpense(tripRef, participants, formattedStartDate);
+		await createExpense(tripRef, participants, formattedStartDate);
 
-    const itineraryRef = doc(collection(tripRef, 'itinerary'));
-    await setDoc(itineraryRef, {});
+		const itineraryRef = doc(collection(tripRef, 'itinerary'));
+		await setDoc(itineraryRef, {});
 
-    const tripIDRef = doc(db, `users/${userId}/tripsIDs/${tripRef.id}`);
-    await setDoc(tripIDRef, {
-      id: tripRef.id,
-    });
+		const tripIDRef = doc(db, `users/${userId}/tripsIDs/${tripRef.id}`);
+		await setDoc(tripIDRef, {
+			id: tripRef.id,
+		});
 
-    return tripRef.id;
-  } catch (error) {
-    console.error('Error adding trip:', error);
-    return null;
-  }
+		return tripRef.id;
+	} catch (error) {
+		console.error('Error adding trip:', error);
+		return null;
+	}
 };
 
 export const createExpense = async (tripRef, participants, startDate, sharedId) => {
 	try {
-		const dateOnly = new Date(startDate).toISOString().split('T')[0]; 
+		const dateOnly = new Date(startDate).toISOString().split('T')[0];
 
 		const existingExpensesSnap = await getDocs(collection(tripRef, 'expenses'));
 		const expenseCount = existingExpensesSnap.size + 1;
@@ -221,23 +222,22 @@ export const createExpense = async (tripRef, participants, startDate, sharedId) 
 		const expenseRef = doc(tripRef, 'expenses', sharedId);
 		await setDoc(expenseRef, {
 			name: `Expense ${expenseCount}`,
-			participants: participants.map(p => p.id || p)
+			participants: participants.map((p) => p.id || p),
 		});
 
 		const dayRef = doc(collection(expenseRef, 'days'), dateOnly);
 		await setDoc(dayRef, {});
 
 		return { expenseRef, dayRef };
-
 	} catch (error) {
-		console.error("Error creating expense with day:", error);
+		console.error('Error creating expense with day:', error);
 		return null;
 	}
 };
 
-export const createItinerary= async (tripRef, participants, startDate, sharedId) => {
+export const createItinerary = async (tripRef, participants, startDate, sharedId) => {
 	try {
-		const dateOnly = new Date(startDate).toISOString().split('T')[0]; 
+		const dateOnly = new Date(startDate).toISOString().split('T')[0];
 
 		const existingItinerariesSnap = await getDocs(collection(tripRef, 'itinerary'));
 		const itineraryCount = existingItinerariesSnap.size + 1;
@@ -245,16 +245,15 @@ export const createItinerary= async (tripRef, participants, startDate, sharedId)
 		const itineraryRef = doc(tripRef, 'itinerary', sharedId);
 		await setDoc(itineraryRef, {
 			name: `Itinerary ${itineraryCount}`,
-			participants: participants.map(p => p.id || p)
+			participants: participants.map((p) => p.id || p),
 		});
 
 		const dayRef = doc(collection(itineraryRef, 'days'), dateOnly);
 		await setDoc(dayRef, {});
 
 		return { itineraryRef, dayRef };
-
 	} catch (error) {
-		console.error("Error creating itinerary with day:", error);
+		console.error('Error creating itinerary with day:', error);
 		return null;
 	}
 };
@@ -262,7 +261,7 @@ export const createItinerary= async (tripRef, participants, startDate, sharedId)
 export const sharedIdGenerator = (tripRef) => {
 	const sharedId = doc(collection(tripRef, 'expenses')).id;
 	return sharedId;
-}
+};
 
 export const searchUsersByName = async (nameToSearch) => {
 	const usersRef = collection(db, 'users');
@@ -371,8 +370,6 @@ export const updateEventInDay = async (tripID, expenseID, date, eventID, updated
 		return false;
 	}
 };
-
-
 
 // addTrip() = db -> trips -> (add fields: description, destination, startDate, endDate, name, participants[], add collections: expenses, itineraries, addtripid(()=>(db->users(matchUserId)->addTrip id to tripsIDs collection)))
 
