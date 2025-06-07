@@ -67,7 +67,7 @@ const Trip = () => {
 	if (tripId) {
 		fetchData();
 	}
-	}, [tripId]);
+	}, [tripId, handleItineraryClick, handleItineraryClick]);
 
 
 	if (!trip) return <p>Loading trip data...</p>;

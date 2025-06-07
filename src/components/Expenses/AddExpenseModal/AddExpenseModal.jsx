@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { addExpenseEvent } from '../../../utils/firebaseUtils';
 import './AddExpenseModal.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addEvent } from '../../../store/eventSlice/EventSlice';
 import ParticipantManager from '../../ParticipantManager/ParticipantManager';
 
@@ -16,7 +16,7 @@ const AddEventModal = ({ tripID, expenseID, date, onClose, onEventAdded }) => {
   const [endTime, setEndTime] = useState('');
   const [location, setLocation] = useState('');
   const [tags, setTags] = useState('');
-  const [currency, setCurrency] = useState('USD');
+  const currency = useSelector((state) => state.currency.currency)
   const [paymentMethod, setPaymentMethod] = useState('');
   const [status, setStatus] = useState('incomplete');
   const [notes, setNotes] = useState('');
@@ -49,8 +49,6 @@ const AddEventModal = ({ tripID, expenseID, date, onClose, onEventAdded }) => {
 
   const handleParticipantsChange = (newParticipants) => {
     setSelectedParticipants(newParticipants);
-    
-    // Remove contributions for participants that are no longer selected
     const newContributions = {};
     newParticipants.forEach(participant => {
       newContributions[participant.id] = participantContributions[participant.id] || '';
