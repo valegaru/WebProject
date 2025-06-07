@@ -13,7 +13,6 @@ const ExpenseCard = ({ event, view }) => {
   const isDayView = view === 'day';
   const isWeekView = view === 'week';
 
-  // Fetch profile pictures
   useEffect(() => {
     const fetchPics = async () => {
       const picMap = {};

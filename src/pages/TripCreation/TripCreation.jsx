@@ -95,7 +95,7 @@ function TripCreation() {
 		);
 
 		if (tripID) {
-			alert('Viaje creado con éxito 🎉');
+			alert('Viaje creado con éxito');
 			navigate('/trips');
 			// Limpiar formulario
 			setTripData({
@@ -108,7 +108,7 @@ function TripCreation() {
 				tripPic: '',
 			});
 		} else {
-			alert('Error al crear el viaje 😞');
+			alert('Error al crear el viaje');
 		}
 	};
 
