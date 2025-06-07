@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { addEvent } from "../../store/eventSlice/EventSlice";
 import AddEventModal from "../../components/Expenses/AddExpenseModal/AddExpenseModal";
 import { useParams } from 'react-router-dom';
+import CalendarRework from "../../components/CalendarRework/CalendarRework";
 
 
 
@@ -80,7 +81,7 @@ const ExpenseTracker = () => {
         <CustomButton label="ADD EXPENSE" onClick={() => {setShowModal(true)}}/>
       </div>
 
-      <Calendar/></>)}
+      <CalendarRework></CalendarRework></>)}
       
 
     {showModal && (

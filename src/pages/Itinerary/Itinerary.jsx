@@ -4,6 +4,8 @@ import { useEffect, useState } from "react"
 import { fetchUserData } from "../../utils/firebaseUtils"
 import MapComponent from "../../components/Map/MapComponent/MapComponent"
 import { setMapType } from "../../store/mapInfo/MapInfo"
+import ExpenseCalendar from "../../components/CalendarRework/CalendarRework"
+import CalendarRework from "../../components/CalendarRework/CalendarRework"
 
 const Itinerary = () => {
 
@@ -25,6 +27,7 @@ const Itinerary = () => {
         <>
             <Navbar></Navbar>
             <MapComponent></MapComponent>
+            <CalendarRework></CalendarRework>
         </>
     )
 }
