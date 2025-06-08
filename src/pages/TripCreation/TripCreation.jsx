@@ -2,16 +2,15 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { addTrip } from '../../utils/firebaseUtils';
-import Navbar from '../../components/Navbar/Navbar';
-import ParticipantManager from '../../components/ParticipantManager/ParticipantManager';
+import LogoutButton from '../../components/LogoutButton/LogoutButton';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import './TripCreation.css';
-
+import Navbar from '../../components/Navbar/Navbar';
+import ParticipantManager from '../../components/ParticipantManager/ParticipantManager';
 import DestinationSearch from '../../components/DestinationSearch/DestinationSearch';
 import DestinationCard from '../../components/DestinationCard/DestinationCard';
-import { APIProvider, Map } from '@vis.gl/react-google-maps';
-import PoiMarkers from '../../components/Map/PoiMarker/PoiMarkers';
+import MapComponent from '../../components/Map/MapComponent/MapComponent';
+import './TripCreation.css';
 
 const TripCreation = () => {
 	const { userId } = useSelector((state) => state.auth);
@@ -29,14 +28,19 @@ const TripCreation = () => {
 
 	const [uploading, setUploading] = useState(false);
 	const [uploadStatus, setUploadStatus] = useState('');
-	const [destinationLocations, setDestinationLocations] = useState([]);
 
 	const handleInputChange = (e) => {
-		setTripData({ ...tripData, [e.target.name]: e.target.value });
+		setTripData({
+			...tripData,
+			[e.target.name]: e.target.value,
+		});
 	};
 
 	const handleParticipantsChange = (newParticipants) => {
-		setTripData({ ...tripData, participants: newParticipants });
+		setTripData({
+			...tripData,
+			participants: newParticipants,
+		});
 	};
 
 	const handleImageUpload = async (e) => {
@@ -64,44 +68,12 @@ const TripCreation = () => {
 				setUploadStatus('Error uploading image.');
 			}
 		} catch (err) {
-			console.error('Error uploading to Cloudinary:', err);
+			console.error('Cloudinary upload error:', err);
 			setUploadStatus('Error uploading image.');
 		} finally {
 			setUploading(false);
 			setTimeout(() => setUploadStatus(''), 4000);
 		}
-	};
-
-	const geocodeCountry = (countryName) => {
-		return new Promise((resolve, reject) => {
-			const geocoder = new window.google.maps.Geocoder();
-			geocoder.geocode({ address: countryName }, (results, status) => {
-				if (status === 'OK' && results[0]) {
-					const loc = results[0].geometry.location;
-					resolve({ lat: loc.lat(), lng: loc.lng() });
-				} else {
-					reject(status);
-				}
-			});
-		});
-	};
-
-	const handleDestinationChange = (newDestinations) => {
-		setTripData((prev) => ({ ...prev, destination: newDestinations }));
-
-		// Remove old destinations
-		setDestinationLocations((locations) => locations.filter((loc) => newDestinations.includes(loc.name)));
-
-		// Add new geocoded ones
-		newDestinations.forEach((name) => {
-			if (!destinationLocations.find((loc) => loc.name === name)) {
-				geocodeCountry(name)
-					.then(({ lat, lng }) => {
-						setDestinationLocations((locations) => [...locations, { name, lat, lng }]);
-					})
-					.catch((err) => console.warn('Geocode failed:', name, err));
-			}
-		});
 	};
 
 	const isValidDates = () => {
@@ -114,7 +86,6 @@ const TripCreation = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-
 		if (!userId) {
 			alert('User not logged in.');
 			return;
@@ -149,7 +120,6 @@ const TripCreation = () => {
 				participants: [],
 				tripPic: '',
 			});
-			setDestinationLocations([]);
 		} else {
 			alert('Error creating trip 😞');
 		}
@@ -184,32 +154,27 @@ const TripCreation = () => {
 						/>
 					</div>
 
-					<DestinationSearch selectedCountries={tripData.destination} onChange={handleDestinationChange} />
+					<DestinationSearch
+						selectedCountries={tripData.destination}
+						onChange={(newDestinations) => setTripData({ ...tripData, destination: newDestinations })}
+					/>
 
-					<div className='map-wrapper' style={{ height: '300px', marginBottom: '1rem' }}>
-						<APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} libraries={['places']}>
-							<Map defaultCenter={{ lat: 20, lng: 0 }} defaultZoom={2} style={{ width: '100%', height: '100%' }}>
-								{destinationLocations.map((loc, i) => (
-									<PoiMarkers key={i} locationInfo={{ lat: loc.lat, lng: loc.lng }} />
-								))}
-							</Map>
-						</APIProvider>
+					<div className='destination-card-list'>
+						{tripData.destination.map((country, index) => (
+							<DestinationCard
+								key={index}
+								name={country}
+								onRemove={() => {
+									setTripData((prev) => ({
+										...prev,
+										destination: prev.destination.filter((c) => c !== country),
+									}));
+								}}
+							/>
+						))}
 					</div>
 
-					{destinationLocations.length > 0 && (
-						<div className='destination-cards-container'>
-							{destinationLocations.map((loc) => (
-								<DestinationCard
-									key={loc.name}
-									name={loc.name}
-									onRemove={(name) => {
-										const filtered = tripData.destination.filter((c) => c !== name);
-										handleDestinationChange(filtered);
-									}}
-								/>
-							))}
-						</div>
-					)}
+					<MapComponent destinations={tripData.destination} />
 
 					<div className='form-group date-group'>
 						<label>Start Date:</label>
