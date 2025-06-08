@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import '../ExpenseCard/ExpenseCard.css'
+import { useSelector } from 'react-redux';
 
 const ExpenseCard = ({ event }) => {
   const [profilePics, setProfilePics] = useState({});
+  const currencySelect = useSelector((state)=> state.currency.currency)
   
   if (!event) {
     return <div>No event data</div>;
@@ -18,7 +20,7 @@ const ExpenseCard = ({ event }) => {
     originalEnd,
     participants = {},
     status = 'pending',
-    currency = 'USD'
+    currency = currencySelect,
   } = event;
 
   // Memoize participantList to prevent unnecessary re-renders
@@ -139,14 +141,6 @@ const ExpenseCard = ({ event }) => {
       <div className="expense-card__content">
         <div 
           className="expense-card__title"
-          style={{ 
-            fontWeight: 'bold',
-            fontSize: '13px',
-            marginBottom: '4px',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap'
-          }}
         >
           {title}
         </div>
