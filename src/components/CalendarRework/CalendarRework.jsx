@@ -105,50 +105,13 @@ const CalendarRework = () => {
       localizer.format(end, 'HH:mm', culture)
   }), []);
 
-  const handleRefresh = async () => {
-    if (!tripId || !expenseId) return;
-    
-    dispatch(setLoading(true));
-    dispatch(setError(null));
-    
-    try {
-      const fetchedEvents = await fetchExpenseEvents(tripId, expenseId);
-      
-      const calendarEvents = fetchedEvents.map(event => ({
-        ...event,
-        start: event.start ? new Date(event.start) : new Date(),
-        end: event.end ? new Date(event.end) : new Date(),
-        title: event.title || event.name || 'Expense Event'
-      }));
-      
-      dispatch(setEvents(calendarEvents));
-    } catch (err) {
-      dispatch(setError('Failed to refresh events'));
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
+  
 
   return (
     <div style={{ height: '600px', padding: '20px' }}>
       <div style={{ marginBottom: '20px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
           <h2 style={{ margin: 0 }}>Hour-Spanning Expense Calendar</h2>
-          <button
-            onClick={handleRefresh}
-            disabled={loading}
-            style={{
-              padding: '8px 16px',
-              backgroundColor: '#10b981',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.6 : 1
-            }}
-          >
-            {loading ? 'Loading...' : 'Refresh'}
-          </button>
         </div>
         
         {error && (
