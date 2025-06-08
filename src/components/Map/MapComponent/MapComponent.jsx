@@ -131,7 +131,7 @@ const MapComponent = () => {
           defaultZoom={defaultMapZoom}
           gestureHandling={'greedy'}
           disableDefaultUI={true}
-          mapId={"3559db7569081dbf973e4ebf"}
+          mapId={"3559db7569081dbfa9264cf8"}
           onClick={(mapInfo) => handleMapClick(mapInfo)}
         >
           <PoiMarkers locationInfo={selectedLocation}></PoiMarkers>
