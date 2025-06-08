@@ -1,21 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    counter: 0,
+    type: "places"
 }
 
 export const MapInfo = createSlice({
     name: 'MapInfo',
     initialState,
     reducers: {
-
-        setIncrement:  (state) => {
-            state.value += 1;
-        },
-
-        setIncrement:  (state) => {
-            state.value -= 1;
-        },
-    }
+        setMapType:  (state, action) => {
+            state.type = action.payload;
+    }}
 })
 
+export const { setMapType } = MapInfo.actions;
+export default MapInfo.reducer;

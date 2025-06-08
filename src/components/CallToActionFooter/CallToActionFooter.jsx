@@ -1,5 +1,5 @@
 import React from 'react';
-import './callToActionFooter.css';
+import './CallToActionFooter.css';
 
 const CallToActionFooter = () => {
 	return (

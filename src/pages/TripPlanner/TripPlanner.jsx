@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import './tripPlanner.css';
 
 import Navbar from '../../components/Navbar/Navbar';
-import CardList from '../../components/cardList/CardList';
+import CardList from '../../components/CardList/CardList';
 
 import expenseImg from '../../assets/expense.png';
 import itineraryImg from '../../assets/itinerary.png';
@@ -14,7 +14,7 @@ import user3 from '../../assets/user3.png';
 import user4 from '../../assets/user4.png';
 import user5 from '../../assets/user5.png';
 import editIcon from '../../assets/editIcon.png';
-import { fetchExpenses, fetchTripById } from '../../utils/firebaseUtils';
+import { fetchExpenses, fetchItineraries, fetchTripById } from '../../utils/firebaseUtils';
 
 
 const Trip = () => {
@@ -25,14 +25,19 @@ const Trip = () => {
 
 	const navigate = useNavigate()
 
-	const handleClick = (expense) => {
+	const handleExpenseClick = (expense) => {
 		console.log("Clicked on expense:", expense);
 		navigate(`/expenseTracker/${tripId}/${expense.id}`);};
+	
+	const handleItineraryClick = (itinerary) => {
+		console.log("Clicked on itinerary:", itinerary);
+		navigate(`/itinerary/${tripId}/${itinerary.id}`);};
 
 	useEffect(() => {
 	const fetchData = async () => {
 		const tripDoc = await fetchTripById(tripId);
 		const expensesData = await fetchExpenses(tripId);
+		const itinerariesData = await fetchItineraries(tripId)
 
 		if (tripDoc) {
 			setTrip(tripDoc.data());
@@ -41,18 +46,28 @@ const Trip = () => {
 		if (expensesData) {
 			const expensesWithClick = expensesData.map((expense) => ({
 				...expense,
-				onClick: () => handleClick(expense), 
+				onClick: () => handleExpenseClick(expense), 
 			}));
 
 			setExpenses(expensesWithClick);
 			console.log(expensesWithClick);
+		}
+
+		if (itinerariesData) {
+			const itineraries = itinerariesData.map((itinerary) => ({
+				...itinerary,
+				onClick: () => handleItineraryClick(itinerary), 
+			}));
+
+			setItineraries(itineraries);
+			console.log(itineraries);
 		}
 	};
 
 	if (tripId) {
 		fetchData();
 	}
-	}, [tripId]);
+	}, [tripId, handleItineraryClick, handleItineraryClick]);
 
 
 	if (!trip) return <p>Loading trip data...</p>;
@@ -93,11 +108,11 @@ const Trip = () => {
 			</section>
 
 			<section className='section'>
-				<CardList title='Itineraries' cardsData={itineraries} variantColor='green' />
+				<CardList title='Itineraries' cardsData={itineraries} variantColor='green' onClick={handleItineraryClick}/>
 			</section>
 
 			<section className='section'>
-				<CardList title='Expenses' cardsData={expenses} variantColor='green' onClick={handleClick} />
+				<CardList title='Expenses' cardsData={expenses} variantColor='green' onClick={handleExpenseClick} />
 			</section>
 		</div>
 	);

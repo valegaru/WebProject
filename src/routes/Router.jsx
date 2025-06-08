@@ -21,6 +21,7 @@ import { useEffect } from 'react';
 import { getUserNameById } from '../utils/firebaseUtils';
 
 import Trips from '../pages/Trips/Trips';
+import Itinerary from '../pages/Itinerary/Itinerary';
 
 const Router = () => {
 	const dispatch = useDispatch();
@@ -133,6 +134,14 @@ const Router = () => {
 					element={
 						<PrivateRoute>
 							<Trips />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path='/itinerary/:tripId/:itineraryId'
+					element={
+						<PrivateRoute>
+							<Itinerary />
 						</PrivateRoute>
 					}
 				/>

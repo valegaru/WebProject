@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { addTrip, searchUsersByName, searchUsersByEmail } from '../../utils/firebaseUtils';
+import { addTrip } from '../../utils/firebaseUtils';
 import LogoutButton from '../../components/LogoutButton/LogoutButton';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Navbar from '../../components/Navbar/Navbar';
-import ParticipantCard from '../../components/ParticipantCard/ParticipantCard';
+import ParticipantManager from '../../components/ParticipantManager/ParticipantManager';
 import './TripCreation.css';
 
 function TripCreation() {
@@ -23,9 +23,6 @@ function TripCreation() {
 		tripPic: '',
 	});
 
-
-	const [searchTerm, setSearchTerm] = useState('');
-	const [searchResults, setSearchResults] = useState([]);
 	const [uploading, setUploading] = useState(false);
 	const [uploadStatus, setUploadStatus] = useState('');
 
@@ -36,44 +33,10 @@ function TripCreation() {
 		});
 	};
 
-	const handleSearchChange = async (e) => {
-		const value = e.target.value;
-		setSearchTerm(value);
-
-		if (value.length >= 1) {
-			const [nameResults, emailResults] = await Promise.all([searchUsersByName(value), searchUsersByEmail(value)]);
-
-			// Combinar sin duplicados (por id)
-			const combined = [...nameResults];
-
-			emailResults.forEach((emailUser) => {
-				if (!combined.some((user) => user.id === emailUser.id)) {
-					combined.push(emailUser);
-				}
-			});
-
-			setSearchResults(combined);
-		} else {
-			setSearchResults([]);
-		}
-	};
-
-	const addParticipant = (user) => {
-		const alreadyAdded = tripData.participants.some((p) => p.id === user.id);
-		if (!alreadyAdded) {
-			setTripData({
-				...tripData,
-				participants: [...tripData.participants, user],
-			});
-		}
-		setSearchTerm('');
-		setSearchResults([]);
-	};
-
-	const removeParticipant = (id) => {
+	const handleParticipantsChange = (newParticipants) => {
 		setTripData({
 			...tripData,
-			participants: tripData.participants.filter((p) => p.id !== id),
+			participants: newParticipants,
 		});
 	};
 
@@ -133,7 +96,6 @@ function TripCreation() {
 
 		if (tripID) {
 			alert('Viaje creado con éxito 🎉');
-
 			navigate('/trips');
 			// Limpiar formulario
 			setTripData({
@@ -152,101 +114,96 @@ function TripCreation() {
 
 	return (
 		<>
-	<Navbar />
-	<div className="trip-creation-container">
-		<h2 className="trip-title">Crear un nuevo viaje</h2>
-		<form onSubmit={handleSubmit} className="trip-form">
+			<Navbar />
+			<div className="trip-creation-container">
+				<h2 className="trip-title">Crear un nuevo viaje</h2>
+				<form onSubmit={handleSubmit} className="trip-form">
 
-			<div className="form-group">
-				<label>Nombre del viaje:</label>
-				<input type="text" name="name" value={tripData.name} onChange={handleInputChange} required className="input" />
-			</div>
-
-			<div className="form-group">
-				<label>Descripción:</label>
-				<textarea name="description" value={tripData.description} onChange={handleInputChange} required className="textarea" />
-			</div>
-
-			<div className="form-group">
-				<label>Destino (país):</label>
-				<input type="text" name="destination" value={tripData.destination} onChange={handleInputChange} required className="input" />
-			</div>
-
-			<div className="form-group date-group">
-				<label>Fecha de inicio:</label>
-				<DatePicker
-					selected={tripData.startDate}
-					onChange={(date) => setTripData({ ...tripData, startDate: date })}
-					dateFormat="yyyy-MM-dd"
-					className="datepicker"
-				/>
-			</div>
-
-			<div className="form-group date-group">
-				<label>Fecha de fin:</label>
-				<DatePicker
-					selected={tripData.endDate}
-					onChange={(date) => setTripData({ ...tripData, endDate: date })}
-					dateFormat="yyyy-MM-dd"
-					className="datepicker"
-				/>
-			</div>
-
-			<div className="form-group">
-				<label>Subir foto del viaje:</label>
-				<input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} className="input-file" />
-				{uploadStatus && <p className="upload-status">{uploadStatus}</p>}
-				{tripData.tripPic && (
-					<div className="image-preview">
-						<p>Vista previa:</p>
-						<img src={tripData.tripPic} alt="Foto del viaje" className="trip-image" />
-					</div>
-				)}
-			</div>
-
-			<div className="form-group">
-				<label>Buscar participantes:</label>
-				<input
-					type="text"
-					value={searchTerm}
-					onChange={handleSearchChange}
-					placeholder="Escribe un nombre..."
-					className="input"
-				/>
-				{searchResults.length > 0 && (
-					<ul className="search-results">
-						{searchResults.map((user) => (
-							<li key={user.id} onClick={() => addParticipant(user)} className="search-result-item">
-								{user.username} ({user.email})
-							</li>
-						))}
-					</ul>
-				)}
-			</div>
-
-			<div className="form-group">
-				<label>Participantes agregados:</label>
-				<div className="participant-list">
-					{tripData.participants.map((user) => (
-						<ParticipantCard
-							key={user.id}
-							name={user.username}
-							avatarUrl={user.photoUrl}
-							email={user.email}
-							onRemove={() => removeParticipant(user.id)}
+					<div className="form-group">
+						<label>Nombre del viaje:</label>
+						<input 
+							type="text" 
+							name="name" 
+							value={tripData.name} 
+							onChange={handleInputChange} 
+							required 
+							className="input" 
 						/>
-					))}
-				</div>
+					</div>
+
+					<div className="form-group">
+						<label>Descripción:</label>
+						<textarea 
+							name="description" 
+							value={tripData.description} 
+							onChange={handleInputChange} 
+							required 
+							className="textarea" 
+						/>
+					</div>
+
+					<div className="form-group">
+						<label>Destino (país):</label>
+						<input 
+							type="text" 
+							name="destination" 
+							value={tripData.destination} 
+							onChange={handleInputChange} 
+							required 
+							className="input" 
+						/>
+					</div>
+
+					<div className="form-group date-group">
+						<label>Fecha de inicio:</label>
+						<DatePicker
+							selected={tripData.startDate}
+							onChange={(date) => setTripData({ ...tripData, startDate: date })}
+							dateFormat="yyyy-MM-dd"
+							className="datepicker"
+						/>
+					</div>
+
+					<div className="form-group date-group">
+						<label>Fecha de fin:</label>
+						<DatePicker
+							selected={tripData.endDate}
+							onChange={(date) => setTripData({ ...tripData, endDate: date })}
+							dateFormat="yyyy-MM-dd"
+							className="datepicker"
+						/>
+					</div>
+
+					<div className="form-group">
+						<label>Subir foto del viaje:</label>
+						<input 
+							type="file" 
+							accept="image/*" 
+							onChange={handleImageUpload} 
+							disabled={uploading} 
+							className="input-file" 
+						/>
+						{uploadStatus && <p className="upload-status">{uploadStatus}</p>}
+						{tripData.tripPic && (
+							<div className="image-preview">
+								<p>Vista previa:</p>
+								<img src={tripData.tripPic} alt="Foto del viaje" className="trip-image" />
+							</div>
+						)}
+					</div>
+
+					<ParticipantManager
+						participants={tripData.participants}
+						onParticipantsChange={handleParticipantsChange}
+					/>
+
+					<div className="form-group">
+						<button type="submit" className="submit-button">Crear viaje</button>
+					</div>
+
+				</form>
 			</div>
-
-			<div className="form-group">
-				<button type="submit" className="submit-button">Crear viaje</button>
-			</div>
-
-		</form>
-	</div>
-</>
-
+		</>
 	);
 }
 
