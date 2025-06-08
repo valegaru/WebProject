@@ -1,41 +1,35 @@
-import React, { useRef, useState } from 'react';
-import { LoadScript, Autocomplete } from '@react-google-maps/api';
-
-const libraries = ['places'];
+import { useEffect, useRef } from 'react';
 
 const DestinationSearch = ({ selectedCountries, onChange }) => {
-	const autocompleteRef = useRef(null);
-	const [inputValue, setInputValue] = useState('');
+	const ref = useRef(null);
 
-	const handlePlaceChanged = () => {
-		if (autocompleteRef.current) {
-			const place = autocompleteRef.current.getPlace();
-			if (place && (place.formatted_address || place.name)) {
-				const newCountry = place.formatted_address || place.name;
-				if (!selectedCountries.includes(newCountry)) {
-					onChange([...selectedCountries, newCountry]);
-				}
-				setInputValue('');
+	useEffect(() => {
+		const el = ref.current;
+
+		const handlePlaceViewed = (event) => {
+			const place = event.detail;
+			const name = place?.formatted_address || place?.name;
+			if (name && !selectedCountries.includes(name)) {
+				onChange([...selectedCountries, name]);
 			}
+		};
+
+		if (el) {
+			el.addEventListener('gmpx-placeautocomplete-placeviewed', handlePlaceViewed);
 		}
-	};
+
+		return () => {
+			if (el) {
+				el.removeEventListener('gmpx-placeautocomplete-placeviewed', handlePlaceViewed);
+			}
+		};
+	}, [selectedCountries, onChange]);
 
 	return (
 		<div className='form-group'>
 			<label>Destination (country):</label>
-			<LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} libraries={libraries}>
-				<Autocomplete onLoad={(ref) => (autocompleteRef.current = ref)} onPlaceChanged={handlePlaceChanged}>
-					<input
-						type='text'
-						placeholder='Start typing a country...'
-						className='input'
-						value={inputValue}
-						onChange={(e) => setInputValue(e.target.value)}
-					/>
-				</Autocomplete>
-			</LoadScript>
+			<gmpx-place-autocomplete ref={ref} class='input' placeholder='Start typing a country...' />
 		</div>
 	);
 };
-
 export default DestinationSearch;

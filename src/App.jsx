@@ -19,11 +19,16 @@ import TripCreation from './pages/TripCreation/TripCreation.jsx';
 import { onAuthStateChanged } from 'firebase/auth';
 import { clearUserId, setUserId } from './store/auth/AuthSlice.jsx';
 import Router from './routes/Router.jsx';
+import GoogleMapsProvider from './components/GoogleMapsProvider';
+
 const App = () => {
 	return (
-		<Provider store={store}>
-			<Router></Router>
-		</Provider>
+		<>
+			<GoogleMapsProvider />
+			<Provider store={store}>
+				<Router></Router>
+			</Provider>
+		</>
 	);
 };
 
