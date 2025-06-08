@@ -1,35 +1,42 @@
-import { useEffect, useRef } from 'react';
+import { useRef, useEffect } from 'react';
+import './DestinationSearch.css';
 
 const DestinationSearch = ({ selectedCountries, onChange }) => {
-	const ref = useRef(null);
+	const autocompleteRef = useRef(null);
 
 	useEffect(() => {
-		const el = ref.current;
+		const el = autocompleteRef.current;
+		if (!el) return;
 
-		const handlePlaceViewed = (event) => {
+		const handlePlaceSelect = (event) => {
 			const place = event.detail;
-			const name = place?.formatted_address || place?.name;
-			if (name && !selectedCountries.includes(name)) {
-				onChange([...selectedCountries, name]);
-			}
+			if (!place || !place.formatted_address) return;
+
+			const newCountry = place.formatted_address;
+			const updated = [...new Set([...selectedCountries, newCountry])];
+			onChange(updated);
+
+			el.value = ''; // limpia el input
 		};
 
-		if (el) {
-			el.addEventListener('gmpx-placeautocomplete-placeviewed', handlePlaceViewed);
-		}
+		el.addEventListener('gmpx-place-select', handlePlaceSelect);
 
 		return () => {
-			if (el) {
-				el.removeEventListener('gmpx-placeautocomplete-placeviewed', handlePlaceViewed);
-			}
+			el.removeEventListener('gmpx-place-select', handlePlaceSelect);
 		};
 	}, [selectedCountries, onChange]);
 
 	return (
 		<div className='form-group'>
-			<label>Destination (country):</label>
-			<gmpx-place-autocomplete ref={ref} class='input' placeholder='Start typing a country...' />
+			<label htmlFor='destination-autocomplete'>Destination (country):</label>
+			<gmpx-place-autocomplete
+				id='destination-autocomplete'
+				ref={autocompleteRef}
+				class='input'
+				placeholder='Start typing a country...'
+			/>
 		</div>
 	);
 };
+
 export default DestinationSearch;
