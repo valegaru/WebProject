@@ -9,6 +9,7 @@ import { fetchLocationData } from "../../../utils/googleMapsUtils";
 const MapComponent = () => {
   const uid = useSelector((state) => state.auth.userId);
   const name = useSelector((state) => state.auth.username);
+  const mapType = useSelector((state) => state.mapInfo.type)
   const [selectedLocation, setSelectedLocation] = useState();
   const [showPanel, setShowPanel] = useState(false);
   const [dialogLocation, setDialogLocation] = useState("");
@@ -176,7 +177,7 @@ const MapComponent = () => {
                 </div>
               )
             )}
-
+            {mapType == "places" &&
             <MapForm
               uid={uid}
               placeDetails={placeDetails}
@@ -185,7 +186,7 @@ const MapComponent = () => {
               onTripAdded={handleTripAdded}
               onCancel={handleCancelTrip}
               initialTripName={initialTripName}
-            />
+            />}
           </div>
         </div>
       )}
@@ -201,10 +202,12 @@ const MapComponent = () => {
           justifyContent: 'center'
         }}>
           <div style={{ width: '100%', maxWidth: '400px' }}>
+            {mapType == "places" &&
             <SearchBar 
               onLocationSelect={handleSearchLocationSelect} 
               googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} 
             />
+            }
           </div>
         </div>
         

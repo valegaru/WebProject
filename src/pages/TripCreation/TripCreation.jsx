@@ -11,6 +11,7 @@ import './TripCreation.css';
 import { StandaloneSearchBox, LoadScript } from '@react-google-maps/api';
 import DestinationSearch from '../../components/DestinationSearch/DestinationSearch';
 import DestinationCard from '../../components/DestinationCard/DestinationCard';
+import MapComponent from '../../components/Map/MapComponent/MapComponent';
 
 const TripCreation = () => {
 	const { userId } = useSelector((state) => state.auth);
@@ -168,6 +169,8 @@ const TripCreation = () => {
 						selectedCountries={tripData.destination}
 						onChange={(newDestinations) => setTripData({ ...tripData, destination: newDestinations })}
 					/>
+
+					<MapComponent></MapComponent>
 
 					<div className='destination-card-list'>
 						{tripData.destination.map((country) => (
