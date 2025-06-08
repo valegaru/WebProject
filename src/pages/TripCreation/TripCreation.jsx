@@ -7,15 +7,13 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Navbar from '../../components/Navbar/Navbar';
 import ParticipantManager from '../../components/ParticipantManager/ParticipantManager';
-import DestinationSearch from '../../components/DestinationSearch/DestinationSearch';
-import DestinationCard from '../../components/DestinationCard/DestinationCard';
-import MapComponent from '../../components/Map/MapComponent/MapComponent';
 import './TripCreation.css';
+import { StandaloneSearchBox, LoadScript } from '@react-google-maps/api';
+import DestinationSearch from '../../components/DestinationSearch/DestinationSearch';
 
 const TripCreation = () => {
 	const { userId } = useSelector((state) => state.auth);
 	const navigate = useNavigate();
-
 	const [tripData, setTripData] = useState({
 		name: '',
 		description: '',
@@ -25,9 +23,9 @@ const TripCreation = () => {
 		participants: [],
 		tripPic: '',
 	});
-
 	const [uploading, setUploading] = useState(false);
 	const [uploadStatus, setUploadStatus] = useState('');
+	const [searchBoxRef, setSearchBoxRef] = useState(null);
 
 	const handleInputChange = (e) => {
 		setTripData({
@@ -68,11 +66,22 @@ const TripCreation = () => {
 				setUploadStatus('Error uploading image.');
 			}
 		} catch (err) {
-			console.error('Cloudinary upload error:', err);
+			console.error('Error uploading to Cloudinary:', err);
 			setUploadStatus('Error uploading image.');
 		} finally {
 			setUploading(false);
 			setTimeout(() => setUploadStatus(''), 4000);
+		}
+	};
+
+	const handlePlacesChanged = () => {
+		const places = searchBoxRef.getPlaces();
+		if (places?.length) {
+			const newCountries = places.map((place) => place.formatted_address || place.name);
+			setTripData((prev) => ({
+				...prev,
+				destination: [...new Set([...prev.destination, ...newCountries])],
+			}));
 		}
 	};
 
@@ -158,23 +167,6 @@ const TripCreation = () => {
 						selectedCountries={tripData.destination}
 						onChange={(newDestinations) => setTripData({ ...tripData, destination: newDestinations })}
 					/>
-
-					<div className='destination-card-list'>
-						{tripData.destination.map((country, index) => (
-							<DestinationCard
-								key={index}
-								name={country}
-								onRemove={() => {
-									setTripData((prev) => ({
-										...prev,
-										destination: prev.destination.filter((c) => c !== country),
-									}));
-								}}
-							/>
-						))}
-					</div>
-
-					<MapComponent destinations={tripData.destination} searchbar={false} />
 
 					<div className='form-group date-group'>
 						<label>Start Date:</label>
