@@ -174,7 +174,7 @@ const TripCreation = () => {
 						))}
 					</div>
 
-					<MapComponent destinations={tripData.destination} />
+					<MapComponent destinations={tripData.destination} searchbar={false} />
 
 					<div className='form-group date-group'>
 						<label>Start Date:</label>
