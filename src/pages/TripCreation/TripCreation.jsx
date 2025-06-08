@@ -10,6 +10,7 @@ import ParticipantManager from '../../components/ParticipantManager/ParticipantM
 import './TripCreation.css';
 import { StandaloneSearchBox, LoadScript } from '@react-google-maps/api';
 import DestinationSearch from '../../components/DestinationSearch/DestinationSearch';
+import DestinationCard from '../../components/DestinationCard/DestinationCard';
 
 const TripCreation = () => {
 	const { userId } = useSelector((state) => state.auth);
