@@ -64,7 +64,7 @@ function ParticipantManager({ participants, onParticipantsChange }) {
 			</div>
 
 			<div className='form-group'>
-				<label>Added participantes:</label>
+				<label>Added participants:</label>
 				<div className='participant-list'>
 					{participants.map((user) => (
 						<ParticipantCard
