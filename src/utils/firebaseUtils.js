@@ -86,13 +86,11 @@ export const fetchItineraries = async (tripId) => {
 	}
 };
 
-// Helper function to convert Firestore Timestamps to JavaScript Dates
 export const convertTimestampsToDate = (data) => {
 	if (!data || typeof data !== 'object') return data;
 
 	const converted = { ...data };
 
-	// List of common timestamp field names
 	const timestampFields = ['createdAt', 'updatedAt', 'start', 'end', 'date', 'timestamp'];
 
 	timestampFields.forEach((field) => {
@@ -101,7 +99,6 @@ export const convertTimestampsToDate = (data) => {
 		}
 	});
 
-	// Handle nested objects
 	Object.keys(converted).forEach((key) => {
 		if (
 			converted[key] &&
@@ -116,13 +113,12 @@ export const convertTimestampsToDate = (data) => {
 	return converted;
 };
 
-// Updated fetchExpenseEvents using the helper
 export const fetchExpenseEvents = async (tripID, expenseID) => {
 	try {
-		console.log('🔍 Starting fetchExpenseEvents with:', { tripID, expenseID });
+		console.log('Starting fetchExpenseEvents with:', { tripID, expenseID });
 
 		if (!tripID || !expenseID) {
-			console.log('❌ Missing required parameters:', { tripID, expenseID });
+			console.log('Missing required parameters:', { tripID, expenseID });
 			return [];
 		}
 
@@ -130,23 +126,16 @@ export const fetchExpenseEvents = async (tripID, expenseID) => {
 		const expenseRef = doc(collection(tripRef, 'expenses'), expenseID);
 		const eventsCollection = collection(expenseRef, 'events');
 
-		console.log('🔎 Attempting to fetch events from Firestore...');
 		const snapshot = await getDocs(eventsCollection);
 
-		console.log('📊 Snapshot received. Empty?', snapshot.empty);
-		console.log('📊 Number of docs in snapshot:', snapshot.size);
 
 		if (snapshot.empty) {
-			console.log('⚠️ No events found in the collection');
-			console.log('🔗 Collection path:', `trips/${tripID}/expenses/${expenseID}/events`);
+			console.log('No events found in the collection');
 			return [];
 		}
 
 		const events = snapshot.docs.map((doc) => {
 			const data = doc.data();
-			console.log('📄 Processing document:', doc.id, data);
-
-			// Convert all Firestore Timestamps to JavaScript Dates
 			const processedData = convertTimestampsToDate(data);
 
 			return {
@@ -154,26 +143,18 @@ export const fetchExpenseEvents = async (tripID, expenseID) => {
 				...processedData,
 			};
 		});
-
-		console.log('✅ Events fetched successfully:', events.length, 'events');
-		console.log('📋 Events data:', events);
 		return events;
 	} catch (error) {
-		console.error('💥 Error in fetchExpenseEvents:', error);
-		console.error('💥 Error message:', error.message);
-		console.error('💥 Error code:', error.code);
+		console.error('Error in fetchExpenseEvents:', error);
 		return [];
 	}
 };
 
-// Function to fetch events for a specific date (filtering client-side)
 export const fetchExpenseEventsByDate = async (tripID, expenseID, date) => {
 	try {
 		const allEvents = await fetchExpenseEvents(tripID, expenseID);
 
-		// Filter events by date (assuming your events now have a 'date' field)
 		const dateEvents = allEvents.filter((event) => {
-			// Adjust this comparison based on how you're storing dates
 			return (
 				event.date === date || (event.start && new Date(event.start).toDateString() === new Date(date).toDateString())
 			);
@@ -187,7 +168,6 @@ export const fetchExpenseEventsByDate = async (tripID, expenseID, date) => {
 	}
 };
 
-// Function to fetch all events for all expenses in a trip
 export const fetchTripAllEvents = async (tripID) => {
 	try {
 		const tripRef = doc(db, 'trips', tripID);
@@ -196,11 +176,9 @@ export const fetchTripAllEvents = async (tripID) => {
 
 		const allEvents = [];
 
-		// Fetch events for each expense
 		await Promise.all(
 			expensesSnapshot.docs.map(async (expenseDoc) => {
 				const expenseEvents = await fetchExpenseEvents(tripID, expenseDoc.id);
-				// Add expense metadata to each event
 				const eventsWithExpenseInfo = expenseEvents.map((event) => ({
 					...event,
 					expenseID: expenseDoc.id,
@@ -218,7 +196,7 @@ export const fetchTripAllEvents = async (tripID) => {
 	}
 };
 
-// Function to add a new event to an expense
+
 export const addExpenseEvent = async (tripID, expenseID, eventData) => {
 	try {
 		const expenseRef = doc(db, 'trips', tripID, 'expenses', expenseID);
@@ -239,7 +217,49 @@ export const addExpenseEvent = async (tripID, expenseID, eventData) => {
 	}
 };
 
-// Function to update an existing event
+
+export const createList = async (userId, name, description) => {
+	try {
+		const listRef = doc(collection(db, 'savedLists'));
+
+		await setDoc(listRef, {
+			userId,
+			name,
+			description,
+		});
+
+		const placesRef = doc(collection(listRef, 'places'));
+		await setDoc(placesRef, {});
+
+		const userListIDRef = doc(db, `users/${userId}/savedLists/${listRef.id}`);
+		await setDoc(userListIDRef, {
+			id: listRef.id,
+		});
+
+		return listRef.id;
+	} catch (error) {
+		console.error('Error adding list:', error);
+		return null;
+	}
+};
+
+
+export const addPlace = async (listId, lat, lng) => {
+	try {
+		const placeRef = doc(collection(db, `savedLists/${listId}/places`));
+
+		await setDoc(placeRef, {
+			lat,
+			lng,
+		});
+
+		return placeRef.id;
+	} catch (error) {
+		console.error('Error adding place:', error);
+		return null;
+	}
+};
+
 export const updateExpenseEvent = async (tripID, expenseID, eventID, eventData) => {
 	try {
 		const tripRef = doc(db, 'trips', tripID);
@@ -258,7 +278,6 @@ export const updateExpenseEvent = async (tripID, expenseID, eventID, eventData) 
 	}
 };
 
-// Function to delete an event
 export const deleteExpenseEvent = async (tripID, expenseID, eventID) => {
 	try {
 		const tripRef = doc(db, 'trips', tripID);
@@ -431,7 +450,7 @@ export const searchUsersByName = async (nameToSearch) => {
 	const usersRef = collection(db, 'users');
 	const q = query(
 		usersRef,
-		orderBy('username'), // ✅ necesitamos un índice en Firestore para esto
+		orderBy('username'), 
 		startAt(nameToSearch),
 		endAt(nameToSearch + '\uf8ff')
 	);
@@ -540,16 +559,3 @@ export const updateEventInDay = async (tripID, expenseID, date, eventID, updated
 		return false;
 	}
 };
-
-// addTrip() = db -> trips -> (add fields: description, destination, startDate, endDate, name, participants[], add collections: expenses, itineraries, addtripid(()=>(db->users(matchUserId)->addTrip id to tripsIDs collection)))
-
-// updateTrip() =
-
-// fetchExpensesIDs(tripID) = return expensesIDs array
-// fetchItinerariesIDs(tripID) = return itinerariesIDs array
-// fetchExpense(tripId, expenseID) = db -> trips -> (select trip by tripId) -> expenses -> (select expense by expenseID) -> return expense data
-// fetchItinerary(tripId, itineraryID) = db -> trips -> (select trip by tripId -> intinerary -> (select itinerary by itineraryID) -> return itinerary data
-
-// addEvent() =
-// updateEvent() =
-// deleteEvent() =

@@ -1,27 +1,27 @@
 import { useState, useEffect } from "react";
-import { addTrip } from "../../../utils/firebaseUtils";
+import { addPlace, createList } from "../../../utils/firebaseUtils";
 import { useSelector } from "react-redux";
 import { fetchLocationData } from "../../../utils/googleMapsUtils";
+import "./MapForm.css";
+import SavedListsDropdown from "../../SavedListsDropdown/SavedListsDropdown";
 
-const MapForm = ({ 
+const LocationForm = ({ 
     uid, 
     dialogLocation, 
-    onTripAdded, 
+    onLocationAdded, 
     onCancel,
-    initialTripName = "" 
+    savedLists = []
 }) => {
-    const mapType = useSelector((state) => state.mapInfo.type);
-
-    const [isAddingTrip, setIsAddingTrip] = useState(false);
+    const [isAddingLocation, setIsAddingLocation] = useState(false);
+    const [isCreatingList, setIsCreatingList] = useState(false);
     const [loadingLocationData, setLoadingLocationData] = useState(false);
     const [placeDetails, setPlaceDetails] = useState(null);
     const [locationPhoto, setLocationPhoto] = useState(null);
-    const [MapForm, setMapForm] = useState({
-        name: initialTripName,
-        description: "",
-        startDate: "",
-        endDate: "",
-        participants: []
+    const [selectedList, setSelectedList] = useState(null);
+    const [showCreateListForm, setShowCreateListForm] = useState(false);
+    const [newListForm, setNewListForm] = useState({
+        name: "",
+        description: ""
     });
 
     useEffect(() => {
@@ -29,15 +29,6 @@ const MapForm = ({
             fetchLocationInfo(dialogLocation.lat, dialogLocation.lng);
         }
     }, [dialogLocation]);
-
-    useEffect(() => {
-        if (initialTripName && !MapForm.name) {
-            setMapForm(prev => ({
-                ...prev,
-                name: initialTripName
-            }));
-        }
-    }, [initialTripName, MapForm.name]);
 
     const fetchLocationInfo = async (lat, lng) => {
         setLoadingLocationData(true);
@@ -53,12 +44,6 @@ const MapForm = ({
 
             if (fetchedPlaceDetails) {
                 setPlaceDetails(fetchedPlaceDetails);
-                if (fetchedPlaceDetails.name && !MapForm.name) {
-                    setMapForm(prev => ({
-                        ...prev,
-                        name: `Trip to ${fetchedPlaceDetails.name}`
-                    }));
-                }
             }
 
             if (photoUrl) {
@@ -71,208 +56,215 @@ const MapForm = ({
         }
     };
 
-    const handleFormChange = (field, value) => {
-        setMapForm(prev => ({
+    const handleCreateNewList = () => {
+        setShowCreateListForm(true);
+        setSelectedList(null);
+    };
+
+    const handleSelectList = (list) => {
+        setSelectedList(list);
+        setShowCreateListForm(false);
+    };
+
+    const handleNewListFormChange = (field, value) => {
+        setNewListForm(prev => ({
             ...prev,
             [field]: value
         }));
     };
 
-    const handleParticipantsChange = (value) => {
-        const participantsList = value.split(',').map(p => p.trim()).filter(p => p.length > 0);
-        setMapForm(prev => ({
-            ...prev,
-            participants: participantsList
-        }));
-    };
-
-    const onAddTrip = async () => {
+    const onCreateList = async () => {
         if (!uid) {
-            console.error("User ID is required to add a trip");
-            alert("Please log in to add a trip");
+            console.error("User ID is required to create a list");
+            alert("Please log in to create a list");
             return;
         }
 
-        if (!placeDetails || !MapForm.name || !MapForm.startDate || !MapForm.endDate) {
-            alert("Please fill in all required fields (Trip Name, Start Date, End Date)");
+        if (!newListForm.name.trim()) {
+            alert("Please enter a list name");
             return;
         }
 
-        setIsAddingTrip(true);
+        setIsCreatingList(true);
 
         try {
-            const destination = placeDetails ? 
-                `${placeDetails.name}, ${placeDetails.address}` : 
-                `${dialogLocation.lat}, ${dialogLocation.lng}`;
+            const listId = await createList(uid, newListForm.name.trim(), newListForm.description.trim());
 
-            const tripPic = locationPhoto || null;
-
-            const tripId = await addTrip(
-                uid,
-                MapForm.description,
-                destination,
-                MapForm.startDate,
-                MapForm.endDate,
-                MapForm.name,
-                MapForm.participants,
-                tripPic
-            );
-
-            if (tripId) {
-                console.log("Trip added successfully with ID:", tripId);
-                alert("Trip added successfully!");
+            if (listId) {
+                console.log("List created successfully with ID:", listId);
                 
-                setMapForm({
-                    name: "",
-                    description: "",
-                    startDate: "",
-                    endDate: "",
-                    participants: []
-                });
+                const placeId = await addPlace(listId, dialogLocation.lat, dialogLocation.lng);
                 
-                onTripAdded(tripId);
+                if (placeId) {
+                    alert("List created and location added successfully!");
+                    setNewListForm({ name: "", description: "" });
+                    setShowCreateListForm(false);
+                    onLocationAdded(listId, placeId);
+                } else {
+                    alert("List created but failed to add location. Please try again.");
+                }
             } else {
-                alert("Failed to add trip. Please try again.");
+                alert("Failed to create list. Please try again.");
             }
         } catch (error) {
-            console.error("Error adding trip:", error);
-            alert("Error adding trip. Please try again.");
+            console.error("Error creating list:", error);
+            alert("Error creating list. Please try again.");
         } finally {
-            setIsAddingTrip(false);
+            setIsCreatingList(false);
         }
+    };
+
+    const onAddLocation = async () => {
+        if (!uid) {
+            console.error("User ID is required to add a location");
+            alert("Please log in to add a location");
+            return;
+        }
+
+        if (!selectedList) {
+            alert("Please select a list to add the location to");
+            return;
+        }
+
+        if (!dialogLocation || !dialogLocation.lat || !dialogLocation.lng) {
+            alert("Location data is not available");
+            return;
+        }
+
+        setIsAddingLocation(true);
+
+        try {
+            const placeId = await addPlace(selectedList.id, dialogLocation.lat, dialogLocation.lng);
+
+            if (placeId) {
+                console.log("Location added successfully with ID:", placeId);
+                alert("Location added to list successfully!");
+                setSelectedList(null);
+                onLocationAdded(selectedList.id, placeId);
+            } else {
+                alert("Failed to add location. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error adding location:", error);
+            alert("Error adding location. Please try again.");
+        } finally {
+            setIsAddingLocation(false);
+        }
+    };
+
+    const handleCancelCreateList = () => {
+        setShowCreateListForm(false);
+        setNewListForm({ name: "", description: "" });
+        setSelectedList(null);
     };
 
     return (
-        <div className="trip-form" style={{ marginBottom: '15px' }}>
-            <h4>Create Trip</h4>
+        <div className="trip-form">
+            <h4 className="form-title">Add Location to List</h4>
             
             {loadingLocationData ? (
-                <div style={{ marginBottom: '15px', textAlign: 'center' }}>
+                <div className="loading-container">
                     <p>Loading location data...</p>
                 </div>
             ) : (
                 placeDetails && (
-                    <div className="place-details" style={{ marginBottom: '15px', padding: '10px', backgroundColor: '#f8f9fa', borderRadius: '4px' }}>
-                        <h5 className="place-name" style={{ margin: '0 0 5px 0' }}>{placeDetails.name}</h5>
+                    <div className="place-details">
+                        <h5 className="place-name">{placeDetails.name}</h5>
                         {placeDetails.rating && (
-                            <p className="place-rating" style={{ margin: '0 0 5px 0', fontSize: '14px' }}>
+                            <p className="place-rating">
                                 Rating: {placeDetails.rating}/5 ⭐
                             </p>
                         )}
-                        <p className="place-address" style={{ margin: '0', fontSize: '14px', color: '#666' }}>
+                        <p className="place-address">
                             {placeDetails.address}
                         </p>
                         {locationPhoto && (
-                            <div style={{ marginTop: '10px' }}>
+                            <div className="location-photo-container">
                                 <img 
                                     src={locationPhoto} 
                                     alt="Location" 
-                                    style={{ 
-                                        width: '100%', 
-                                        maxWidth: '280px', 
-                                        height: 'auto', 
-                                        borderRadius: '4px' 
-                                    }} 
+                                    className="location-photo"
                                 />
                             </div>
                         )}
                     </div>
                 )
             )}
-            
-            <div style={{ marginBottom: '10px' }}>
-                <label>Trip Name *</label>
-                <input
-                    type="text"
-                    value={MapForm.name}
-                    onChange={(e) => handleFormChange('name', e.target.value)}
-                    placeholder="Enter trip name"
-                    style={{ width: '100%', padding: '5px', marginTop: '3px' }}
-                />
-            </div>
 
-            <div style={{ marginBottom: '10px' }}>
-                <label>Description</label>
-                <textarea
-                    value={MapForm.description}
-                    onChange={(e) => handleFormChange('description', e.target.value)}
-                    placeholder="Trip description (optional)"
-                    style={{ width: '100%', padding: '5px', marginTop: '3px', minHeight: '60px' }}
-                />
-            </div>
-
-            <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-                <div style={{ flex: 1 }}>
-                    <label>Start Date *</label>
-                    <input
-                        type="date"
-                        value={MapForm.startDate}
-                        onChange={(e) => handleFormChange('startDate', e.target.value)}
-                        style={{ width: '100%', padding: '5px', marginTop: '3px' }}
-                    />
+            {showCreateListForm ? (
+                <div className="create-list-form">
+                    <h5>Create New List</h5>
+                    <div className="form-field">
+                        <label>List Name *</label>
+                        <input
+                            type="text"
+                            value={newListForm.name}
+                            onChange={(e) => handleNewListFormChange('name', e.target.value)}
+                            placeholder="Enter list name"
+                            className="form-input"
+                        />
+                    </div>
+                    <div className="form-field">
+                        <label>Description</label>
+                        <textarea
+                            value={newListForm.description}
+                            onChange={(e) => handleNewListFormChange('description', e.target.value)}
+                            placeholder="List description (optional)"
+                            className="form-textarea"
+                        />
+                    </div>
+                    <div className="button-group">
+                        <button
+                            className={`app-button add-trip-button ${(isCreatingList || loadingLocationData) ? 'disabled' : ''}`}
+                            onClick={onCreateList}
+                            disabled={isCreatingList || loadingLocationData}
+                        >
+                            {isCreatingList ? 'Creating List...' : 'Create List & Add Location'}
+                        </button>
+                        <button 
+                            onClick={handleCancelCreateList}
+                            disabled={isCreatingList || loadingLocationData}
+                            className={`cancel-button ${(isCreatingList || loadingLocationData) ? 'disabled' : ''}`}
+                        >
+                            Back
+                        </button>
+                    </div>
                 </div>
-                <div style={{ flex: 1 }}>
-                    <label>End Date *</label>
-                    <input
-                        type="date"
-                        value={MapForm.endDate}
-                        onChange={(e) => handleFormChange('endDate', e.target.value)}
-                        style={{ width: '100%', padding: '5px', marginTop: '3px' }}
-                    />
-                </div>
-            </div>
+            ) : (
+                <>
+                    <div className="form-field">
+                        <label>Select List *</label>
+                        <SavedListsDropdown 
+                            savedLists={savedLists}
+                            onCreateNewList={handleCreateNewList}
+                            onSelectList={handleSelectList}
+                            placeholder="Choose a list to add location to..."
+                        />
+                    </div>
 
-            <div style={{ marginBottom: '15px' }}>
-                <label>Participants</label>
-                <input
-                    type="text"
-                    value={MapForm.participants.join(', ')}
-                    onChange={(e) => handleParticipantsChange(e.target.value)}
-                    placeholder="Enter participant names/emails"
-                    style={{ width: '100%', padding: '5px', marginTop: '3px' }}
-                />
-            </div>
-
-            <div style={{ display: 'flex', gap: '10px' }}>
-                {mapType === "trip" && (
-                    <button
-                        className="app-button" 
-                        onClick={onAddTrip}
-                        disabled={isAddingTrip || loadingLocationData}
-                        style={{ 
-                            flex: 1,
-                            padding: '10px',
-                            backgroundColor: (isAddingTrip || loadingLocationData) ? '#ccc' : '#007bff',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '4px',
-                            cursor: (isAddingTrip || loadingLocationData) ? 'not-allowed' : 'pointer'
-                        }}
-                    >
-                        {isAddingTrip ? 'Adding Trip...' : 'Add Trip'}
-                    </button>
-                )}
-                
-                {onCancel && (
-                    <button 
-                        onClick={onCancel}
-                        disabled={isAddingTrip || loadingLocationData}
-                        style={{ 
-                            flex: 1,
-                            padding: '10px',
-                            backgroundColor: '#6c757d',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '4px',
-                            cursor: (isAddingTrip || loadingLocationData) ? 'not-allowed' : 'pointer'
-                        }}
-                    >
-                        Cancel
-                    </button>
-                )}
-            </div>
+                    <div className="button-group">
+                        <button
+                            className={`app-button add-trip-button ${(isAddingLocation || loadingLocationData || !selectedList) ? 'disabled' : ''}`}
+                            onClick={onAddLocation}
+                            disabled={isAddingLocation || loadingLocationData || !selectedList}
+                        >
+                            {isAddingLocation ? 'Adding Location...' : 'Add Location'}
+                        </button>
+                        
+                        {onCancel && (
+                            <button 
+                                onClick={onCancel}
+                                disabled={isAddingLocation || loadingLocationData}
+                                className={`cancel-button ${(isAddingLocation || loadingLocationData) ? 'disabled' : ''}`}
+                            >
+                                Cancel
+                            </button>
+                        )}
+                    </div>
+                </>
+            )}
         </div>
     );
 };
 
-export default MapForm;
+export default LocationForm;

@@ -6,19 +6,22 @@ import { useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { fetchLocationData } from '../../../utils/googleMapsUtils';
 
-const MapComponent = ({ searchbar = true }) => {
-	const uid = useSelector((state) => state.auth.userId);
-	const name = useSelector((state) => state.auth.username);
-	const [selectedLocation, setSelectedLocation] = useState();
-	const [showDialog, setShowDialog] = useState(false);
-	const [dialogLocation, setDialogLocation] = useState('');
-	const [locationPhoto, setLocationPhoto] = useState(null);
-	const [loadingPhotos, setLoadingPhotos] = useState(false);
-	const [placeDetails, setPlaceDetails] = useState(null);
-	const [initialTripName, setInitialTripName] = useState('');
-	const [defaultMapCenter] = useState({ lat: 22.54992, lng: 0 });
-	const [defaultMapZoom] = useState(3);
-	const mapRef = useRef(null);
+const MapComponent = () => {
+  const uid = useSelector((state) => state.auth.userId);
+  const name = useSelector((state) => state.auth.username);
+  const mapType = useSelector((state) => state.mapInfo.type)
+  const [selectedLocation, setSelectedLocation] = useState();
+  const [showPanel, setShowPanel] = useState(false);
+  const [dialogLocation, setDialogLocation] = useState("");
+  const [locationPhoto, setLocationPhoto] = useState(null);
+  const [loadingPhotos, setLoadingPhotos] = useState(false);
+  const [placeDetails, setPlaceDetails] = useState(null);
+  const [initialTripName, setInitialTripName] = useState("");
+
+  const [defaultMapCenter] = useState({ lat: 22.54992, lng: 0 });
+  const [defaultMapZoom] = useState(3);
+
+  const mapRef = useRef(null);
 
 	const fetchLocationPhotos = async (lat, lng) => {
 		setLoadingPhotos(true);
@@ -46,28 +49,30 @@ const MapComponent = ({ searchbar = true }) => {
 		setLoadingPhotos(false);
 	};
 
-	const handleMapClick = (mapInfo) => {
-		if (mapInfo?.detail?.latLng) {
-			const lat = mapInfo.detail.latLng.lat;
-			const lng = mapInfo.detail.latLng.lng;
-			setDialogLocation({ lat, lng });
-			setSelectedLocation({ lat, lng });
-			setShowDialog(true);
-			fetchLocationPhotos(lat, lng);
-		}
-	};
+  const handleMapClick = (mapInfo) => {
+    if (mapInfo && mapInfo.detail && mapInfo.detail.latLng) {
+      const lat = mapInfo.detail.latLng.lat;
+      const lng = mapInfo.detail.latLng.lng;
+      setDialogLocation({ lat, lng });
+      setSelectedLocation({ lat, lng });
+      setShowPanel(true);
+      fetchLocationPhotos(lat, lng);
+    } else {
+      console.log("NO LOCATION SPECIFIED", mapInfo);
+    }
+  };
 
-	const handleSearchLocationSelect = (location) => {
-		const { lat, lng, placeDetails: searchPlaceDetails } = location;
+  const handleSearchLocationSelect = (location) => {
+    const { lat, lng, placeDetails: searchPlaceDetails } = location;
 
-		if (mapRef.current) {
-			mapRef.current.panTo({ lat, lng });
-			mapRef.current.setZoom(15);
-		}
+    if (mapRef.current) {
+      mapRef.current.panTo({ lat, lng });
+      mapRef.current.setZoom(15);
+    }
 
-		setDialogLocation({ lat, lng });
-		setSelectedLocation({ lat, lng });
-		setShowDialog(true);
+    setDialogLocation({ lat, lng });
+    setSelectedLocation({ lat, lng });
+    setShowPanel(true);
 
 		if (searchPlaceDetails) {
 			setPlaceDetails(searchPlaceDetails);
@@ -86,104 +91,143 @@ const MapComponent = ({ searchbar = true }) => {
 		}
 	};
 
-	const handleTripAdded = () => {
-		setShowDialog(false);
-		setSelectedLocation(null);
-		setPlaceDetails(null);
-		setLocationPhoto(null);
-		setInitialTripName('');
-	};
+  const handleTripAdded = (tripId) => {
+    setShowPanel(false);
+    setSelectedLocation(null);
+    setPlaceDetails(null);
+    setLocationPhoto(null);
+    setInitialTripName("");
+  };
 
-	const handleCancelTrip = () => {
-		setShowDialog(false);
-		setSelectedLocation(null);
-		setPlaceDetails(null);
-		setLocationPhoto(null);
-		setInitialTripName('');
-	};
+  const handleCancelTrip = () => {
+    setShowPanel(false);
+    setSelectedLocation(null);
+    setPlaceDetails(null);
+    setLocationPhoto(null);
+    setInitialTripName("");
+  };
 
-	return (
-		<div style={{ position: 'relative', width: '100%', height: '50vh' }}>
-			{searchbar && (
-				<div
-					style={{
-						position: 'absolute',
-						top: '20px',
-						left: '50%',
-						transform: 'translateX(-50%)',
-						zIndex: 1000,
-						width: '90%',
-						maxWidth: '400px',
-					}}
-				>
-					<SearchBar
-						onLocationSelect={handleSearchLocationSelect}
-						googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
-					/>
-				</div>
-			)}
+  return (
+    <div style={{ position: 'relative', width: '100%', height: '50vh', display: 'flex' }}>
+      {showPanel && (
+        <div style={{
+          width: '400px',
+          minWidth: '400px',
+          height: '100%',
+          backgroundColor: 'white',
+          borderRight: '1px solid #ddd',
+          overflowY: 'auto',
+          zIndex: 1000,
+          boxShadow: '2px 0 8px rgba(0,0,0,0.1)'
+        }}>
+          <div style={{ padding: '20px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+              <h3 style={{ margin: 0 }}>Trip Details</h3>
+              <button
+                onClick={handleCancelTrip}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '18px',
+                  cursor: 'pointer',
+                  padding: '5px',
+                  borderRadius: '3px'
+                }}
+              >
+                ✕
+              </button>
+            </div>
 
-			<APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} libraries={['places']}>
-				<Map
-					ref={mapRef}
-					style={{ width: '100%', height: '100%' }}
-					defaultCenter={defaultMapCenter}
-					defaultZoom={defaultMapZoom}
-					gestureHandling={'greedy'}
-					disableDefaultUI={true}
-					mapId={'3559db7569081dbf973e4ebf'}
-					onClick={handleMapClick}
-				>
-					<PoiMarkers locationInfo={selectedLocation} />
-					{showDialog && (
-						<InfoWindow position={dialogLocation}>
-							<div className='info-window-container' style={{ minWidth: '300px', padding: '10px' }}>
-								{placeDetails && (
-									<div className='place-details' style={{ marginBottom: '15px' }}>
-										<h4 className='place-name'>{placeDetails.name}</h4>
-										{placeDetails.rating && <p>Rating: {placeDetails.rating}/5 ⭐</p>}
-										<p>{placeDetails.address}</p>
-									</div>
-								)}
-								{loadingPhotos ? (
-									<p>Loading photos...</p>
-								) : (
-									<div style={{ marginBottom: '15px' }}>
-										{locationPhoto ? (
-											<div>
-												<p>Photo:</p>
-												<img
-													src={locationPhoto}
-													alt='Location'
-													style={{
-														width: '100%',
-														maxWidth: '280px',
-														height: 'auto',
-														borderRadius: '8px',
-													}}
-												/>
-											</div>
-										) : (
-											<p>No photos available</p>
-										)}
-									</div>
-								)}
-								<MapForm
-									uid={uid}
-									placeDetails={placeDetails}
-									dialogLocation={dialogLocation}
-									locationPhoto={locationPhoto}
-									onTripAdded={handleTripAdded}
-									onCancel={handleCancelTrip}
-									initialTripName={initialTripName}
-								/>
-							</div>
-						</InfoWindow>
-					)}
-				</Map>
-			</APIProvider>
-		</div>
-	);
+            {placeDetails && (
+              <div className="place-details" style={{
+                marginBottom: '20px',
+                padding: '15px',
+                backgroundColor: '#f8f9fa',
+                borderRadius: '8px'
+              }}>
+                <h4 className="place-name" style={{ margin: '0 0 8px 0' }}>{placeDetails.name}</h4>
+                {placeDetails.rating && (
+                  <p className="place-rating" style={{ margin: '0 0 8px 0', fontSize: '14px' }}>
+                    Rating: {placeDetails.rating}/5 ⭐
+                  </p>
+                )}
+                <p className="place-address" style={{ margin: '0', fontSize: '14px', color: '#666' }}>
+                  {placeDetails.address}
+                </p>
+              </div>
+            )}
+
+            {loadingPhotos ? (
+              <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+                <p>Loading photos...</p>
+              </div>
+            ) : (
+              locationPhoto && (
+                <div style={{ marginBottom: '20px' }}>
+                  <img
+                    src={locationPhoto}
+                    alt="Location"
+                    style={{
+                      width: '100%',
+                      height: '200px',
+                      objectFit: 'cover',
+                      borderRadius: '8px'
+                    }}
+                  />
+                </div>
+              )
+            )}
+            {mapType == "places" &&
+            <MapForm
+              uid={uid}
+              placeDetails={placeDetails}
+              dialogLocation={dialogLocation}
+              locationPhoto={locationPhoto}
+              onTripAdded={handleTripAdded}
+              onCancel={handleCancelTrip}
+              initialTripName={initialTripName}
+            />}
+          </div>
+        </div>
+      )}
+
+      <div style={{ flex: 1, position: 'relative' }}>
+        <div style={{
+          position: 'absolute',
+          top: '20px',
+          left: '20px',
+          right: '20px',
+          zIndex: 1000,
+          display: 'flex',
+          justifyContent: 'center'
+        }}>
+          <div style={{ width: '100%', maxWidth: '400px' }}>
+            {mapType == "places" &&
+            <SearchBar
+              onLocationSelect={handleSearchLocationSelect}
+              googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
+            />
+            }
+          </div>
+        </div>
+
+        <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} libraries={['places']}>
+          <Map
+            ref={mapRef}
+            style={{ width: '100%', height: '100%' }}
+            defaultCenter={defaultMapCenter}
+            defaultZoom={defaultMapZoom}
+            gestureHandling={'greedy'}
+            disableDefaultUI={true}
+            mapId={"624601b44f7f9812ef057a38"}
+            onClick={(mapInfo) => handleMapClick(mapInfo)}
+          >
+            <PoiMarkers locationInfo={selectedLocation}></PoiMarkers>
+          </Map>
+        </APIProvider>
+      </div>
+    </div>
+  );
 };
 
 export default MapComponent;

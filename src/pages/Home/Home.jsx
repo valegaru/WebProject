@@ -23,8 +23,10 @@ import CardList from '../../components/CardList/CardList';
 
 const Home = () => {
 	const navigate = useNavigate();
+	const reduxState = useSelector((state) => state)
 	const uid = useSelector((state) => state.auth.userId);
 	const name = useSelector((state) => state.auth.username);
+	console.log(reduxState, "redux")
 
 	const [trips, setTrips] = useState([]);
 

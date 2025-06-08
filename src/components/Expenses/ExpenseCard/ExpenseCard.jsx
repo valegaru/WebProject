@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
+import '../ExpenseCard/ExpenseCard.css'
+import { useSelector } from 'react-redux';
 
 const ExpenseCard = ({ event }) => {
   const [profilePics, setProfilePics] = useState({});
+  const currencySelect = useSelector((state)=> state.currency.currency)
   
-  // Validate event prop
   if (!event) {
     return <div>No event data</div>;
   }
 
-  // Extract event data with defaults
   const {
     id,
     title = 'Untitled Expense',
@@ -19,12 +20,12 @@ const ExpenseCard = ({ event }) => {
     originalEnd,
     participants = {},
     status = 'pending',
-    currency = 'USD'
+    currency = currencySelect,
   } = event;
 
-  const participantList = Object.values(participants);
+  // Memoize participantList to prevent unnecessary re-renders
+  const participantList = useMemo(() => Object.values(participants), [participants]);
 
-  // Generate profile pictures for participants
   useEffect(() => {
     const generateProfilePics = async () => {
       const picMap = {};
@@ -107,9 +108,14 @@ const ExpenseCard = ({ event }) => {
     textShadow: '0 1px 2px rgba(0,0,0,0.3)',
     boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
     height: '100%',
+    width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    position: 'relative',
+    top: 0,
+    left: 0,
+    margin: 0
   };
 
   const handleMouseEnter = (e) => {
@@ -132,24 +138,13 @@ const ExpenseCard = ({ event }) => {
       onMouseLeave={handleMouseLeave}
       title={`${title} - ${formatAmount(amount)} - ${participantList.length} participant(s)`}
     >
-      {/* Main Content */}
       <div className="expense-card__content">
-        {/* Title */}
         <div 
           className="expense-card__title"
-          style={{ 
-            fontWeight: 'bold',
-            fontSize: '13px',
-            marginBottom: '4px',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap'
-          }}
         >
           {title}
         </div>
 
-        {/* Amount */}
         <div 
           className="expense-card__amount"
           style={{ 
@@ -166,7 +161,6 @@ const ExpenseCard = ({ event }) => {
           {formatAmount(amount)}
         </div>
 
-        {/* Time Range */}
         {formatTimeRange() && (
           <div 
             className="expense-card__time"
@@ -185,7 +179,6 @@ const ExpenseCard = ({ event }) => {
         )}
       </div>
 
-      {/* Footer with participants */}
       {participantList.length > 0 && (
         <div 
           className="expense-card__footer"

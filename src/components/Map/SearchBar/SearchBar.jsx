@@ -10,7 +10,6 @@ const SearchBar = ({ onLocationSelect, googleMapsApiKey }) => {
   const placesService = useRef(null);
   const searchInputRef = useRef(null);
 
-  // Function to check if Google Maps API is ready
   const checkGoogleMapsReady = () => {
     return window.google && 
            window.google.maps && 
@@ -28,22 +27,18 @@ const SearchBar = ({ onLocationSelect, googleMapsApiKey }) => {
         setIsGoogleMapsReady(true);
         return;
       }
-
-      // If not ready, check again after a short delay
+      
       setTimeout(initializeServices, 100);
     };
 
-    // Start checking immediately
     initializeServices();
 
-    // Also listen for the Google Maps API load event as backup
     const handleGoogleMapsLoad = () => {
       if (checkGoogleMapsReady() && !isGoogleMapsReady) {
         initializeServices();
       }
     };
 
-    // Listen for the global google maps ready event
     window.addEventListener('google-maps-api-loaded', handleGoogleMapsLoad);
     
     // Cleanup

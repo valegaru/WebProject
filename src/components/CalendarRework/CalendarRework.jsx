@@ -40,10 +40,13 @@ const roundToHourBoundaries = (events) => {
 
 const CalendarRework = () => {
   const { tripId, expenseId } = useParams();
+  const reduxState = useSelector((state)=> state)
   const dispatch = useDispatch();
   const { events, loading, error } = useSelector((state) => state.events);
   const [view, setView] = useState('month');
   const [date, setDate] = useState(new Date());
+
+  console.log(reduxState, "redux")
 
   useEffect(() => {
     const loadEvents = async () => {
@@ -105,14 +108,9 @@ const CalendarRework = () => {
       localizer.format(end, 'HH:mm', culture)
   }), []);
 
-  
-
   return (
     <div style={{ height: '600px', padding: '20px' }}>
       <div style={{ marginBottom: '20px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-          <h2 style={{ margin: 0 }}>Hour-Spanning Expense Calendar</h2>
-        </div>
         
         {error && (
           <div style={{
