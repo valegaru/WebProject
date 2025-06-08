@@ -17,7 +17,6 @@ const MapComponent = () => {
   const [placeDetails, setPlaceDetails] = useState(null);
   const [initialTripName, setInitialTripName] = useState("");
   
-  // KEY FIX: Use defaultCenter and defaultZoom instead of controlled center/zoom
   const [defaultMapCenter] = useState({ lat: 22.54992, lng: 0 });
   const [defaultMapZoom] = useState(3);
   
@@ -56,7 +55,6 @@ const MapComponent = () => {
       setDialogLocation({ lat, lng });
       setSelectedLocation({ lat, lng });
       setShowDialog(true);
-      // Fetch photos for this location
       fetchLocationPhotos(lat, lng);
     } else {
       console.log("NO LOCATION SPECIFIED", mapInfo);
@@ -66,8 +64,6 @@ const MapComponent = () => {
   const handleSearchLocationSelect = (location) => {
     const { lat, lng, placeDetails: searchPlaceDetails } = location;
     
-    // KEY FIX: Use the map reference to programmatically set center and zoom
-    // instead of controlling through React state
     if (mapRef.current) {
       mapRef.current.panTo({ lat, lng });
       mapRef.current.setZoom(15);
@@ -131,10 +127,8 @@ const MapComponent = () => {
         <Map
           ref={mapRef}
           style={{ width: '100%', height: '100%' }}
-          // KEY FIX: Use defaultCenter and defaultZoom for initial positioning
           defaultCenter={defaultMapCenter}
           defaultZoom={defaultMapZoom}
-          // Remove the controlled center and zoom props
           gestureHandling={'greedy'}
           disableDefaultUI={true}
           mapId={"3559db7569081dbf973e4ebf"}
