@@ -120,3 +120,17 @@
 	}
 }
 
+@media (max-width: 500px) {
+	.calendar-rework {
+		padding: 1rem 0.5rem;
+		overflow-x: auto;
+	}
+
+	.calendar-rework__view {
+		min-width: 600px; /* Esto evita que el calendario se comprima demasiado */
+	}
+
+	.rbc-calendar {
+		width: 100%;
+	}
+}
