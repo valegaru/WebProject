@@ -33,7 +33,7 @@ const Register = () => {
 			setPassword('');
 			setUsername('');
 
-			navigate('/home'); // redirigir al Home
+			// navigate('/home'); // redirigir al Home
 		} catch (error) {
 			console.error(error.code, error.message);
 			setError('❌ ' + error.message);
