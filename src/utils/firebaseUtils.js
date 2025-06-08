@@ -218,6 +218,28 @@ export const addExpenseEvent = async (tripID, expenseID, eventData) => {
 };
 
 
+export const createList = async (userId, name, description) => {
+	try {
+		const listRef = doc(collection(db, 'savedLists'));
+
+		await setDoc(listRef, {
+			userId,
+			name,
+			description,
+		});
+
+		const userListIDRef = doc(db, `users/${userId}/savedLists/${listRef.id}`);
+		await setDoc(userListIDRef, {
+			id: listRef.id,
+		});
+
+		return listRef.id;
+	} catch (error) {
+		console.error('Error adding list:', error);
+		return null;
+	}
+};
+
 export const updateExpenseEvent = async (tripID, expenseID, eventID, eventData) => {
 	try {
 		const tripRef = doc(db, 'trips', tripID);
@@ -517,16 +539,3 @@ export const updateEventInDay = async (tripID, expenseID, date, eventID, updated
 		return false;
 	}
 };
-
-// addTrip() = db -> trips -> (add fields: description, destination, startDate, endDate, name, participants[], add collections: expenses, itineraries, addtripid(()=>(db->users(matchUserId)->addTrip id to tripsIDs collection)))
-
-// updateTrip() =
-
-// fetchExpensesIDs(tripID) = return expensesIDs array
-// fetchItinerariesIDs(tripID) = return itinerariesIDs array
-// fetchExpense(tripId, expenseID) = db -> trips -> (select trip by tripId) -> expenses -> (select expense by expenseID) -> return expense data
-// fetchItinerary(tripId, itineraryID) = db -> trips -> (select trip by tripId -> intinerary -> (select itinerary by itineraryID) -> return itinerary data
-
-// addEvent() =
-// updateEvent() =
-// deleteEvent() =
