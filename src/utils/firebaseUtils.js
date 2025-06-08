@@ -243,6 +243,23 @@ export const createList = async (userId, name, description) => {
 	}
 };
 
+
+export const addPlace = async (listId, lat, lng) => {
+	try {
+		const placeRef = doc(collection(db, `savedLists/${listId}/places`));
+
+		await setDoc(placeRef, {
+			lat,
+			lng,
+		});
+
+		return placeRef.id;
+	} catch (error) {
+		console.error('Error adding place:', error);
+		return null;
+	}
+};
+
 export const updateExpenseEvent = async (tripID, expenseID, eventID, eventData) => {
 	try {
 		const tripRef = doc(db, 'trips', tripID);
