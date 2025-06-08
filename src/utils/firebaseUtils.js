@@ -150,14 +150,11 @@ export const fetchExpenseEvents = async (tripID, expenseID) => {
 	}
 };
 
-// Function to fetch events for a specific date (filtering client-side)
 export const fetchExpenseEventsByDate = async (tripID, expenseID, date) => {
 	try {
 		const allEvents = await fetchExpenseEvents(tripID, expenseID);
 
-		// Filter events by date (assuming your events now have a 'date' field)
 		const dateEvents = allEvents.filter((event) => {
-			// Adjust this comparison based on how you're storing dates
 			return (
 				event.date === date || (event.start && new Date(event.start).toDateString() === new Date(date).toDateString())
 			);
@@ -171,7 +168,6 @@ export const fetchExpenseEventsByDate = async (tripID, expenseID, date) => {
 	}
 };
 
-// Function to fetch all events for all expenses in a trip
 export const fetchTripAllEvents = async (tripID) => {
 	try {
 		const tripRef = doc(db, 'trips', tripID);
@@ -180,11 +176,9 @@ export const fetchTripAllEvents = async (tripID) => {
 
 		const allEvents = [];
 
-		// Fetch events for each expense
 		await Promise.all(
 			expensesSnapshot.docs.map(async (expenseDoc) => {
 				const expenseEvents = await fetchExpenseEvents(tripID, expenseDoc.id);
-				// Add expense metadata to each event
 				const eventsWithExpenseInfo = expenseEvents.map((event) => ({
 					...event,
 					expenseID: expenseDoc.id,
@@ -202,7 +196,7 @@ export const fetchTripAllEvents = async (tripID) => {
 	}
 };
 
-// Function to add a new event to an expense
+
 export const addExpenseEvent = async (tripID, expenseID, eventData) => {
 	try {
 		const expenseRef = doc(db, 'trips', tripID, 'expenses', expenseID);
@@ -223,7 +217,7 @@ export const addExpenseEvent = async (tripID, expenseID, eventData) => {
 	}
 };
 
-// Function to update an existing event
+
 export const updateExpenseEvent = async (tripID, expenseID, eventID, eventData) => {
 	try {
 		const tripRef = doc(db, 'trips', tripID);
@@ -242,7 +236,6 @@ export const updateExpenseEvent = async (tripID, expenseID, eventID, eventData) 
 	}
 };
 
-// Function to delete an event
 export const deleteExpenseEvent = async (tripID, expenseID, eventID) => {
 	try {
 		const tripRef = doc(db, 'trips', tripID);
@@ -415,7 +408,7 @@ export const searchUsersByName = async (nameToSearch) => {
 	const usersRef = collection(db, 'users');
 	const q = query(
 		usersRef,
-		orderBy('username'), // ✅ necesitamos un índice en Firestore para esto
+		orderBy('username'), 
 		startAt(nameToSearch),
 		endAt(nameToSearch + '\uf8ff')
 	);
