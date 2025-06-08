@@ -31,14 +31,6 @@ const DestinationSearch = ({ selectedCountries, onChange }) => {
 					/>
 				</StandaloneSearchBox>
 			</LoadScript>
-
-			{selectedCountries.length > 0 && (
-				<ul className='selected-destinations'>
-					{selectedCountries.map((country, index) => (
-						<li key={index}>{country}</li>
-					))}
-				</ul>
-			)}
 		</div>
 	);
 };
