@@ -1,19 +1,22 @@
 import React, { useRef, useState } from 'react';
-import { LoadScript, StandaloneSearchBox } from '@react-google-maps/api';
+import { LoadScript, Autocomplete } from '@react-google-maps/api';
 
 const libraries = ['places'];
 
 const DestinationSearch = ({ selectedCountries, onChange }) => {
-	const searchBoxRef = useRef(null);
+	const autocompleteRef = useRef(null);
 	const [inputValue, setInputValue] = useState('');
 
-	const handlePlacesChanged = () => {
-		const places = searchBoxRef.current.getPlaces();
-		if (places?.length) {
-			const newSelections = places.map((place) => place.formatted_address || place.name);
-			const uniqueCountries = [...new Set([...selectedCountries, ...newSelections])];
-			onChange(uniqueCountries);
-			setInputValue('');
+	const handlePlaceChanged = () => {
+		if (autocompleteRef.current) {
+			const place = autocompleteRef.current.getPlace();
+			if (place && (place.formatted_address || place.name)) {
+				const newCountry = place.formatted_address || place.name;
+				if (!selectedCountries.includes(newCountry)) {
+					onChange([...selectedCountries, newCountry]);
+				}
+				setInputValue('');
+			}
 		}
 	};
 
@@ -21,7 +24,7 @@ const DestinationSearch = ({ selectedCountries, onChange }) => {
 		<div className='form-group'>
 			<label>Destination (country):</label>
 			<LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} libraries={libraries}>
-				<StandaloneSearchBox onLoad={(ref) => (searchBoxRef.current = ref)} onPlacesChanged={handlePlacesChanged}>
+				<Autocomplete onLoad={(ref) => (autocompleteRef.current = ref)} onPlaceChanged={handlePlaceChanged}>
 					<input
 						type='text'
 						placeholder='Start typing a country...'
@@ -29,7 +32,7 @@ const DestinationSearch = ({ selectedCountries, onChange }) => {
 						value={inputValue}
 						onChange={(e) => setInputValue(e.target.value)}
 					/>
-				</StandaloneSearchBox>
+				</Autocomplete>
 			</LoadScript>
 		</div>
 	);
