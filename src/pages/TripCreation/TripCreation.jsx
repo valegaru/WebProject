@@ -149,6 +149,30 @@ const TripCreation = () => {
 			<div className='trip-creation-container'>
 				<h2 className='trip-title'>Create a New Trip</h2>
 				<form onSubmit={handleSubmit} className='trip-form'>
+					<DestinationSearch
+						selectedCountries={tripData.destination}
+						onChange={(newDestinations) => setTripData({ ...tripData, destination: newDestinations })}
+					/>
+
+					<MapComponent></MapComponent>
+					
+					<div className='destination-card-list'>
+						{tripData.destination.map((country) => (
+							<DestinationCard
+								key={country}
+								name={country}
+								flagUrl={null} // Replace this with actual flag URL logic if available
+								onRemove={(nameToRemove) =>
+									setTripData((prev) => ({
+										...prev,
+										destination: prev.destination.filter((d) => d !== nameToRemove),
+									}))
+								}
+							/>
+						))}
+					</div>
+
+
 					<div className='form-group'>
 						<label>Trip Name:</label>
 						<input
@@ -172,29 +196,7 @@ const TripCreation = () => {
 						/>
 					</div>
 
-					<DestinationSearch
-						selectedCountries={tripData.destination}
-						onChange={(newDestinations) => setTripData({ ...tripData, destination: newDestinations })}
-					/>
-
-					<MapComponent></MapComponent>
-
-					<div className='destination-card-list'>
-						{tripData.destination.map((country) => (
-							<DestinationCard
-								key={country}
-								name={country}
-								flagUrl={null} // Replace this with actual flag URL logic if available
-								onRemove={(nameToRemove) =>
-									setTripData((prev) => ({
-										...prev,
-										destination: prev.destination.filter((d) => d !== nameToRemove),
-									}))
-								}
-							/>
-						))}
-					</div>
-
+			
 					<div className='form-group date-group'>
 						<label>Start Date:</label>
 						<DatePicker
