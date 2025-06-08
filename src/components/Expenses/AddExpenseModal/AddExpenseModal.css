@@ -1,5 +1,5 @@
-/* Overlay oscuro */
-.add-expense-modal-overlay {
+/* Overlay semitransparente */
+.modal-overlay {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -8,8 +8,9 @@
 	background: rgba(0, 0, 0, 0.4);
 	display: flex;
 	justify-content: center;
-	align-items: center;
-	z-index: 999;
+	align-items: start; /* Arranca desde arriba para respetar margin-top del modal */
+	z-index: 1000;
+	overflow: hidden;
 }
 
 /* Contenedor del modal */
@@ -21,149 +22,134 @@
 	max-width: 600px;
 	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 	font-family: 'Inter', sans-serif;
+
+	/* 🔹 Deja espacio arriba para no ocultarse tras la navbar de 64px */
+	margin-top: 150px;
+
+	/* 🔹 Limitamos la altura total y habilitamos scroll solo dentro */
+	max-height: calc(100vh - 100px);
 	overflow-y: auto;
-	max-height: 95vh;
 }
 
 /* Título */
-.add-expense-modal__title {
+.add-expense-modal h3 {
 	margin-top: 0;
-	margin-bottom: 1.5rem;
-	font-size: 1.7rem;
-	color: #1d2d44;
-	text-align: center;
+	margin-bottom: 1rem;
+	font-size: 1.5rem;
+	color: #1a1a1a;
 }
 
-/* Formulario */
-.add-expense-form {
+/* Filas de formulario */
+.add-expense-modal .form-row {
 	display: flex;
-	flex-direction: column;
-	gap: 1rem;
+	gap: 0.75rem;
+	margin-bottom: 1rem;
 }
 
-/* Cada fila de inputs */
-.add-expense-form__row {
-	display: flex;
-	gap: 1rem;
-	flex-wrap: wrap;
-}
-
-/* Inputs, selects y textarea */
-.add-expense-form__input,
-.add-expense-form__select,
-.add-expense-form__textarea {
-	width: 100%;
-	padding: 0.9rem 1rem;
-	border: 1px solid #ccc;
-	border-radius: 10px;
+.add-expense-modal .form-row input,
+.add-expense-modal .form-row select {
+	flex: 1;
+	padding: 0.75rem 1rem;
 	font-size: 1rem;
-	background-color: #fdfdfd;
+	border: 1px solid #ccc;
+	border-radius: 8px;
 	box-sizing: border-box;
 }
 
-.add-expense-form__select {
-	background-color: #fff;
-	cursor: pointer;
-}
-
-.add-expense-form__textarea {
+/* Textareas genéricos */
+.add-expense-modal textarea {
+	width: 100%;
+	padding: 0.75rem 1rem;
+	font-size: 1rem;
+	border: 1px solid #ccc;
+	border-radius: 8px;
 	resize: vertical;
+	margin-bottom: 1rem;
 }
 
 /* Sección de contribuciones */
-.add-expense-form__contributions {
-	margin-top: 1rem;
-}
-
-.add-expense-form__contributions-title {
-	margin-bottom: 0.5rem;
-	font-weight: 600;
-	color: #444;
-}
-
-/* Fila de cada contribución */
-.participant-contribution {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 0.5rem;
-}
-
-.participant-contribution__name {
-	font-weight: 500;
-	color: #333;
-	font-size: 0.95rem;
-	flex: 1;
-}
-
-.participant-contribution__input {
-	max-width: 100px;
-	padding: 0.5rem;
-	border-radius: 6px;
-	border: 1px solid #ccc;
-	box-sizing: border-box;
-}
-
-/* Botonera */
-.add-expense-modal__actions {
-	display: flex;
-	justify-content: space-between;
-	gap: 1rem;
+.add-expense-modal .contributions-section {
 	margin-top: 1.5rem;
 }
 
-.add-expense-modal__actions button {
+.add-expense-modal .participant-contribution-row {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin-bottom: 0.75rem;
+}
+
+.add-expense-modal .participant-name {
 	flex: 1;
-	padding: 0.9rem;
+	font-weight: 500;
+	color: #333;
+}
+
+.add-expense-modal .contribution-input {
+	width: 100px;
+	padding: 0.5rem;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+}
+
+/* Botones al pie del modal */
+.add-expense-modal .modal-buttons {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.75rem;
+	margin-top: 1.5rem;
+}
+
+.add-expense-modal .modal-buttons button {
+	padding: 0.75rem 1.25rem;
 	font-size: 1rem;
+	border-radius: 8px;
 	border: none;
-	border-radius: 10px;
-	color: white;
-	background-color: #4a7c2f;
-	transition: background-color 0.3s ease;
 	cursor: pointer;
+	transition: background-color 0.2s ease;
 }
 
-.add-expense-modal__actions button[type='button'] {
-	background-color: #888;
+.add-expense-modal .modal-buttons button[type='submit'] {
+	background-color: #4a7c2f;
+	color: #fff;
 }
 
-.add-expense-modal__actions button:hover {
-	opacity: 0.9;
+.add-expense-modal .modal-buttons button[type='submit']:hover {
+	background-color: #3a6628;
 }
 
-/* Mensaje de error */
-.add-expense-modal__error {
+.add-expense-modal .modal-buttons button[type='button'] {
+	background-color: #e5e7eb;
+	color: #374151;
+}
+
+.add-expense-modal .modal-buttons button[type='button']:hover {
+	background-color: #d1d5db;
+}
+
+/* Error banner */
+.add-expense-modal .error-banner {
 	background-color: #fee2e2;
-	color: #dc2626;
-	padding: 12px;
-	border-radius: 4px;
-	margin-bottom: 16px;
+	color: #b91c1c;
+	padding: 0.75rem 1rem;
+	border-radius: 6px;
+	margin-bottom: 1rem;
 	border: 1px solid #fecaca;
 	font-size: 0.95rem;
 }
 
-/* Responsive en móvil */
+/* Responsive para pantallas muy pequeñas */
 @media (max-width: 500px) {
 	.add-expense-modal {
 		padding: 1.5rem;
+		margin-top: 80px;
+		max-height: calc(100vh - 80px);
 	}
-
-	.add-expense-form__row {
+	.add-expense-modal .form-row {
 		flex-direction: column;
 	}
-
-	.participant-contribution {
+	.add-expense-modal .participant-contribution-row {
 		flex-direction: column;
 		align-items: flex-start;
-	}
-
-	.participant-contribution__input {
-		width: 100%;
-		margin-top: 0.25rem;
-	}
-
-	.add-expense-modal__actions {
-		flex-direction: column;
 	}
 }
