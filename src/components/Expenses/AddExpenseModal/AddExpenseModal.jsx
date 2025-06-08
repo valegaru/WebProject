@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addEvent } from '../../../store/eventSlice/EventSlice';
 import ParticipantManager from '../../ParticipantManager/ParticipantManager';
 
-const AddEventModal = ({ tripID, expenseID, date, onClose, onEventAdded }) => {
+const AddEventModal = ({ tripID, expenseID, onClose, onEventAdded }) => {
   const dispatch = useDispatch();
-
+  const date = useSelector((state) => state.date.selectedDate);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');

@@ -88,7 +88,6 @@ const ExpenseTracker = () => {
   <AddEventModal
     tripID={tripId}
     expenseID={expenseId}
-    date={date}
     onClose={() => setShowModal(false)}
     onEventAdded={(newEventId) => {
       console.log('Event added:', newEventId);
