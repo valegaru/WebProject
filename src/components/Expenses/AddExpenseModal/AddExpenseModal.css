@@ -1,4 +1,4 @@
-/* Overlay that darkens the screen */
+/* Overlay oscuro */
 .add-expense-modal-overlay {
 	position: fixed;
 	top: 0;
@@ -12,7 +12,7 @@
 	z-index: 999;
 }
 
-/* Modal container */
+/* Contenedor del modal */
 .add-expense-modal {
 	background-color: #ffffff;
 	padding: 2rem;
@@ -25,7 +25,8 @@
 	max-height: 95vh;
 }
 
-.add-expense-modal h3 {
+/* Título */
+.add-expense-modal__title {
 	margin-top: 0;
 	margin-bottom: 1.5rem;
 	font-size: 1.7rem;
@@ -33,76 +34,85 @@
 	text-align: center;
 }
 
-/* Form wrapper */
+/* Formulario */
 .add-expense-form {
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
 }
 
-/* Row grouping */
-.add-expense-form .form-row {
+/* Cada fila de inputs */
+.add-expense-form__row {
 	display: flex;
 	gap: 1rem;
 	flex-wrap: wrap;
 }
 
-/* Inputs and selects */
-.add-expense-form input,
-.add-expense-form select,
-.add-expense-form textarea {
+/* Inputs, selects y textarea */
+.add-expense-form__input,
+.add-expense-form__select,
+.add-expense-form__textarea {
 	width: 100%;
 	padding: 0.9rem 1rem;
 	border: 1px solid #ccc;
 	border-radius: 10px;
 	font-size: 1rem;
 	background-color: #fdfdfd;
+	box-sizing: border-box;
 }
 
-.add-expense-form select {
+.add-expense-form__select {
 	background-color: #fff;
 	cursor: pointer;
 }
 
-.add-expense-form textarea {
+.add-expense-form__textarea {
 	resize: vertical;
 }
 
-/* Contributions section */
-.contributions-section {
+/* Sección de contribuciones */
+.add-expense-form__contributions {
 	margin-top: 1rem;
 }
 
-.participant-contribution-row {
+.add-expense-form__contributions-title {
+	margin-bottom: 0.5rem;
+	font-weight: 600;
+	color: #444;
+}
+
+/* Fila de cada contribución */
+.participant-contribution {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	margin-bottom: 0.5rem;
 }
 
-.participant-name {
+.participant-contribution__name {
 	font-weight: 500;
 	color: #333;
 	font-size: 0.95rem;
 	flex: 1;
 }
 
-.contribution-input {
+.participant-contribution__input {
 	max-width: 100px;
 	padding: 0.5rem;
 	border-radius: 6px;
 	border: 1px solid #ccc;
+	box-sizing: border-box;
 }
 
-/* Buttons */
-.modal-buttons {
+/* Botonera */
+.add-expense-modal__actions {
 	display: flex;
 	justify-content: space-between;
 	gap: 1rem;
 	margin-top: 1.5rem;
 }
 
-.modal-buttons button {
+.add-expense-modal__actions button {
 	flex: 1;
 	padding: 0.9rem;
 	font-size: 1rem;
@@ -114,35 +124,46 @@
 	cursor: pointer;
 }
 
-.modal-buttons button[type='button'] {
+.add-expense-modal__actions button[type='button'] {
 	background-color: #888;
 }
 
-.modal-buttons button:hover {
+.add-expense-modal__actions button:hover {
 	opacity: 0.9;
 }
 
-/* Responsive adjustments */
+/* Mensaje de error */
+.add-expense-modal__error {
+	background-color: #fee2e2;
+	color: #dc2626;
+	padding: 12px;
+	border-radius: 4px;
+	margin-bottom: 16px;
+	border: 1px solid #fecaca;
+	font-size: 0.95rem;
+}
+
+/* Responsive en móvil */
 @media (max-width: 500px) {
 	.add-expense-modal {
 		padding: 1.5rem;
 	}
 
-	.add-expense-form .form-row {
+	.add-expense-form__row {
 		flex-direction: column;
 	}
 
-	.participant-contribution-row {
+	.participant-contribution {
 		flex-direction: column;
 		align-items: flex-start;
 	}
 
-	.contribution-input {
+	.participant-contribution__input {
 		width: 100%;
 		margin-top: 0.25rem;
 	}
 
-	.modal-buttons {
+	.add-expense-modal__actions {
 		flex-direction: column;
 	}
 }
