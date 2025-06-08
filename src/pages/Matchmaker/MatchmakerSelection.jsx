@@ -10,6 +10,7 @@ import Navbar from '../../components/Navbar/Navbar';
 import CardCity from '../../components/CardCity/CardCity';
 import { db } from '../../services/firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 import './MatchmakerSelection.css';
 
 function MatchmakerSelection() {
@@ -54,7 +55,18 @@ function MatchmakerSelection() {
 	};
 
 	const handleSubmitVotes = async () => {
-		const userId = Date.now().toString(); // Puedes reemplazarlo por user.uid si tienes auth
+		const auth = getAuth();
+		const user = auth.currentUser;
+		const userId = user?.uid;
+
+		// const userId = Date.now().toString(); // Puedes reemplazarlo por user.uid si tienes auth
+		// const matchRef = doc(db, 'matchLists', roomId);
+
+		if (!userId) {
+			alert('Usuario no autenticado');
+			return;
+		}
+
 		const matchRef = doc(db, 'matchLists', roomId);
 
 		try {
@@ -81,46 +93,46 @@ export default MatchmakerSelection;
 // function MatchmakerSelection() {
 // 	const navigate = useNavigate();
 
-	const cities = [
-		{
-			name: 'Barcelona',
-			image:
-				'https://www.spain.info/export/sites/segtur/.content/imagenes/cabeceras-grandes/cataluna/park-guell-barcelona-s-305364611.jpg',
-			aesthetic: 'Stunning architecture.',
-			vibe: 'Beachside relaxation and nightlife.',
-			gastronomy: 'Tapas, paella, and fresh seafood.',
-			renowned: 'Football, art, history, and Mediterranean sunsets.',
-			activities: [
-				{
-					image:
-						'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1c/d7/0b/9c/salon-principal.jpg?w=900&h=500&s=1',
-					label: '7 Portes',
-				},
-				{
-					image:
-						'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/06/e6/28/1a/opium-mar-club.jpg?w=1200&h=-1&s=1',
-					label: 'Opium',
-				},
-				{
-					image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFhHLNIJtwWE48GdslCOHhkmqikXHQrJLf2g&s',
-					label: 'National Art Museum of Catalonia',
-				},
-			],
-			attractions: [
-				{
-					image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRX1Aljp-xBwkgIDW5LKS336X9OMYzp5xAjA&s',
-					label: 'La Sagrada Familia',
-				},
-				{
-					image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz2SqFo8Z2vNKfmqSi4uxzWJkNa65DcGD5fQ&s',
-					label: 'Park Güell',
-				},
-				{
-					image: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Casa_Mil%C3%A0%2C_general_view.jpg',
-					label: 'Casa Milà',
-				},
-			],
-		},
+// const cities = [
+// 	{
+// 		name: 'Barcelona',
+// 		image:
+// 			'https://www.spain.info/export/sites/segtur/.content/imagenes/cabeceras-grandes/cataluna/park-guell-barcelona-s-305364611.jpg',
+// 		aesthetic: 'Stunning architecture.',
+// 		vibe: 'Beachside relaxation and nightlife.',
+// 		gastronomy: 'Tapas, paella, and fresh seafood.',
+// 		renowned: 'Football, art, history, and Mediterranean sunsets.',
+// 		activities: [
+// 			{
+// 				image:
+// 					'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1c/d7/0b/9c/salon-principal.jpg?w=900&h=500&s=1',
+// 				label: '7 Portes',
+// 			},
+// 			{
+// 				image:
+// 					'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/06/e6/28/1a/opium-mar-club.jpg?w=1200&h=-1&s=1',
+// 				label: 'Opium',
+// 			},
+// 			{
+// 				image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFhHLNIJtwWE48GdslCOHhkmqikXHQrJLf2g&s',
+// 				label: 'National Art Museum of Catalonia',
+// 			},
+// 		],
+// 		attractions: [
+// 			{
+// 				image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRX1Aljp-xBwkgIDW5LKS336X9OMYzp5xAjA&s',
+// 				label: 'La Sagrada Familia',
+// 			},
+// 			{
+// 				image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz2SqFo8Z2vNKfmqSi4uxzWJkNa65DcGD5fQ&s',
+// 				label: 'Park Güell',
+// 			},
+// 			{
+// 				image: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Casa_Mil%C3%A0%2C_general_view.jpg',
+// 				label: 'Casa Milà',
+// 			},
+// 		],
+// 	},
 // 		{
 // 			name: 'Kyoto',
 // 			image: 'https://boutiquejapan.com/wp-content/uploads/2019/07/yasaka-pagoda-higashiyama-kyoto-japan-1140x761.jpg',
