@@ -20,6 +20,7 @@
     "@vis.gl/react-google-maps": "^1.5.2",
     "firebase": "^11.6.1",
     "lucide-react": "^0.487.0",
+    "moment": "^2.30.1",
     "react": "^19.0.0",
     "react-big-calendar": "^1.19.2",
     "react-datepicker": "^8.3.0",
