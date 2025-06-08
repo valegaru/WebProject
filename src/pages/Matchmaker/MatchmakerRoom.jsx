@@ -54,6 +54,82 @@ function MatchmakerRoom() {
 				],
 			},
 			{
+				name: 'Paris',
+				image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34', // Torre Eiffel
+				aesthetic: 'Romantic boulevards and world-class art.',
+				vibe: 'Chic cafés, river strolls, elegant and historic.',
+				gastronomy: 'Croissants, cheese, wine and haute cuisine.',
+				renowned: 'Iconic landmarks like the Eiffel Tower and Louvre.',
+				activities: [
+					{ image: 'https://images.unsplash.com/photo-1536665755100-8510aefa6b0b', label: 'Seine River Cruise' },
+					{ image: 'https://images.unsplash.com/photo-1586122623053-270e5a2a0531', label: 'Louvre Tour' },
+					{ image: 'https://images.unsplash.com/photo-1520697222868-1286bea0e4ca', label: 'Montmartre Walk' },
+				],
+				attractions: [
+					{ image: 'https://images.unsplash.com/photo-1543349688-faa2537a07a9', label: 'Eiffel Tower' },
+					{ image: 'https://images.unsplash.com/photo-1529612700005-9c0eb18e6c38', label: 'Notre-Dame Cathedral' },
+					{ image: 'https://images.unsplash.com/photo-1561489427-9a40d4350b53', label: 'Sacré‑Cœur' },
+				],
+			},
+			{
+				name: 'Sydney',
+				image: 'https://www.sydney.com/images/785da7dc29c0e52d35aa3fae651a5f30_LARGE.jpg', // Opera House
+				aesthetic: 'Modern architecture meeting ocean vistas.',
+				vibe: 'Vibrant, open-air lifestyle by the harbour.',
+				gastronomy: 'Fresh seafood, multicultural cafés, Aussie BBQ.',
+				renowned: 'Sydney Opera House and Harbour Bridge views.',
+				activities: [
+					{ image: 'https://images.unsplash.com/photo-1580666922091-87b0eb19149c', label: 'Sydney Harbour Cruise' },
+					{ image: 'https://images.unsplash.com/photo-1588371050923-ebe4f0d14d86', label: 'Bridge Climb' },
+					{ image: 'https://images.unsplash.com/photo-1573327471517-ac60469d2f5e', label: 'Bondi Beach Surfing' },
+				],
+				attractions: [
+					{ image: 'https://images.unsplash.com/photo-1506784365847-bbad939e9335', label: 'Sydney Opera House' },
+					{
+						image: 'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb',
+						label: 'Harbour Bridge Pylon Lookout',
+					},
+					{ image: 'https://images.unsplash.com/photo-1598866531648-87b150ac4bb0', label: 'Royal Botanic Garden' },
+				],
+			},
+			{
+				name: 'Rome',
+				image: 'https://images.unsplash.com/photo-1529655683826-aba9b3e77383', // Colosseum
+				aesthetic: 'Ancient ruins with Renaissance elegance.',
+				vibe: 'Bustling piazzas, gelato, timeless art.',
+				gastronomy: 'Pasta, pizza al taglio, espresso and gelato.',
+				renowned: 'The Colosseum, Vatican City and Baroque fountains.',
+				activities: [
+					{ image: 'https://images.unsplash.com/photo-1525072713-63ae21eb47dc', label: 'Colosseum Tour' },
+					{ image: 'https://images.unsplash.com/photo-1477587458883-47145ed94245', label: 'Vatican Museums' },
+					{ image: 'https://images.unsplash.com/photo-1526910322861-86c5b57ba3c5', label: 'Treví Fountain Visit' },
+				],
+				attractions: [
+					{ image: 'https://images.unsplash.com/photo-1514196566156-119dc9ddbdb0', label: 'Pantheon' },
+					{ image: 'https://images.unsplash.com/photo-1507567677256-d798f6a1e8d2', label: 'Spanish Steps' },
+					{ image: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308', label: 'St. Peter’s Basilica' },
+				],
+			},
+			{
+				name: 'New York',
+				image: 'https://images.unsplash.com/photo-1558670014-3ce946301dbf', // Manhattan skyline
+				aesthetic: 'Iconic skyline of skyscrapers.',
+				vibe: 'Energetic, artistic, 24/7 city life.',
+				gastronomy: 'Bagels, street food, diverse cuisines.',
+				renowned: 'Statue of Liberty, Broadway and Central Park.',
+				activities: [
+					{ image: 'https://images.unsplash.com/photo-1505761671935-60b3a7427bad', label: 'Broadway Show' },
+					{ image: 'https://images.unsplash.com/photo-1534850336045-c8b50e7357d1', label: 'Central Park Boat Ride' },
+					{ image: 'https://images.unsplash.com/photo-1591620342849-bf51bc3605a7', label: 'Metropolitan Museum' },
+				],
+				attractions: [
+					{ image: 'https://images.unsplash.com/photo-1524230948340-7d64c90b64b8', label: 'Statue of Liberty' },
+					{ image: 'https://images.unsplash.com/photo-1501726491172-05d0662c0d14', label: 'Times Square' },
+					{ image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c', label: 'Brooklyn Bridge' },
+				],
+			},
+
+			{
 				name: 'Kyoto',
 				image:
 					'https://boutiquejapan.com/wp-content/uploads/2019/07/yasaka-pagoda-higashiyama-kyoto-japan-1140x761.jpg',
@@ -111,13 +187,15 @@ function MatchmakerRoom() {
 
 			{roomId && (
 				<div style={{ marginTop: '2rem', backgroundColor: 'white', padding: '1rem' }}>
-					<p>Escanea este QR o comparte el link:</p>
+					<h3>Escanea este QR o comparte el link:</h3>
 					<QRCode value={roomLink} size={256} />
+
 					<p>
 						<a href={roomLink} target='_blank' rel='noreferrer'>
 							{roomLink}
 						</a>
 					</p>
+					<h3>Da click al link para empezar</h3>
 				</div>
 			)}
 		</div>
