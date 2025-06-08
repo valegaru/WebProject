@@ -9,6 +9,7 @@ import Navbar from '../../components/Navbar/Navbar';
 import ParticipantManager from '../../components/ParticipantManager/ParticipantManager';
 import './TripCreation.css';
 import { StandaloneSearchBox, LoadScript } from '@react-google-maps/api';
+import DestinationSearch from '../../components/DestinationSearch/DestinationSearch';
 
 const TripCreation = () => {
 	const { userId } = useSelector((state) => state.auth);
@@ -136,71 +137,85 @@ const TripCreation = () => {
 	return (
 		<>
 			<Navbar />
-			<div className="trip-creation-container">
-				<h2 className="trip-title">Create a New Trip</h2>
-				<form onSubmit={handleSubmit} className="trip-form">
-					<div className="form-group">
+			<div className='trip-creation-container'>
+				<h2 className='trip-title'>Create a New Trip</h2>
+				<form onSubmit={handleSubmit} className='trip-form'>
+					<div className='form-group'>
 						<label>Trip Name:</label>
-						<input type="text" name="name" value={tripData.name} onChange={handleInputChange} required className="input" />
+						<input
+							type='text'
+							name='name'
+							value={tripData.name}
+							onChange={handleInputChange}
+							required
+							className='input'
+						/>
 					</div>
 
-					<div className="form-group">
+					<div className='form-group'>
 						<label>Description:</label>
-						<textarea name="description" value={tripData.description} onChange={handleInputChange} required className="textarea" />
+						<textarea
+							name='description'
+							value={tripData.description}
+							onChange={handleInputChange}
+							required
+							className='textarea'
+						/>
 					</div>
 
-					<div className="form-group">
-						<label>Destination (country):</label>
-						<LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} libraries={['places']}>
-							<StandaloneSearchBox onLoad={ref => setSearchBoxRef(ref)} onPlacesChanged={handlePlacesChanged}>
-								<input type="text" placeholder="Start typing a country..." className="input" />
-							</StandaloneSearchBox>
-						</LoadScript>
-						<ul>
-							{tripData.destination.map((d, i) => (
-								<li key={i}>{d}</li>
-							))}
-						</ul>
-					</div>
+					<DestinationSearch
+						selectedCountries={tripData.destination}
+						onChange={(newDestinations) => setTripData({ ...tripData, destination: newDestinations })}
+					/>
 
-					<div className="form-group date-group">
+					<div className='form-group date-group'>
 						<label>Start Date:</label>
 						<DatePicker
 							selected={tripData.startDate}
 							onChange={(date) => setTripData({ ...tripData, startDate: date })}
-							dateFormat="yyyy-MM-dd"
-							className="datepicker"
+							dateFormat='yyyy-MM-dd'
+							className='datepicker'
 							minDate={new Date()}
 						/>
 					</div>
 
-					<div className="form-group date-group">
+					<div className='form-group date-group'>
 						<label>End Date:</label>
 						<DatePicker
 							selected={tripData.endDate}
 							onChange={(date) => setTripData({ ...tripData, endDate: date })}
-							dateFormat="yyyy-MM-dd"
-							className="datepicker"
+							dateFormat='yyyy-MM-dd'
+							className='datepicker'
 							minDate={tripData.startDate || new Date()}
 						/>
 					</div>
 
-					<div className="form-group">
+					<div className='form-group'>
 						<label>Trip Image:</label>
-						<input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} className="input-file" />
-						{uploadStatus && <p className="upload-status">{uploadStatus}</p>}
+						<input
+							type='file'
+							accept='image/*'
+							onChange={handleImageUpload}
+							disabled={uploading}
+							className='input-file'
+						/>
+						{uploadStatus && <p className='upload-status'>{uploadStatus}</p>}
 						{tripData.tripPic && (
-							<div className="image-preview">
+							<div className='image-preview'>
 								<p>Preview:</p>
-								<img src={tripData.tripPic} alt="Trip" className="trip-image" />
+								<img src={tripData.tripPic} alt='Trip' className='trip-image' />
 							</div>
 						)}
 					</div>
 
 					<ParticipantManager participants={tripData.participants} onParticipantsChange={handleParticipantsChange} />
 
-					<div className="form-group">
-						<button type="submit" className="submit-button" disabled={!isValidDates() || !tripData.name || !tripData.description || !tripData.destination.length}>
+					<div className='form-group'>
+						<button
+							type='submit'
+							className='submit-button'
+							disabled={!isValidDates() || !tripData.name || !tripData.description || !tripData.destination.length}
+						>
 							Create Trip
 						</button>
 					</div>
