@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { addTrip } from "../../../utils/firebaseUtils";
 import { useSelector } from "react-redux";
 import { fetchLocationData } from "../../../utils/googleMapsUtils";
+import "./MapForm.css";
 
 const MapForm = ({ 
     uid, 
@@ -143,36 +144,31 @@ const MapForm = ({
     };
 
     return (
-        <div className="trip-form" style={{ marginBottom: '15px' }}>
-            <h4>Create Trip</h4>
+        <div className="trip-form">
+            <h4 className="form-title">Create Trip</h4>
             
             {loadingLocationData ? (
-                <div style={{ marginBottom: '15px', textAlign: 'center' }}>
+                <div className="loading-container">
                     <p>Loading location data...</p>
                 </div>
             ) : (
                 placeDetails && (
-                    <div className="place-details" style={{ marginBottom: '15px', padding: '10px', backgroundColor: '#f8f9fa', borderRadius: '4px' }}>
-                        <h5 className="place-name" style={{ margin: '0 0 5px 0' }}>{placeDetails.name}</h5>
+                    <div className="place-details">
+                        <h5 className="place-name">{placeDetails.name}</h5>
                         {placeDetails.rating && (
-                            <p className="place-rating" style={{ margin: '0 0 5px 0', fontSize: '14px' }}>
+                            <p className="place-rating">
                                 Rating: {placeDetails.rating}/5 ⭐
                             </p>
                         )}
-                        <p className="place-address" style={{ margin: '0', fontSize: '14px', color: '#666' }}>
+                        <p className="place-address">
                             {placeDetails.address}
                         </p>
                         {locationPhoto && (
-                            <div style={{ marginTop: '10px' }}>
+                            <div className="location-photo-container">
                                 <img 
                                     src={locationPhoto} 
                                     alt="Location" 
-                                    style={{ 
-                                        width: '100%', 
-                                        maxWidth: '280px', 
-                                        height: 'auto', 
-                                        borderRadius: '4px' 
-                                    }} 
+                                    className="location-photo"
                                 />
                             </div>
                         )}
@@ -180,74 +176,65 @@ const MapForm = ({
                 )
             )}
             
-            <div style={{ marginBottom: '10px' }}>
+            <div className="form-field">
                 <label>Trip Name *</label>
                 <input
                     type="text"
                     value={MapForm.name}
                     onChange={(e) => handleFormChange('name', e.target.value)}
                     placeholder="Enter trip name"
-                    style={{ width: '100%', padding: '5px', marginTop: '3px' }}
+                    className="form-input"
                 />
             </div>
 
-            <div style={{ marginBottom: '10px' }}>
+            <div className="form-field">
                 <label>Description</label>
                 <textarea
                     value={MapForm.description}
                     onChange={(e) => handleFormChange('description', e.target.value)}
                     placeholder="Trip description (optional)"
-                    style={{ width: '100%', padding: '5px', marginTop: '3px', minHeight: '60px' }}
+                    className="form-textarea"
                 />
             </div>
 
-            <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-                <div style={{ flex: 1 }}>
+            <div className="date-fields">
+                <div className="date-field">
                     <label>Start Date *</label>
                     <input
                         type="date"
                         value={MapForm.startDate}
                         onChange={(e) => handleFormChange('startDate', e.target.value)}
-                        style={{ width: '100%', padding: '5px', marginTop: '3px' }}
+                        className="form-input"
                     />
                 </div>
-                <div style={{ flex: 1 }}>
+                <div className="date-field">
                     <label>End Date *</label>
                     <input
                         type="date"
                         value={MapForm.endDate}
                         onChange={(e) => handleFormChange('endDate', e.target.value)}
-                        style={{ width: '100%', padding: '5px', marginTop: '3px' }}
+                        className="form-input"
                     />
                 </div>
             </div>
 
-            <div style={{ marginBottom: '15px' }}>
+            <div className="form-field participants-field">
                 <label>Participants</label>
                 <input
                     type="text"
                     value={MapForm.participants.join(', ')}
                     onChange={(e) => handleParticipantsChange(e.target.value)}
                     placeholder="Enter participant names/emails"
-                    style={{ width: '100%', padding: '5px', marginTop: '3px' }}
+                    className="form-input"
                 />
             </div>
 
-            <div style={{ display: 'flex', gap: '10px' }}>
+            <div className="button-group">
                 {mapType === "trip" && (
                     <button
-                        className="app-button" 
+                        className={`app-button add-trip-button ${(isAddingTrip || loadingLocationData) ? 'disabled' : ''}`}
                         onClick={onAddTrip}
                         disabled={isAddingTrip || loadingLocationData}
-                        style={{ 
-                            flex: 1,
-                            padding: '10px',
-                            backgroundColor: (isAddingTrip || loadingLocationData) ? '#ccc' : '#007bff',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '4px',
-                            cursor: (isAddingTrip || loadingLocationData) ? 'not-allowed' : 'pointer'
-                        }}
                     >
                         {isAddingTrip ? 'Adding Trip...' : 'Add Trip'}
                     </button>
@@ -257,15 +244,7 @@ const MapForm = ({
                     <button 
                         onClick={onCancel}
                         disabled={isAddingTrip || loadingLocationData}
-                        style={{ 
-                            flex: 1,
-                            padding: '10px',
-                            backgroundColor: '#6c757d',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '4px',
-                            cursor: (isAddingTrip || loadingLocationData) ? 'not-allowed' : 'pointer'
-                        }}
+                        className={`cancel-button ${(isAddingTrip || loadingLocationData) ? 'disabled' : ''}`}
                     >
                         Cancel
                     </button>
