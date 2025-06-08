@@ -5,9 +5,26 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addEvent } from '../../../store/eventSlice/EventSlice';
 import ParticipantManager from '../../ParticipantManager/ParticipantManager';
 
-const AddEventModal = ({ tripID, expenseID, date, onClose, onEventAdded }) => {
+const AddEventModal = ({ tripID, expenseID, onClose, onEventAdded }) => {
   const dispatch = useDispatch();
-
+  const selectedDate = useSelector((state) => state.date.selectedDate);
+  
+  // Initialize date state with selected date from Redux or current date
+  const [date, setDate] = useState(() => {
+    if (selectedDate) {
+      // If selectedDate is a Date object, format it for input
+      if (selectedDate instanceof Date) {
+        return selectedDate.toISOString().split('T')[0];
+      }
+      // If selectedDate is already a string in YYYY-MM-DD format
+      if (typeof selectedDate === 'string' && selectedDate.includes('-')) {
+        return selectedDate;
+      }
+    }
+    // Default to today's date
+    return new Date().toISOString().split('T')[0];
+  });
+  
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
@@ -78,6 +95,10 @@ const AddEventModal = ({ tripID, expenseID, date, onClose, onEventAdded }) => {
     }
     if (!amount || parseFloat(amount) <= 0) {
       setError('Valid amount is required');
+      return false;
+    }
+    if (!date) {
+      setError('Date is required');
       return false;
     }
     if (!startTime) {
@@ -215,6 +236,12 @@ const AddEventModal = ({ tripID, expenseID, date, onClose, onEventAdded }) => {
           </div>
 
           <div className="form-row">
+            <input 
+              type="date"
+              value={date} 
+              onChange={(e) => setDate(e.target.value)} 
+              required 
+            />
             <select 
               value={category} 
               onChange={(e) => setCategory(e.target.value)}
@@ -223,17 +250,6 @@ const AddEventModal = ({ tripID, expenseID, date, onClose, onEventAdded }) => {
               {categoryOptions.map(cat => (
                 <option key={cat} value={cat}>{cat}</option>
               ))}
-            </select>
-            
-            <select 
-              value={currency} 
-              onChange={(e) => setCurrency(e.target.value)}
-            >
-              <option value="USD">USD</option>
-              <option value="EUR">EUR</option>
-              <option value="GBP">GBP</option>
-              <option value="JPY">JPY</option>
-              <option value="COP">COP</option>
             </select>
           </div>
 
@@ -253,6 +269,28 @@ const AddEventModal = ({ tripID, expenseID, date, onClose, onEventAdded }) => {
             />
           </div>
 
+          <div className="form-row">
+            <select 
+              value={currency} 
+              onChange={(e) => setCurrency(e.target.value)}
+            >
+              <option value="USD">USD</option>
+              <option value="EUR">EUR</option>
+              <option value="GBP">GBP</option>
+              <option value="JPY">JPY</option>
+              <option value="COP">COP</option>
+            </select>
+            <select 
+              value={paymentMethod} 
+              onChange={(e) => setPaymentMethod(e.target.value)}
+            >
+              <option value="">Payment Method</option>
+              {paymentMethods.map(method => (
+                <option key={method} value={method}>{method}</option>
+              ))}
+            </select>
+          </div>
+
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -266,22 +304,12 @@ const AddEventModal = ({ tripID, expenseID, date, onClose, onEventAdded }) => {
               onChange={(e) => setLocation(e.target.value)} 
               placeholder="Location" 
             />
-            <select 
-              value={paymentMethod} 
-              onChange={(e) => setPaymentMethod(e.target.value)}
-            >
-              <option value="">Payment Method</option>
-              {paymentMethods.map(method => (
-                <option key={method} value={method}>{method}</option>
-              ))}
-            </select>
+            <input 
+              value={tags} 
+              onChange={(e) => setTags(e.target.value)} 
+              placeholder="Tags (comma-separated)" 
+            />
           </div>
-
-          <input 
-            value={tags} 
-            onChange={(e) => setTags(e.target.value)} 
-            placeholder="Tags (comma-separated)" 
-          />
 
           <select value={status} onChange={(e) => setStatus(e.target.value)}>
             <option value="incomplete">Incomplete</option>

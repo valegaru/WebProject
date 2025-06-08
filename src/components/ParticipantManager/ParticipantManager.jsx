@@ -11,10 +11,7 @@ function ParticipantManager({ participants, onParticipantsChange }) {
 		setSearchTerm(value);
 
 		if (value.length >= 1) {
-			const [nameResults, emailResults] = await Promise.all([
-				searchUsersByName(value), 
-				searchUsersByEmail(value)
-			]);
+			const [nameResults, emailResults] = await Promise.all([searchUsersByName(value), searchUsersByEmail(value)]);
 
 			// Combinar sin duplicados (por id)
 			const combined = [...nameResults];
@@ -45,24 +42,20 @@ function ParticipantManager({ participants, onParticipantsChange }) {
 	};
 
 	return (
-		<div className="participant-manager">
-			<div className="form-group">
-				<label>Buscar participantes:</label>
+		<div className='participant-manager'>
+			<div className='form-group'>
+				<label>Search participants:</label>
 				<input
-					type="text"
+					type='text'
 					value={searchTerm}
 					onChange={handleSearchChange}
-					placeholder="Escribe un nombre..."
-					className="input"
+					placeholder='Write a name...'
+					className='input'
 				/>
 				{searchResults.length > 0 && (
-					<ul className="search-results">
+					<ul className='search-results'>
 						{searchResults.map((user) => (
-							<li 
-								key={user.id} 
-								onClick={() => addParticipant(user)} 
-								className="search-result-item"
-							>
+							<li key={user.id} onClick={() => addParticipant(user)} className='search-result-item'>
 								{user.username} ({user.email})
 							</li>
 						))}
@@ -70,9 +63,9 @@ function ParticipantManager({ participants, onParticipantsChange }) {
 				)}
 			</div>
 
-			<div className="form-group">
-				<label>Participantes agregados:</label>
-				<div className="participant-list">
+			<div className='form-group'>
+				<label>Added participants:</label>
+				<div className='participant-list'>
 					{participants.map((user) => (
 						<ParticipantCard
 							key={user.id}

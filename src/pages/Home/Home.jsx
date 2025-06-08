@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Home.css';
 import Navbar from '../../components/Navbar/Navbar';
-import CardList from '../../components/cardList/CardList';
+
 import mapImage from '../../assets/map.png';
 
 import restaurants from '../../assets/restaurants.png';
@@ -18,6 +18,7 @@ import { fetchTripsFromUser } from '../../utils/firebaseUtils';
 import { useNavigate } from 'react-router-dom';
 import MapComponent from '../../components/Map/MapComponent/MapComponent';
 import PoiMarkers from '../../components/Map/PoiMarker/PoiMarkers';
+import CardList from '../../components/CardList/CardList';
 
 
 const Home = () => {
