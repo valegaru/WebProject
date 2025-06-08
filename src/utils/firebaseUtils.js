@@ -228,6 +228,9 @@ export const createList = async (userId, name, description) => {
 			description,
 		});
 
+		const placesRef = doc(collection(listRef, 'places'));
+		await setDoc(placesRef, {});
+
 		const userListIDRef = doc(db, `users/${userId}/savedLists/${listRef.id}`);
 		await setDoc(userListIDRef, {
 			id: listRef.id,
