@@ -8,23 +8,23 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Navbar from '../../components/Navbar/Navbar';
 import ParticipantManager from '../../components/ParticipantManager/ParticipantManager';
 import './TripCreation.css';
+import { StandaloneSearchBox, LoadScript } from '@react-google-maps/api';
 
-function TripCreation() {
+const TripCreation = () => {
 	const { userId } = useSelector((state) => state.auth);
 	const navigate = useNavigate();
-
 	const [tripData, setTripData] = useState({
 		name: '',
 		description: '',
-		destination: '',
+		destination: [],
 		startDate: null,
 		endDate: null,
 		participants: [],
 		tripPic: '',
 	});
-
 	const [uploading, setUploading] = useState(false);
 	const [uploadStatus, setUploadStatus] = useState('');
+	const [searchBoxRef, setSearchBoxRef] = useState(null);
 
 	const handleInputChange = (e) => {
 		setTripData({
@@ -45,7 +45,7 @@ function TripCreation() {
 		if (!file) return;
 
 		setUploading(true);
-		setUploadStatus('Subiendo imagen...');
+		setUploadStatus('Uploading image...');
 
 		const formData = new FormData();
 		formData.append('file', file);
@@ -60,24 +60,46 @@ function TripCreation() {
 
 			if (data.secure_url) {
 				setTripData((prev) => ({ ...prev, tripPic: data.secure_url }));
-				setUploadStatus('Imagen subida correctamente.');
+				setUploadStatus('Image uploaded successfully.');
 			} else {
-				setUploadStatus('Error al subir la imagen.');
+				setUploadStatus('Error uploading image.');
 			}
 		} catch (err) {
-			console.error('Error al subir a Cloudinary:', err);
-			setUploadStatus('Error al subir la imagen.');
+			console.error('Error uploading to Cloudinary:', err);
+			setUploadStatus('Error uploading image.');
 		} finally {
 			setUploading(false);
 			setTimeout(() => setUploadStatus(''), 4000);
 		}
 	};
 
+	const handlePlacesChanged = () => {
+		const places = searchBoxRef.getPlaces();
+		if (places?.length) {
+			const newCountries = places.map((place) => place.formatted_address || place.name);
+			setTripData((prev) => ({
+				...prev,
+				destination: [...new Set([...prev.destination, ...newCountries])],
+			}));
+		}
+	};
+
+	const isValidDates = () => {
+		const today = new Date();
+		const { startDate, endDate } = tripData;
+		if (startDate && startDate < today.setHours(0, 0, 0, 0)) return false;
+		if (endDate && startDate && endDate < startDate) return false;
+		return true;
+	};
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-
 		if (!userId) {
-			alert('Usuario no logueado.');
+			alert('User not logged in.');
+			return;
+		}
+		if (!isValidDates()) {
+			alert('Invalid date selection.');
 			return;
 		}
 
@@ -86,7 +108,7 @@ function TripCreation() {
 		const tripID = await addTrip(
 			userId,
 			description,
-			destination,
+			destination.join(', '),
 			startDate?.toISOString() || '',
 			endDate?.toISOString() || '',
 			name,
@@ -95,20 +117,19 @@ function TripCreation() {
 		);
 
 		if (tripID) {
-			alert('Viaje creado con éxito 🎉');
+			alert('Trip created successfully 🎉');
 			navigate('/trips');
-			// Limpiar formulario
 			setTripData({
 				name: '',
 				description: '',
-				destination: '',
+				destination: [],
 				startDate: null,
 				endDate: null,
 				participants: [],
 				tripPic: '',
 			});
 		} else {
-			alert('Error al crear el viaje 😞');
+			alert('Error creating trip 😞');
 		}
 	};
 
@@ -116,95 +137,77 @@ function TripCreation() {
 		<>
 			<Navbar />
 			<div className="trip-creation-container">
-				<h2 className="trip-title">Crear un nuevo viaje</h2>
+				<h2 className="trip-title">Create a New Trip</h2>
 				<form onSubmit={handleSubmit} className="trip-form">
-
 					<div className="form-group">
-						<label>Nombre del viaje:</label>
-						<input
-							type="text"
-							name="name"
-							value={tripData.name}
-							onChange={handleInputChange}
-							required
-							className="input"
-						/>
+						<label>Trip Name:</label>
+						<input type="text" name="name" value={tripData.name} onChange={handleInputChange} required className="input" />
 					</div>
 
 					<div className="form-group">
-						<label>Descripción:</label>
-						<textarea
-							name="description"
-							value={tripData.description}
-							onChange={handleInputChange}
-							required
-							className="textarea"
-						/>
+						<label>Description:</label>
+						<textarea name="description" value={tripData.description} onChange={handleInputChange} required className="textarea" />
 					</div>
 
 					<div className="form-group">
-						<label>Destino (país):</label>
-						<input
-							type="text"
-							name="destination"
-							value={tripData.destination}
-							onChange={handleInputChange}
-							required
-							className="input"
-						/>
+						<label>Destination (country):</label>
+						<LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} libraries={['places']}>
+							<StandaloneSearchBox onLoad={ref => setSearchBoxRef(ref)} onPlacesChanged={handlePlacesChanged}>
+								<input type="text" placeholder="Start typing a country..." className="input" />
+							</StandaloneSearchBox>
+						</LoadScript>
+						<ul>
+							{tripData.destination.map((d, i) => (
+								<li key={i}>{d}</li>
+							))}
+						</ul>
 					</div>
 
 					<div className="form-group date-group">
-						<label>Fecha de inicio:</label>
+						<label>Start Date:</label>
 						<DatePicker
 							selected={tripData.startDate}
 							onChange={(date) => setTripData({ ...tripData, startDate: date })}
 							dateFormat="yyyy-MM-dd"
 							className="datepicker"
+							minDate={new Date()}
 						/>
 					</div>
 
 					<div className="form-group date-group">
-						<label>Fecha de fin:</label>
+						<label>End Date:</label>
 						<DatePicker
 							selected={tripData.endDate}
 							onChange={(date) => setTripData({ ...tripData, endDate: date })}
 							dateFormat="yyyy-MM-dd"
 							className="datepicker"
+							minDate={tripData.startDate || new Date()}
 						/>
 					</div>
 
 					<div className="form-group">
-						<label>Subir foto del viaje:</label>
-						<input
-							type="file"
-							accept="image/*"
-							onChange={handleImageUpload}
-							disabled={uploading}
-							className="input-file"
-						/>
+						<label>Trip Image:</label>
+						<input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} className="input-file" />
 						{uploadStatus && <p className="upload-status">{uploadStatus}</p>}
 						{tripData.tripPic && (
 							<div className="image-preview">
-								<p>Vista previa:</p>
-								<img src={tripData.tripPic} alt="Foto del viaje" className="trip-image" />
+								<p>Preview:</p>
+								<img src={tripData.tripPic} alt="Trip" className="trip-image" />
 							</div>
 						)}
 					</div>
 
-					<ParticipantManager
-						participants={tripData.participants}
-						onParticipantsChange={handleParticipantsChange}
-					/>
+					<ParticipantManager participants={tripData.participants} onParticipantsChange={handleParticipantsChange} />
 
 					<div className="form-group">
-						<button type="submit" className="submit-button">Crear viaje</button>
+						<button type="submit" className="submit-button" disabled={!isValidDates() || !tripData.name || !tripData.description || !tripData.destination.length}>
+							Create Trip
+						</button>
 					</div>
-
 				</form>
 			</div>
 		</>
 	);
-}
+};
 
 export default TripCreation;
