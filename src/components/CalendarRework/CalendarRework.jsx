@@ -10,11 +10,36 @@ import { useParams } from 'react-router-dom';
 
 const localizer = momentLocalizer(moment);
 
-const CalendarRework = () => {
+const roundToHourBoundaries = (events) => {
+  return events.map(event => {
+    if (!event.start || !event.end) {
+      return event;
+    }
 
+    const originalStart = new Date(event.start);
+    const originalEnd = new Date(event.end);
+
+    const displayStart = new Date(originalStart);
+    displayStart.setMinutes(0, 0, 0);
+
+    const displayEnd = new Date(originalEnd);
+    if (displayEnd.getMinutes() > 0 || displayEnd.getSeconds() > 0) {
+      displayEnd.setHours(displayEnd.getHours() + 1);
+    }
+    displayEnd.setMinutes(0, 0, 0);
+
+    return {
+      ...event,
+      originalStart,
+      originalEnd,
+      start: displayStart,
+      end: displayEnd
+    };
+  });
+};
+
+const CalendarRework = () => {
   const { tripId, expenseId } = useParams();
-  console.log(tripId)
-  console.log(expenseId)
   const dispatch = useDispatch();
   const { events, loading, error } = useSelector((state) => state.events);
   const [view, setView] = useState('month');
@@ -28,10 +53,8 @@ const CalendarRework = () => {
       dispatch(setError(null));
       
       try {
-        // Fetch events from Firebase
         const fetchedEvents = await fetchExpenseEvents(tripId, expenseId);
         
-        // Transform events to match calendar format
         const calendarEvents = fetchedEvents.map(event => ({
           ...event,
           start: event.start ? new Date(event.start) : new Date(),
@@ -39,9 +62,8 @@ const CalendarRework = () => {
           title: event.title || event.name || 'Expense Event'
         }));
         
-        // Set events in Redux store
         dispatch(setEvents(calendarEvents));
-        console.log(calendarEvents, "logedd")
+        console.log(calendarEvents, "logged")
       } catch (err) {
         console.error('Error loading events:', err);
         dispatch(setError('Failed to load events'));
@@ -53,12 +75,14 @@ const CalendarRework = () => {
     loadEvents();
   }, [tripId, expenseId, dispatch]);
 
-  // Custom event component
+  const hourBoundaryEvents = useMemo(() => {
+    return roundToHourBoundaries(events);
+  }, [events]);
+
   const EventComponent = ({ event }) => (
-    <ExpenseCard event={event} view={view} />
+    <ExpenseCard event={event} />
   );
 
-  // Custom event style getter
   const eventStyleGetter = (event, start, end, isSelected) => {
     return {
       style: {
@@ -81,51 +105,13 @@ const CalendarRework = () => {
       localizer.format(end, 'HH:mm', culture)
   }), []);
 
-  // Handle refresh events
-  const handleRefresh = async () => {
-    if (!tripId || !expenseId) return;
-    
-    dispatch(setLoading(true));
-    dispatch(setError(null));
-    
-    try {
-      const fetchedEvents = await fetchExpenseEvents(tripId, expenseId);
-      
-      const calendarEvents = fetchedEvents.map(event => ({
-        ...event,
-        start: event.start ? new Date(event.start) : new Date(),
-        end: event.end ? new Date(event.end) : new Date(),
-        title: event.title || event.name || 'Expense Event'
-      }));
-      
-      dispatch(setEvents(calendarEvents));
-    } catch (err) {
-      dispatch(setError('Failed to refresh events'));
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
+  
 
   return (
     <div style={{ height: '600px', padding: '20px' }}>
       <div style={{ marginBottom: '20px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-          <h2 style={{ margin: 0 }}>Expense Calendar</h2>
-          <button
-            onClick={handleRefresh}
-            disabled={loading}
-            style={{
-              padding: '8px 16px',
-              backgroundColor: '#10b981',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.6 : 1
-            }}
-          >
-            {loading ? 'Loading...' : 'Refresh'}
-          </button>
+          <h2 style={{ margin: 0 }}>Hour-Spanning Expense Calendar</h2>
         </div>
         
         {error && (
@@ -183,7 +169,8 @@ const CalendarRework = () => {
         </div>
         
         <div style={{ fontSize: '14px', color: '#666' }}>
-          Showing {events.length} event{events.length !== 1 ? 's' : ''}
+          Showing {hourBoundaryEvents.length} event{hourBoundaryEvents.length !== 1 ? 's' : ''} 
+          {hourBoundaryEvents.length > 0 && ' (rounded to hour boundaries)'}
         </div>
       </div>
 
@@ -201,7 +188,7 @@ const CalendarRework = () => {
       ) : (
         <Calendar
           localizer={localizer}
-          events={events}
+          events={hourBoundaryEvents}
           startAccessor="start"
           endAccessor="end"
           view={view}
@@ -216,8 +203,8 @@ const CalendarRework = () => {
           style={{ height: '500px' }}
           step={30}
           timeslots={2}
-          min={new Date(2025, 0, 1, 6, 0)} // 6 AM
-          max={new Date(2025, 0, 1, 23, 0)} // 11 PM
+          min={new Date(2025, 0, 1, 6, 0)} 
+          max={new Date(2025, 0, 1, 23, 0)} 
           dayLayoutAlgorithm="no-overlap"
         />
       )}

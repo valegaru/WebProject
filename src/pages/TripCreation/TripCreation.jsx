@@ -121,36 +121,36 @@ function TripCreation() {
 
 					<div className="form-group">
 						<label>Nombre del viaje:</label>
-						<input 
-							type="text" 
-							name="name" 
-							value={tripData.name} 
-							onChange={handleInputChange} 
-							required 
-							className="input" 
+						<input
+							type="text"
+							name="name"
+							value={tripData.name}
+							onChange={handleInputChange}
+							required
+							className="input"
 						/>
 					</div>
 
 					<div className="form-group">
 						<label>Descripción:</label>
-						<textarea 
-							name="description" 
-							value={tripData.description} 
-							onChange={handleInputChange} 
-							required 
-							className="textarea" 
+						<textarea
+							name="description"
+							value={tripData.description}
+							onChange={handleInputChange}
+							required
+							className="textarea"
 						/>
 					</div>
 
 					<div className="form-group">
 						<label>Destino (país):</label>
-						<input 
-							type="text" 
-							name="destination" 
-							value={tripData.destination} 
-							onChange={handleInputChange} 
-							required 
-							className="input" 
+						<input
+							type="text"
+							name="destination"
+							value={tripData.destination}
+							onChange={handleInputChange}
+							required
+							className="input"
 						/>
 					</div>
 
@@ -176,12 +176,12 @@ function TripCreation() {
 
 					<div className="form-group">
 						<label>Subir foto del viaje:</label>
-						<input 
-							type="file" 
-							accept="image/*" 
-							onChange={handleImageUpload} 
-							disabled={uploading} 
-							className="input-file" 
+						<input
+							type="file"
+							accept="image/*"
+							onChange={handleImageUpload}
+							disabled={uploading}
+							className="input-file"
 						/>
 						{uploadStatus && <p className="upload-status">{uploadStatus}</p>}
 						{tripData.tripPic && (
