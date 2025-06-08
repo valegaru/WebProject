@@ -24,14 +24,12 @@ const MapForm = ({
         participants: []
     });
 
-    // Fetch location data when dialogLocation changes
     useEffect(() => {
         if (dialogLocation && dialogLocation.lat && dialogLocation.lng) {
             fetchLocationInfo(dialogLocation.lat, dialogLocation.lng);
         }
     }, [dialogLocation]);
 
-    // Update trip name when initialTripName changes
     useEffect(() => {
         if (initialTripName && !MapForm.name) {
             setMapForm(prev => ({
@@ -55,7 +53,6 @@ const MapForm = ({
 
             if (fetchedPlaceDetails) {
                 setPlaceDetails(fetchedPlaceDetails);
-                // Update trip name if not already set
                 if (fetchedPlaceDetails.name && !MapForm.name) {
                     setMapForm(prev => ({
                         ...prev,
@@ -149,7 +146,6 @@ const MapForm = ({
         <div className="trip-form" style={{ marginBottom: '15px' }}>
             <h4>Create Trip</h4>
             
-            {/* Location Information Section */}
             {loadingLocationData ? (
                 <div style={{ marginBottom: '15px', textAlign: 'center' }}>
                     <p>Loading location data...</p>
