@@ -429,7 +429,13 @@ export const sharedIdGenerator = (tripRef) => {
 
 export const searchUsersByName = async (nameToSearch) => {
 	const usersRef = collection(db, 'users');
-	const q = query(usersRef, where('username', '==', nameToSearch));
+	const q = query(
+		usersRef,
+		orderBy('username'), // ✅ necesitamos un índice en Firestore para esto
+		startAt(nameToSearch),
+		endAt(nameToSearch + '\uf8ff')
+	);
+
 	const querySnapshot = await getDocs(q);
 
 	const results = [];
