@@ -17,7 +17,6 @@ import { useSelector } from 'react-redux';
 import { fetchTripsFromUser } from '../../utils/firebaseUtils';
 import { useNavigate } from 'react-router-dom';
 import MapComponent from '../../components/Map/MapComponent/MapComponent';
-import PoiMarkers from '../../components/Map/PoiMarker/PoiMarkers';
 import CardList from '../../components/CardList/CardList';
 
 

@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    type: "places"
+    type: "places",
+    markers: []
 }
 
 export const MapInfo = createSlice({
@@ -10,8 +11,12 @@ export const MapInfo = createSlice({
     reducers: {
         setMapType:  (state, action) => {
             state.type = action.payload;
+    }, 
+    setMapMarkers:  (state, action) => {
+            state.markers = action.payload;
     }}
+        
 })
 
-export const { setMapType } = MapInfo.actions;
+export const { setMapType, setMapMarkers} = MapInfo.actions;
 export default MapInfo.reducer;
