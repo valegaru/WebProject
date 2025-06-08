@@ -15,14 +15,28 @@ const DestinationSearch = ({ selectedCountries, onChange }) => {
 			const newCountry = place.formatted_address;
 			const updated = [...new Set([...selectedCountries, newCountry])];
 			onChange(updated);
+			el.value = '';
+		};
 
-			el.value = ''; // limpia el input
+		const ensureClickable = () => {
+			const shadowRoot = el.shadowRoot;
+			if (!shadowRoot) return;
+
+			const input = shadowRoot.querySelector('input');
+			if (input) {
+				input.removeAttribute('readonly');
+				input.disabled = false;
+			}
 		};
 
 		el.addEventListener('gmpx-place-select', handlePlaceSelect);
 
+		const observer = new MutationObserver(ensureClickable);
+		observer.observe(el, { childList: true, subtree: true });
+
 		return () => {
 			el.removeEventListener('gmpx-place-select', handlePlaceSelect);
+			observer.disconnect();
 		};
 	}, [selectedCountries, onChange]);
 
@@ -34,7 +48,7 @@ const DestinationSearch = ({ selectedCountries, onChange }) => {
 				ref={autocompleteRef}
 				class='input'
 				placeholder='Start typing a country...'
-			/>
+			></gmpx-place-autocomplete>
 		</div>
 	);
 };
