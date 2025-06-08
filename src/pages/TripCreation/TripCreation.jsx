@@ -12,7 +12,7 @@ import { StandaloneSearchBox, LoadScript } from '@react-google-maps/api';
 import DestinationSearch from '../../components/DestinationSearch/DestinationSearch';
 import DestinationCard from '../../components/DestinationCard/DestinationCard';
 import MapComponent from './../../components/Map/MapComponent/MapComponent';
-import { setMapType, setMapMarkers } from '../../store/mapInfo/MapInfo';
+import { setMapType } from '../../store/mapInfo/MapInfo';
 import './TripCreation.css';
 
 const TripCreation = () => {
@@ -28,8 +28,6 @@ const TripCreation = () => {
 		participants: [],
 		tripPic: '',
 	});
-	// Store destination objects with both name and coordinates
-	const [destinationObjects, setDestinationObjects] = useState([]);
 	const [uploading, setUploading] = useState(false);
 	const [uploadStatus, setUploadStatus] = useState('');
 	const [searchBoxRef, setSearchBoxRef] = useState(null);
@@ -84,46 +82,12 @@ const TripCreation = () => {
 	const handlePlacesChanged = () => {
 		const places = searchBoxRef.getPlaces();
 		if (places?.length) {
-			const newDestinationObjects = places.map((place) => ({
-				name: place.formatted_address || place.name,
-				lat: place.geometry.location.lat(),
-				lng: place.geometry.location.lng()
-			}));
-
-			// Update destination objects array
-			setDestinationObjects(prev => {
-				const existingNames = prev.map(dest => dest.name);
-				const filteredNew = newDestinationObjects.filter(dest => !existingNames.includes(dest.name));
-				return [...prev, ...filteredNew];
-			});
-
-			// Update trip data with destination names
-			const newCountries = newDestinationObjects.map(dest => dest.name);
+			const newCountries = places.map((place) => place.formatted_address || place.name);
 			setTripData((prev) => ({
 				...prev,
 				destination: [...new Set([...prev.destination, ...newCountries])],
 			}));
 		}
-	};
-
-	// Update map markers whenever destinations change
-	useEffect(() => {
-		const markers = destinationObjects.map(dest => ({
-			lat: dest.lat,
-			lng: dest.lng
-		}));
-		dispatch(setMapMarkers(markers));
-	}, [destinationObjects, dispatch]);
-
-	const handleDestinationRemove = (nameToRemove) => {
-		// Remove from destination objects
-		setDestinationObjects(prev => prev.filter(dest => dest.name !== nameToRemove));
-		
-		// Remove from trip data
-		setTripData((prev) => ({
-			...prev,
-			destination: prev.destination.filter((d) => d !== nameToRemove),
-		}));
 	};
 
 	const isValidDates = () => {
@@ -170,8 +134,6 @@ const TripCreation = () => {
 				participants: [],
 				tripPic: '',
 			});
-			setDestinationObjects([]);
-			dispatch(setMapMarkers([])); // Clear markers
 		} else {
 			alert('Error creating trip 😞');
 		}
@@ -187,24 +149,6 @@ const TripCreation = () => {
 			<div className='trip-creation-container'>
 				<h2 className='trip-title'>Create a New Trip</h2>
 				<form onSubmit={handleSubmit} className='trip-form'>
-					<DestinationSearch
-						selectedCountries={tripData.destination}
-						onChange={(newDestinations) => setTripData({ ...tripData, destination: newDestinations })}
-					/>
-
-					<MapComponent></MapComponent>
-					
-					<div className='destination-card-list'>
-						{tripData.destination.map((country) => (
-							<DestinationCard
-								key={country}
-								name={country}
-								flagUrl={null} // Replace this with actual flag URL logic if available
-								onRemove={handleDestinationRemove}
-							/>
-						))}
-					</div>
-
 					<div className='form-group'>
 						<label>Trip Name:</label>
 						<input
@@ -226,6 +170,29 @@ const TripCreation = () => {
 							required
 							className='textarea'
 						/>
+					</div>
+
+					<DestinationSearch
+						selectedCountries={tripData.destination}
+						onChange={(newDestinations) => setTripData({ ...tripData, destination: newDestinations })}
+					/>
+
+					<MapComponent></MapComponent>
+
+					<div className='destination-card-list'>
+						{tripData.destination.map((country) => (
+							<DestinationCard
+								key={country}
+								name={country}
+								flagUrl={null} // Replace this with actual flag URL logic if available
+								onRemove={(nameToRemove) =>
+									setTripData((prev) => ({
+										...prev,
+										destination: prev.destination.filter((d) => d !== nameToRemove),
+									}))
+								}
+							/>
+						))}
 					</div>
 
 					<div className='form-group date-group'>
