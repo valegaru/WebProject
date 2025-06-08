@@ -12,11 +12,11 @@ import { StandaloneSearchBox, LoadScript } from '@react-google-maps/api';
 import DestinationSearch from '../../components/DestinationSearch/DestinationSearch';
 import DestinationCard from '../../components/DestinationCard/DestinationCard';
 import MapComponent from './../../components/Map/MapComponent/MapComponent';
-import { setMapType } from '../../store/mapInfo/MapInfo';
+import { setMapType, setMapMarkers, addMapMarkers, removeMapMarkers } from '../../store/mapInfo/MapInfo';
 import './TripCreation.css';
 
 const TripCreation = () => {
-	const dispatch = useDispatch()
+	const dispatch = useDispatch();
 	const { userId } = useSelector((state) => state.auth);
 	const navigate = useNavigate();
 	const [tripData, setTripData] = useState({
@@ -89,14 +89,58 @@ const TripCreation = () => {
 		return typeof destination === 'object' && destination.coordinates ? destination.coordinates : null;
 	};
 
+	// Function to update map markers based on destinations
+	const updateMapMarkers = (destinations) => {
+		const markers = destinations
+			.filter(dest => getDestinationCoordinates(dest) !== null)
+			.map((dest, index) => {
+				const name = getDestinationName(dest);
+				const coordinates = getDestinationCoordinates(dest);
+				return {
+					id: name || `destination-${index}`,
+					name: name,
+					position: {
+						lat: coordinates.lat,
+						lng: coordinates.lng
+					},
+					type: 'destination'
+				};
+			});
+		
+		dispatch(setMapMarkers(markers));
+	};
+
+	// Handle destination changes and update markers
+	const handleDestinationChange = (newDestinations) => {
+		setTripData({ ...tripData, destination: newDestinations });
+		updateMapMarkers(newDestinations);
+	};
+
+	// Handle destination removal and update markers
+	const handleDestinationRemove = (nameToRemove) => {
+		const updatedDestinations = tripData.destination.filter((d) => {
+			const dName = getDestinationName(d);
+			return dName !== nameToRemove;
+		});
+		
+		setTripData((prev) => ({
+			...prev,
+			destination: updatedDestinations,
+		}));
+		
+		updateMapMarkers(updatedDestinations);
+	};
+
 	const handlePlacesChanged = () => {
 		const places = searchBoxRef.getPlaces();
 		if (places?.length) {
 			const newCountries = places.map((place) => place.formatted_address || place.name);
+			const updatedDestinations = [...new Set([...tripData.destination, ...newCountries])];
 			setTripData((prev) => ({
 				...prev,
-				destination: [...new Set([...prev.destination, ...newCountries])],
+				destination: updatedDestinations,
 			}));
+			updateMapMarkers(updatedDestinations);
 		}
 	};
 
@@ -160,14 +204,23 @@ const TripCreation = () => {
 				participants: [],
 				tripPic: '',
 			});
+			// Clear map markers when trip is created
+			dispatch(setMapMarkers([]));
 		} else {
 			alert('Error creating trip 😞');
 		}
 	};
 
 	useEffect(() => {
-		dispatch(setMapType("trips"))
-	},[])
+		dispatch(setMapType("trips"));
+		// Initialize with empty markers
+		dispatch(setMapMarkers([]));
+	}, [dispatch]);
+
+	// Update markers whenever destinations change
+	useEffect(() => {
+		updateMapMarkers(tripData.destination);
+	}, [tripData.destination]);
 
 	return (
 		<>
@@ -177,7 +230,7 @@ const TripCreation = () => {
 				<form onSubmit={handleSubmit} className='trip-form'>
 					<DestinationSearch
 						selectedCountries={tripData.destination}
-						onChange={(newDestinations) => setTripData({ ...tripData, destination: newDestinations })}
+						onChange={handleDestinationChange}
 					/>
 
 					<MapComponent></MapComponent>
@@ -193,15 +246,7 @@ const TripCreation = () => {
 									name={destinationName}
 									coordinates={coordinates}
 									flagUrl={null} // Replace this with actual flag URL logic if available
-									onRemove={(nameToRemove) =>
-										setTripData((prev) => ({
-											...prev,
-											destination: prev.destination.filter((d) => {
-												const dName = getDestinationName(d);
-												return dName !== nameToRemove;
-											}),
-										}))
-									}
+									onRemove={handleDestinationRemove}
 								/>
 							);
 						})}
