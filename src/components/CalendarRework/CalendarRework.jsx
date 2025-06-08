@@ -108,14 +108,9 @@ const CalendarRework = () => {
       localizer.format(end, 'HH:mm', culture)
   }), []);
 
-  
-
   return (
     <div style={{ height: '600px', padding: '20px' }}>
       <div style={{ marginBottom: '20px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-          <h2 style={{ margin: 0 }}>Hour-Spanning Expense Calendar</h2>
-        </div>
         
         {error && (
           <div style={{
