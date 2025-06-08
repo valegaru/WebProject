@@ -10,6 +10,8 @@ const MapComponent = () => {
   const uid = useSelector((state) => state.auth.userId);
   const name = useSelector((state) => state.auth.username);
   const mapType = useSelector((state) => state.mapInfo.type)
+  const mapMarkers = useSelector((state) => state.mapInfo.markers)
+
   const [selectedLocation, setSelectedLocation] = useState();
   const [showPanel, setShowPanel] = useState(false);
   const [dialogLocation, setDialogLocation] = useState("");
@@ -223,6 +225,12 @@ const MapComponent = () => {
             onClick={(mapInfo) => handleMapClick(mapInfo)}
           >
             <PoiMarkers locationInfo={selectedLocation}></PoiMarkers>
+            {mapMarkers && mapMarkers.length > 0 && mapMarkers.map((marker, index) => (
+              <PoiMarkers 
+                key={marker.id || `marker-${index}`} 
+                locationInfo={marker.coordinates || marker.position}
+              />
+            ))}
           </Map>
         </APIProvider>
       </div>
