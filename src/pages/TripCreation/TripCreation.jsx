@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { addTrip } from '../../utils/firebaseUtils';
 import LogoutButton from '../../components/LogoutButton/LogoutButton';
@@ -16,6 +16,7 @@ import { setMapType } from '../../store/mapInfo/MapInfo';
 import './TripCreation.css';
 
 const TripCreation = () => {
+	const dispatch = useDispatch()
 	const { userId } = useSelector((state) => state.auth);
 	const navigate = useNavigate();
 	const [tripData, setTripData] = useState({
@@ -137,6 +138,10 @@ const TripCreation = () => {
 			alert('Error creating trip 😞');
 		}
 	};
+
+	useEffect(() => {
+		dispatch(setMapType("trips"))
+	},[])
 
 	return (
 		<>
