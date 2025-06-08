@@ -156,3 +156,48 @@
 		flex-direction: column;
 	}
 }
+
+/* Ajustes específicos para dispositivos muy angostos como iPhone 12 Pro */
+@media (max-width: 400px) {
+	.add-expense-modal {
+		width: 92%;
+		padding: 1.2rem 0.8rem;
+		margin-top: 85px;
+		border-radius: 12px;
+		max-height: calc(100vh - 90px);
+	}
+
+	.add-expense-modal .form-row {
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+
+	.add-expense-modal .modal-buttons {
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.add-expense-modal .modal-buttons button {
+		width: 100%;
+	}
+
+	.add-expense-modal textarea,
+	.add-expense-modal select,
+	.add-expense-modal input {
+		font-size: 0.95rem;
+	}
+
+	.add-expense-modal h3 {
+		font-size: 1.25rem;
+		margin-bottom: 1rem;
+	}
+
+	.add-expense-modal .participant-contribution-row {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.add-expense-modal .contribution-input {
+		width: 100%;
+	}
+}
