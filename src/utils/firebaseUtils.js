@@ -86,13 +86,11 @@ export const fetchItineraries = async (tripId) => {
 	}
 };
 
-// Helper function to convert Firestore Timestamps to JavaScript Dates
 export const convertTimestampsToDate = (data) => {
 	if (!data || typeof data !== 'object') return data;
 
 	const converted = { ...data };
 
-	// List of common timestamp field names
 	const timestampFields = ['createdAt', 'updatedAt', 'start', 'end', 'date', 'timestamp'];
 
 	timestampFields.forEach((field) => {
@@ -101,7 +99,6 @@ export const convertTimestampsToDate = (data) => {
 		}
 	});
 
-	// Handle nested objects
 	Object.keys(converted).forEach((key) => {
 		if (
 			converted[key] &&
@@ -116,13 +113,12 @@ export const convertTimestampsToDate = (data) => {
 	return converted;
 };
 
-// Updated fetchExpenseEvents using the helper
 export const fetchExpenseEvents = async (tripID, expenseID) => {
 	try {
-		console.log('🔍 Starting fetchExpenseEvents with:', { tripID, expenseID });
+		console.log('Starting fetchExpenseEvents with:', { tripID, expenseID });
 
 		if (!tripID || !expenseID) {
-			console.log('❌ Missing required parameters:', { tripID, expenseID });
+			console.log('Missing required parameters:', { tripID, expenseID });
 			return [];
 		}
 
@@ -130,23 +126,16 @@ export const fetchExpenseEvents = async (tripID, expenseID) => {
 		const expenseRef = doc(collection(tripRef, 'expenses'), expenseID);
 		const eventsCollection = collection(expenseRef, 'events');
 
-		console.log('🔎 Attempting to fetch events from Firestore...');
 		const snapshot = await getDocs(eventsCollection);
 
-		console.log('📊 Snapshot received. Empty?', snapshot.empty);
-		console.log('📊 Number of docs in snapshot:', snapshot.size);
 
 		if (snapshot.empty) {
-			console.log('⚠️ No events found in the collection');
-			console.log('🔗 Collection path:', `trips/${tripID}/expenses/${expenseID}/events`);
+			console.log('No events found in the collection');
 			return [];
 		}
 
 		const events = snapshot.docs.map((doc) => {
 			const data = doc.data();
-			console.log('📄 Processing document:', doc.id, data);
-
-			// Convert all Firestore Timestamps to JavaScript Dates
 			const processedData = convertTimestampsToDate(data);
 
 			return {
@@ -154,14 +143,9 @@ export const fetchExpenseEvents = async (tripID, expenseID) => {
 				...processedData,
 			};
 		});
-
-		console.log('✅ Events fetched successfully:', events.length, 'events');
-		console.log('📋 Events data:', events);
 		return events;
 	} catch (error) {
-		console.error('💥 Error in fetchExpenseEvents:', error);
-		console.error('💥 Error message:', error.message);
-		console.error('💥 Error code:', error.code);
+		console.error('Error in fetchExpenseEvents:', error);
 		return [];
 	}
 };
