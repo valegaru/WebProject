@@ -79,6 +79,16 @@ const TripCreation = () => {
 		}
 	};
 
+	// Helper function to get destination name (handles both string and object formats)
+	const getDestinationName = (destination) => {
+		return typeof destination === 'string' ? destination : destination.name;
+	};
+
+	// Helper function to get destination coordinates
+	const getDestinationCoordinates = (destination) => {
+		return typeof destination === 'object' && destination.coordinates ? destination.coordinates : null;
+	};
+
 	const handlePlacesChanged = () => {
 		const places = searchBoxRef.getPlaces();
 		if (places?.length) {
@@ -111,15 +121,31 @@ const TripCreation = () => {
 
 		const { name, description, destination, startDate, endDate, participants, tripPic } = tripData;
 
+		// Process destinations to extract names and coordinates
+		const destinationNames = destination.map(dest => getDestinationName(dest)).join(', ');
+		
+		// Extract coordinates for potential future use or storage
+		const destinationCoords = destination
+			.map(dest => ({
+				name: getDestinationName(dest),
+				coordinates: getDestinationCoordinates(dest)
+			}))
+			.filter(dest => dest.coordinates !== null);
+
+		// Log coordinates for debugging (you can remove this later)
+		console.log('Destination coordinates:', destinationCoords);
+
 		const tripID = await addTrip(
 			userId,
 			description,
-			destination.join(', '),
+			destinationNames, // Send names as string for backward compatibility
 			startDate?.toISOString() || '',
 			endDate?.toISOString() || '',
 			name,
 			participants.map((p) => p.id),
 			tripPic
+			// If you want to store coordinates, you might need to modify addTrip function
+			// to accept an additional parameter: destinationCoords
 		);
 
 		if (tripID) {
@@ -157,21 +183,29 @@ const TripCreation = () => {
 					<MapComponent></MapComponent>
 					
 					<div className='destination-card-list'>
-						{tripData.destination.map((country) => (
-							<DestinationCard
-								key={country}
-								name={country}
-								flagUrl={null} // Replace this with actual flag URL logic if available
-								onRemove={(nameToRemove) =>
-									setTripData((prev) => ({
-										...prev,
-										destination: prev.destination.filter((d) => d !== nameToRemove),
-									}))
-								}
-							/>
-						))}
+						{tripData.destination.map((destination, index) => {
+							const destinationName = getDestinationName(destination);
+							const coordinates = getDestinationCoordinates(destination);
+							
+							return (
+								<DestinationCard
+									key={destinationName || index}
+									name={destinationName}
+									coordinates={coordinates}
+									flagUrl={null} // Replace this with actual flag URL logic if available
+									onRemove={(nameToRemove) =>
+										setTripData((prev) => ({
+											...prev,
+											destination: prev.destination.filter((d) => {
+												const dName = getDestinationName(d);
+												return dName !== nameToRemove;
+											}),
+										}))
+									}
+								/>
+							);
+						})}
 					</div>
-
 
 					<div className='form-group'>
 						<label>Trip Name:</label>
@@ -196,7 +230,6 @@ const TripCreation = () => {
 						/>
 					</div>
 
-			
 					<div className='form-group date-group'>
 						<label>Start Date:</label>
 						<DatePicker

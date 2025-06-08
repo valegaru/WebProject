@@ -12,7 +12,7 @@ export const MapInfo = createSlice({
         setMapType:  (state, action) => {
             state.type = action.payload;
     }, 
-    setMapMarkers:  (state, action) => {
+        setMapMarkers:  (state, action) => {
             state.markers = action.payload;
     }}
         
