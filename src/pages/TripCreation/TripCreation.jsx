@@ -168,6 +168,22 @@ const TripCreation = () => {
 						onChange={(newDestinations) => setTripData({ ...tripData, destination: newDestinations })}
 					/>
 
+					<div className='destination-card-list'>
+						{tripData.destination.map((country) => (
+							<DestinationCard
+								key={country}
+								name={country}
+								flagUrl={null} // Replace this with actual flag URL logic if available
+								onRemove={(nameToRemove) =>
+									setTripData((prev) => ({
+										...prev,
+										destination: prev.destination.filter((d) => d !== nameToRemove),
+									}))
+								}
+							/>
+						))}
+					</div>
+
 					<div className='form-group date-group'>
 						<label>Start Date:</label>
 						<DatePicker
