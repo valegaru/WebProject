@@ -2,18 +2,21 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { addTrip } from '../../utils/firebaseUtils';
-import LogoutButton from '../../components/LogoutButton/LogoutButton';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import Navbar from '../../components/Navbar/Navbar';
 import ParticipantManager from '../../components/ParticipantManager/ParticipantManager';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import './TripCreation.css';
-import { StandaloneSearchBox, LoadScript } from '@react-google-maps/api';
+
 import DestinationSearch from '../../components/DestinationSearch/DestinationSearch';
+import DestinationCard from '../../components/DestinationCard/DestinationCard';
+import { APIProvider, Map } from '@vis.gl/react-google-maps';
+import PoiMarkers from '../../components/Map/PoiMarker/PoiMarkers';
 
 const TripCreation = () => {
 	const { userId } = useSelector((state) => state.auth);
 	const navigate = useNavigate();
+
 	const [tripData, setTripData] = useState({
 		name: '',
 		description: '',
@@ -23,22 +26,17 @@ const TripCreation = () => {
 		participants: [],
 		tripPic: '',
 	});
+
 	const [uploading, setUploading] = useState(false);
 	const [uploadStatus, setUploadStatus] = useState('');
-	const [searchBoxRef, setSearchBoxRef] = useState(null);
+	const [destinationLocations, setDestinationLocations] = useState([]);
 
 	const handleInputChange = (e) => {
-		setTripData({
-			...tripData,
-			[e.target.name]: e.target.value,
-		});
+		setTripData({ ...tripData, [e.target.name]: e.target.value });
 	};
 
 	const handleParticipantsChange = (newParticipants) => {
-		setTripData({
-			...tripData,
-			participants: newParticipants,
-		});
+		setTripData({ ...tripData, participants: newParticipants });
 	};
 
 	const handleImageUpload = async (e) => {
@@ -74,15 +72,36 @@ const TripCreation = () => {
 		}
 	};
 
-	const handlePlacesChanged = () => {
-		const places = searchBoxRef.getPlaces();
-		if (places?.length) {
-			const newCountries = places.map((place) => place.formatted_address || place.name);
-			setTripData((prev) => ({
-				...prev,
-				destination: [...new Set([...prev.destination, ...newCountries])],
-			}));
-		}
+	const geocodeCountry = (countryName) => {
+		return new Promise((resolve, reject) => {
+			const geocoder = new window.google.maps.Geocoder();
+			geocoder.geocode({ address: countryName }, (results, status) => {
+				if (status === 'OK' && results[0]) {
+					const loc = results[0].geometry.location;
+					resolve({ lat: loc.lat(), lng: loc.lng() });
+				} else {
+					reject(status);
+				}
+			});
+		});
+	};
+
+	const handleDestinationChange = (newDestinations) => {
+		setTripData((prev) => ({ ...prev, destination: newDestinations }));
+
+		// Remove old destinations
+		setDestinationLocations((locations) => locations.filter((loc) => newDestinations.includes(loc.name)));
+
+		// Add new geocoded ones
+		newDestinations.forEach((name) => {
+			if (!destinationLocations.find((loc) => loc.name === name)) {
+				geocodeCountry(name)
+					.then(({ lat, lng }) => {
+						setDestinationLocations((locations) => [...locations, { name, lat, lng }]);
+					})
+					.catch((err) => console.warn('Geocode failed:', name, err));
+			}
+		});
 	};
 
 	const isValidDates = () => {
@@ -95,6 +114,7 @@ const TripCreation = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+
 		if (!userId) {
 			alert('User not logged in.');
 			return;
@@ -129,6 +149,7 @@ const TripCreation = () => {
 				participants: [],
 				tripPic: '',
 			});
+			setDestinationLocations([]);
 		} else {
 			alert('Error creating trip 😞');
 		}
@@ -163,10 +184,32 @@ const TripCreation = () => {
 						/>
 					</div>
 
-					<DestinationSearch
-						selectedCountries={tripData.destination}
-						onChange={(newDestinations) => setTripData({ ...tripData, destination: newDestinations })}
-					/>
+					<DestinationSearch selectedCountries={tripData.destination} onChange={handleDestinationChange} />
+
+					<div className='map-wrapper' style={{ height: '300px', marginBottom: '1rem' }}>
+						<APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} libraries={['places']}>
+							<Map defaultCenter={{ lat: 20, lng: 0 }} defaultZoom={2} style={{ width: '100%', height: '100%' }}>
+								{destinationLocations.map((loc, i) => (
+									<PoiMarkers key={i} locationInfo={{ lat: loc.lat, lng: loc.lng }} />
+								))}
+							</Map>
+						</APIProvider>
+					</div>
+
+					{destinationLocations.length > 0 && (
+						<div className='destination-cards-container'>
+							{destinationLocations.map((loc) => (
+								<DestinationCard
+									key={loc.name}
+									name={loc.name}
+									onRemove={(name) => {
+										const filtered = tripData.destination.filter((c) => c !== name);
+										handleDestinationChange(filtered);
+									}}
+								/>
+							))}
+						</div>
+					)}
 
 					<div className='form-group date-group'>
 						<label>Start Date:</label>
