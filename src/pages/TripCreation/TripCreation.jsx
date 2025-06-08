@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { addTrip } from '../../utils/firebaseUtils';
 import LogoutButton from '../../components/LogoutButton/LogoutButton';
@@ -8,26 +8,24 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Navbar from '../../components/Navbar/Navbar';
 import ParticipantManager from '../../components/ParticipantManager/ParticipantManager';
 import './TripCreation.css';
-import { StandaloneSearchBox, LoadScript } from '@react-google-maps/api';
-import DestinationSearch from '../../components/DestinationSearch/DestinationSearch';
-import DestinationCard from '../../components/DestinationCard/DestinationCard';
-import MapComponent from '../../components/Map/MapComponent/MapComponent';
+import { setMapType } from '../../store/mapInfo/MapInfo';
 
-const TripCreation = () => {
+function TripCreation() {
 	const { userId } = useSelector((state) => state.auth);
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const [tripData, setTripData] = useState({
 		name: '',
 		description: '',
-		destination: [],
+		destination: '',
 		startDate: null,
 		endDate: null,
 		participants: [],
 		tripPic: '',
 	});
+
 	const [uploading, setUploading] = useState(false);
 	const [uploadStatus, setUploadStatus] = useState('');
-	const [searchBoxRef, setSearchBoxRef] = useState(null);
 
 	const handleInputChange = (e) => {
 		setTripData({
@@ -48,7 +46,7 @@ const TripCreation = () => {
 		if (!file) return;
 
 		setUploading(true);
-		setUploadStatus('Uploading image...');
+		setUploadStatus('Subiendo imagen...');
 
 		const formData = new FormData();
 		formData.append('file', file);
@@ -63,46 +61,24 @@ const TripCreation = () => {
 
 			if (data.secure_url) {
 				setTripData((prev) => ({ ...prev, tripPic: data.secure_url }));
-				setUploadStatus('Image uploaded successfully.');
+				setUploadStatus('Imagen subida correctamente.');
 			} else {
-				setUploadStatus('Error uploading image.');
+				setUploadStatus('Error al subir la imagen.');
 			}
 		} catch (err) {
-			console.error('Error uploading to Cloudinary:', err);
-			setUploadStatus('Error uploading image.');
+			console.error('Error al subir a Cloudinary:', err);
+			setUploadStatus('Error al subir la imagen.');
 		} finally {
 			setUploading(false);
 			setTimeout(() => setUploadStatus(''), 4000);
 		}
 	};
 
-	const handlePlacesChanged = () => {
-		const places = searchBoxRef.getPlaces();
-		if (places?.length) {
-			const newCountries = places.map((place) => place.formatted_address || place.name);
-			setTripData((prev) => ({
-				...prev,
-				destination: [...new Set([...prev.destination, ...newCountries])],
-			}));
-		}
-	};
-
-	const isValidDates = () => {
-		const today = new Date();
-		const { startDate, endDate } = tripData;
-		if (startDate && startDate < today.setHours(0, 0, 0, 0)) return false;
-		if (endDate && startDate && endDate < startDate) return false;
-		return true;
-	};
-
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+
 		if (!userId) {
-			alert('User not logged in.');
-			return;
-		}
-		if (!isValidDates()) {
-			alert('Invalid date selection.');
+			alert('Usuario no logueado.');
 			return;
 		}
 
@@ -111,7 +87,7 @@ const TripCreation = () => {
 		const tripID = await addTrip(
 			userId,
 			description,
-			destination.join(', '),
+			destination,
 			startDate?.toISOString() || '',
 			endDate?.toISOString() || '',
 			name,
@@ -120,129 +96,120 @@ const TripCreation = () => {
 		);
 
 		if (tripID) {
-			alert('Trip created successfully 🎉');
+			alert('Viaje creado con éxito 🎉');
 			navigate('/trips');
+			// Limpiar formulario
 			setTripData({
 				name: '',
 				description: '',
-				destination: [],
+				destination: '',
 				startDate: null,
 				endDate: null,
 				participants: [],
 				tripPic: '',
 			});
 		} else {
-			alert('Error creating trip 😞');
+			alert('Error al crear el viaje 😞');
 		}
 	};
+
+	useEffect(()=>{
+		dispatch(setMapType("trip"))
+	},[])
 
 	return (
 		<>
 			<Navbar />
-			<div className='trip-creation-container'>
-				<h2 className='trip-title'>Create a New Trip</h2>
-				<form onSubmit={handleSubmit} className='trip-form'>
-					<div className='form-group'>
-						<label>Trip Name:</label>
-						<input
-							type='text'
-							name='name'
-							value={tripData.name}
-							onChange={handleInputChange}
-							required
-							className='input'
+			<div className="trip-creation-container">
+				<h2 className="trip-title">Crear un nuevo viaje</h2>
+				<form onSubmit={handleSubmit} className="trip-form">
+
+					<div className="form-group">
+						<label>Nombre del viaje:</label>
+						<input 
+							type="text" 
+							name="name" 
+							value={tripData.name} 
+							onChange={handleInputChange} 
+							required 
+							className="input" 
 						/>
 					</div>
 
-					<div className='form-group'>
-						<label>Description:</label>
-						<textarea
-							name='description'
-							value={tripData.description}
-							onChange={handleInputChange}
-							required
-							className='textarea'
+					<div className="form-group">
+						<label>Descripción:</label>
+						<textarea 
+							name="description" 
+							value={tripData.description} 
+							onChange={handleInputChange} 
+							required 
+							className="textarea" 
 						/>
 					</div>
 
-					<DestinationSearch
-						selectedCountries={tripData.destination}
-						onChange={(newDestinations) => setTripData({ ...tripData, destination: newDestinations })}
-					/>
-
-					<MapComponent></MapComponent>
-
-					<div className='destination-card-list'>
-						{tripData.destination.map((country) => (
-							<DestinationCard
-								key={country}
-								name={country}
-								flagUrl={null} // Replace this with actual flag URL logic if available
-								onRemove={(nameToRemove) =>
-									setTripData((prev) => ({
-										...prev,
-										destination: prev.destination.filter((d) => d !== nameToRemove),
-									}))
-								}
-							/>
-						))}
+					<div className="form-group">
+						<label>Destino (país):</label>
+						<input 
+							type="text" 
+							name="destination" 
+							value={tripData.destination} 
+							onChange={handleInputChange} 
+							required 
+							className="input" 
+						/>
 					</div>
 
-					<div className='form-group date-group'>
-						<label>Start Date:</label>
+					<div className="form-group date-group">
+						<label>Fecha de inicio:</label>
 						<DatePicker
 							selected={tripData.startDate}
 							onChange={(date) => setTripData({ ...tripData, startDate: date })}
-							dateFormat='yyyy-MM-dd'
-							className='datepicker'
-							minDate={new Date()}
+							dateFormat="yyyy-MM-dd"
+							className="datepicker"
 						/>
 					</div>
 
-					<div className='form-group date-group'>
-						<label>End Date:</label>
+					<div className="form-group date-group">
+						<label>Fecha de fin:</label>
 						<DatePicker
 							selected={tripData.endDate}
 							onChange={(date) => setTripData({ ...tripData, endDate: date })}
-							dateFormat='yyyy-MM-dd'
-							className='datepicker'
-							minDate={tripData.startDate || new Date()}
+							dateFormat="yyyy-MM-dd"
+							className="datepicker"
 						/>
 					</div>
 
-					<div className='form-group'>
-						<label>Trip Image:</label>
-						<input
-							type='file'
-							accept='image/*'
-							onChange={handleImageUpload}
-							disabled={uploading}
-							className='input-file'
+					<div className="form-group">
+						<label>Subir foto del viaje:</label>
+						<input 
+							type="file" 
+							accept="image/*" 
+							onChange={handleImageUpload} 
+							disabled={uploading} 
+							className="input-file" 
 						/>
-						{uploadStatus && <p className='upload-status'>{uploadStatus}</p>}
+						{uploadStatus && <p className="upload-status">{uploadStatus}</p>}
 						{tripData.tripPic && (
-							<div className='image-preview'>
-								<p>Preview:</p>
-								<img src={tripData.tripPic} alt='Trip' className='trip-image' />
+							<div className="image-preview">
+								<p>Vista previa:</p>
+								<img src={tripData.tripPic} alt="Foto del viaje" className="trip-image" />
 							</div>
 						)}
 					</div>
 
-					<ParticipantManager participants={tripData.participants} onParticipantsChange={handleParticipantsChange} />
+					<ParticipantManager
+						participants={tripData.participants}
+						onParticipantsChange={handleParticipantsChange}
+					/>
 
-					<div className='form-group'>
-						<button
-							type='submit'
-							className='submit-button'
-							disabled={!isValidDates() || !tripData.name || !tripData.description || !tripData.destination.length}
-						>
-							Create Trip
-						</button>
+					<div className="form-group">
+						<button type="submit" className="submit-button">Crear viaje</button>
 					</div>
+
 				</form>
 			</div>
 		</>
 	);
-};
+}
 
 export default TripCreation;
