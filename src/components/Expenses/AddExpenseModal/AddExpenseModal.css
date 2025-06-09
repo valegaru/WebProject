@@ -1,59 +1,203 @@
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background: rgba(0, 0, 0, 0.4);
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	padding-top: 70px;
+	z-index: 1000;
+	overflow-y: auto;
 }
 
-.modal {
-  background: white;
-  padding: 20px;
-  border-radius: 6px;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  font-family: sans-serif;
+/* Contenedor principal */
+.add-expense-modal {
+	background-color: #ffffff;
+	padding: 2rem;
+	border-radius: 16px;
+	width: 90%;
+	max-width: 600px;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+	font-family: 'Inter', sans-serif;
+	margin-top: 80px;
+	max-height: calc(100vh - 100px);
+	overflow-y: auto;
 }
 
-.modal h2 {
-  margin-top: 0;
-  margin-bottom: 12px;
-  font-size: 1.5rem;
+/* Título */
+.add-expense-modal h3 {
+	margin-top: 0;
+	margin-bottom: 1rem;
+	font-size: 1.5rem;
+	color: #1a1a1a;
 }
 
-.modal form > input,
-.modal form > select,
-.modal form > button {
-  display: block;
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  box-sizing: border-box;
-  font-size: 1rem;
+/* Filas */
+.add-expense-modal .form-row {
+	display: flex;
+	gap: 0.75rem;
+	margin-bottom: 1rem;
 }
 
-.modal form > button {
-  cursor: pointer;
-  border: none;
-  border-radius: 4px;
-  background-color: #555;
-  color: white;
+.add-expense-modal .form-row input,
+.add-expense-modal .form-row select {
+	flex: 1;
+	padding: 0.75rem 1rem;
+	font-size: 1rem;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	box-sizing: border-box;
 }
 
-.modal form > button[type="button"] {
-  background-color: #555;
+.add-expense-modal textarea {
+	width: 100%;
+	padding: 0.75rem 1rem;
+	font-size: 1rem;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	resize: vertical;
+	margin-bottom: 1rem;
 }
 
-.modal form > button:hover {
-  opacity: 0.9;
+/* Participantes */
+.add-expense-modal .contributions-section {
+	margin-top: 1.5rem;
 }
 
-.modal div > input {
-  margin-bottom: 8px;
+.add-expense-modal .participant-contribution-row {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin-bottom: 0.75rem;
+}
+
+.add-expense-modal .participant-name {
+	flex: 1;
+	font-weight: 500;
+	color: #333;
+}
+
+.add-expense-modal .contribution-input {
+	width: 100px;
+	padding: 0.5rem;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+}
+
+/* Botones */
+.add-expense-modal .modal-buttons {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.75rem;
+	margin-top: 1.5rem;
+}
+
+.add-expense-modal .modal-buttons button {
+	padding: 0.75rem 1.25rem;
+	font-size: 1rem;
+	border-radius: 8px;
+	border: none;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.add-expense-modal .modal-buttons button[type='submit'] {
+	background-color: #4a7c2f;
+	color: #fff;
+}
+
+.add-expense-modal .modal-buttons button[type='submit']:hover {
+	background-color: #3a6628;
+}
+
+.add-expense-modal .modal-buttons button[type='button'] {
+	background-color: #e5e7eb;
+	color: #374151;
+}
+
+.add-expense-modal .modal-buttons button[type='button']:hover {
+	background-color: #d1d5db;
+}
+
+/* Banner de error */
+.add-expense-modal .error-banner {
+	background-color: #fee2e2;
+	color: #b91c1c;
+	padding: 0.75rem 1rem;
+	border-radius: 6px;
+	margin-bottom: 1rem;
+	border: 1px solid #fecaca;
+	font-size: 0.95rem;
+}
+
+/* 🔸 Responsive para pantallas < 600px */
+@media (max-width: 600px) {
+	.add-expense-modal {
+		width: 95%;
+		padding: 1.5rem 1rem;
+		margin-top: 90px;
+		max-height: calc(100vh - 90px);
+	}
+
+	.add-expense-modal .form-row {
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.add-expense-modal .participant-contribution-row {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.add-expense-modal .modal-buttons {
+		flex-direction: column;
+	}
+}
+
+/* Ajustes específicos para dispositivos muy angostos como iPhone 12 Pro */
+@media (max-width: 400px) {
+	.add-expense-modal {
+		width: 92%;
+		padding: 1.2rem 0.8rem;
+		margin-top: 85px;
+		border-radius: 12px;
+		max-height: calc(100vh - 90px);
+	}
+
+	.add-expense-modal .form-row {
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+
+	.add-expense-modal .modal-buttons {
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.add-expense-modal .modal-buttons button {
+		width: 100%;
+	}
+
+	.add-expense-modal textarea,
+	.add-expense-modal select,
+	.add-expense-modal input {
+		font-size: 0.95rem;
+	}
+
+	.add-expense-modal h3 {
+		font-size: 1.25rem;
+		margin-bottom: 1rem;
+	}
+
+	.add-expense-modal .participant-contribution-row {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.add-expense-modal .contribution-input {
+		width: 100%;
+	}
 }

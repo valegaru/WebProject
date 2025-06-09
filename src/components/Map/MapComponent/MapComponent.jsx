@@ -1,10 +1,10 @@
-import { APIProvider, InfoWindow, Map } from "@vis.gl/react-google-maps";
-import PoiMarkers from "../PoiMarker/PoiMarkers";
-import MapForm from "../MapForm/MapForm";
-import SearchBar from "../SearchBar/SearchBar";
-import { useState, useRef } from "react";
-import { useSelector } from "react-redux";
-import { fetchLocationData } from "../../../utils/googleMapsUtils";
+import { APIProvider, InfoWindow, Map } from '@vis.gl/react-google-maps';
+import PoiMarkers from '../PoiMarker/PoiMarkers';
+import MapForm from '../MapForm/MapForm';
+import SearchBar from '../SearchBar/SearchBar';
+import { useState, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { fetchLocationData } from '../../../utils/googleMapsUtils';
 
 const MapComponent = () => {
   const uid = useSelector((state) => state.auth.userId);
@@ -19,37 +19,37 @@ const MapComponent = () => {
   const [loadingPhotos, setLoadingPhotos] = useState(false);
   const [placeDetails, setPlaceDetails] = useState(null);
   const [initialTripName, setInitialTripName] = useState("");
-  
+
   const [defaultMapCenter] = useState({ lat: 22.54992, lng: 0 });
   const [defaultMapZoom] = useState(3);
-  
+
   const mapRef = useRef(null);
 
-  const fetchLocationPhotos = async (lat, lng) => {
-    setLoadingPhotos(true);
-    setLocationPhoto(null);
-    setPlaceDetails(null);
-    setInitialTripName("");
+	const fetchLocationPhotos = async (lat, lng) => {
+		setLoadingPhotos(true);
+		setLocationPhoto(null);
+		setPlaceDetails(null);
+		setInitialTripName('');
 
-    const { placeDetails: fetchedPlaceDetails, photoUrl, error } = await fetchLocationData(lat, lng);
+		const { placeDetails: fetchedPlaceDetails, photoUrl, error } = await fetchLocationData(lat, lng);
 
-    if (error) {
-      console.error('Error fetching location data:', error);
-    }
+		if (error) {
+			console.error('Error fetching location data:', error);
+		}
 
-    if (fetchedPlaceDetails) {
-      setPlaceDetails(fetchedPlaceDetails);
-      if (fetchedPlaceDetails.name) {
-        setInitialTripName(`Trip to ${fetchedPlaceDetails.name}`);
-      }
-    }
+		if (fetchedPlaceDetails) {
+			setPlaceDetails(fetchedPlaceDetails);
+			if (fetchedPlaceDetails.name) {
+				setInitialTripName(`Trip to ${fetchedPlaceDetails.name}`);
+			}
+		}
 
-    if (photoUrl) {
-      setLocationPhoto(photoUrl);
-    }
+		if (photoUrl) {
+			setLocationPhoto(photoUrl);
+		}
 
-    setLoadingPhotos(false);
-  };
+		setLoadingPhotos(false);
+	};
 
   const handleMapClick = (mapInfo) => {
     if (mapInfo && mapInfo.detail && mapInfo.detail.latLng) {
@@ -66,32 +66,32 @@ const MapComponent = () => {
 
   const handleSearchLocationSelect = (location) => {
     const { lat, lng, placeDetails: searchPlaceDetails } = location;
-    
+
     if (mapRef.current) {
       mapRef.current.panTo({ lat, lng });
       mapRef.current.setZoom(15);
     }
-    
+
     setDialogLocation({ lat, lng });
     setSelectedLocation({ lat, lng });
     setShowPanel(true);
 
-    if (searchPlaceDetails) {
-      setPlaceDetails(searchPlaceDetails);
-      setLoadingPhotos(false);
-      if (searchPlaceDetails.name) {
-        setInitialTripName(`Trip to ${searchPlaceDetails.name}`);
-      }
-      if (searchPlaceDetails.photos && searchPlaceDetails.photos.length > 0) {
-        const photoUrl = searchPlaceDetails.photos[0].getUrl({ maxWidth: 400, maxHeight: 300 });
-        setLocationPhoto(photoUrl);
-      } else {
-        setLocationPhoto(null);
-      }
-    } else {
-      fetchLocationPhotos(lat, lng);
-    }
-  };
+		if (searchPlaceDetails) {
+			setPlaceDetails(searchPlaceDetails);
+			setLoadingPhotos(false);
+			if (searchPlaceDetails.name) {
+				setInitialTripName(`Trip to ${searchPlaceDetails.name}`);
+			}
+			if (searchPlaceDetails.photos?.length > 0) {
+				const photoUrl = searchPlaceDetails.photos[0].getUrl({ maxWidth: 400, maxHeight: 300 });
+				setLocationPhoto(photoUrl);
+			} else {
+				setLocationPhoto(null);
+			}
+		} else {
+			fetchLocationPhotos(lat, lng);
+		}
+	};
 
   const handleTripAdded = (tripId) => {
     setShowPanel(false);
@@ -140,11 +140,11 @@ const MapComponent = () => {
             </div>
 
             {placeDetails && (
-              <div className="place-details" style={{ 
-                marginBottom: '20px', 
-                padding: '15px', 
-                backgroundColor: '#f8f9fa', 
-                borderRadius: '8px' 
+              <div className="place-details" style={{
+                marginBottom: '20px',
+                padding: '15px',
+                backgroundColor: '#f8f9fa',
+                borderRadius: '8px'
               }}>
                 <h4 className="place-name" style={{ margin: '0 0 8px 0' }}>{placeDetails.name}</h4>
                 {placeDetails.rating && (
@@ -165,15 +165,15 @@ const MapComponent = () => {
             ) : (
               locationPhoto && (
                 <div style={{ marginBottom: '20px' }}>
-                  <img 
-                    src={locationPhoto} 
-                    alt="Location" 
-                    style={{ 
-                      width: '100%', 
+                  <img
+                    src={locationPhoto}
+                    alt="Location"
+                    style={{
+                      width: '100%',
                       height: '200px',
                       objectFit: 'cover',
-                      borderRadius: '8px' 
-                    }} 
+                      borderRadius: '8px'
+                    }}
                   />
                 </div>
               )
@@ -193,9 +193,9 @@ const MapComponent = () => {
       )}
 
       <div style={{ flex: 1, position: 'relative' }}>
-        <div style={{ 
-          position: 'absolute', 
-          top: '20px', 
+        <div style={{
+          position: 'absolute',
+          top: '20px',
           left: '20px',
           right: '20px',
           zIndex: 1000,
@@ -204,14 +204,14 @@ const MapComponent = () => {
         }}>
           <div style={{ width: '100%', maxWidth: '400px' }}>
             {mapType == "places" &&
-            <SearchBar 
-              onLocationSelect={handleSearchLocationSelect} 
-              googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} 
+            <SearchBar
+              onLocationSelect={handleSearchLocationSelect}
+              googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
             />
             }
           </div>
         </div>
-        
+
         <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} libraries={['places']}>
           <Map
             ref={mapRef}

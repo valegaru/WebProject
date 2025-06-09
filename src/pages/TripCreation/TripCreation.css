@@ -56,16 +56,19 @@
 	margin-top: 5px;
 }
 
-.image-preview {
-	margin-top: 10px;
-}
-
 .trip-image {
 	max-width: 100%;
+	max-height: 300px; /* Limita la altura /
+object-fit: cover; / 🔹 Opcional: recorta sin deformar */
 	border-radius: 8px;
 	margin-top: 5px;
 }
 
+.image-preview {
+	margin-top: 10px;
+	display: flex;
+	justify-content: center;
+}
 .search-results {
 	list-style: none;
 	padding: 0;
@@ -116,4 +119,11 @@
 	.trip-title {
 		font-size: 1.5rem;
 	}
+}
+
+.destination-card-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	margin-top: 1rem;
 }

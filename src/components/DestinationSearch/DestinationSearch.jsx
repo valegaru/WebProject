@@ -35,7 +35,7 @@ const DestinationSearch = ({ selectedCountries, onChange }) => {
         setIsGoogleMapsReady(true);
         return;
       }
-      
+
       setTimeout(initializeServices, 100);
     };
 
@@ -67,7 +67,7 @@ const DestinationSearch = ({ selectedCountries, onChange }) => {
               return !desc.includes(',') || desc.split(',').length <= 2;
             })
             .slice(0, 5);
-          
+
           setPredictions(filteredPredictions);
           setShowPredictions(true);
         } else {
@@ -232,7 +232,7 @@ const DestinationSearch = ({ selectedCountries, onChange }) => {
   return (
     <div className='form-group'>
       <label>Destination (country):</label>
-      <div 
+      <div
         ref={searchInputRef}
         style={{ position: 'relative' }}
       >
@@ -246,7 +246,7 @@ const DestinationSearch = ({ selectedCountries, onChange }) => {
           disabled={!isGoogleMapsReady || isLoading}
           style={inputStyle}
         />
-        
+
         {isLoading && (
           <div style={spinnerStyle}></div>
         )}
