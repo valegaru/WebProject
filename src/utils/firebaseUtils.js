@@ -283,17 +283,25 @@ export const getSavedLists = async (userId) => {
     }
 };
 
-export const addPlace = async (listId, lat, lng, tripPic = null, description = null) => {
+export const addPlace = async (
+  listId,
+  lat,
+  lng,
+  tripPic = null,
+  name = 'Untitled Place',
+  address = ''
+) => {
   try {
     const placeRef = doc(collection(db, `savedLists/${listId}/places`));
 
     await setDoc(placeRef, {
+      name,
+      address,
       coordinates: {
         lat,
         lng,
       },
       tripPic,
-      description,
     });
 
     return placeRef.id;

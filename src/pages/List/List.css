@@ -1,0 +1,32 @@
+.savedList-list {
+  padding: 1rem 2rem;
+}
+
+.savedList-list h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #222;
+}
+
+.savedList-list p {
+  font-size: 1.1rem;
+  color: #666;
+}
+
+/* Container for cards */
+.places-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.2rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 600px) {
+  .savedList-list {
+    padding: 1rem;
+  }
+
+  .places-list {
+    grid-template-columns: 1fr;
+  }
+}

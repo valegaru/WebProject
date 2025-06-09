@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-
+import './List.css'
 import Navbar from '../../components/Navbar/Navbar';
-import CardList from '../../components/CardList/CardList';
-
+import Card from '../../components/Card/Card'; // your Card component
 import editIcon from '../../assets/editIcon.png';
 import { fetchSavedListById, fetchItemsForSavedList } from '../../utils/firebaseUtils';
 
 const List = () => {
 	const { listId } = useParams();
 	const [list, setList] = useState(null);
-	const [places, setItems] = useState([]);
+	const [places, setPlaces] = useState([]);
 
 	const navigate = useNavigate();
 
-	const handleItemClick = (item) => {
-		console.log('Clicked on item:', item);
+	const handleItemClick = (placeId) => {
+		console.log('Clicked on place id:', placeId);
+		// Optionally navigate somewhere on click:
+		// navigate(`/savedList/${listId}/place/${placeId}`);
 	};
 
 	useEffect(() => {
@@ -25,15 +26,15 @@ const List = () => {
 				const listItems = await fetchItemsForSavedList(listId);
 
 				if (listDoc) {
-                        setList(listDoc);
-                }
+					setList(listDoc);
+				}
 
 				if (listItems) {
 					const itemsWithClick = listItems.map((item) => ({
 						...item,
-						onClick: () => handleItemClick(item),
+						onClick: () => handleItemClick(item.id),
 					}));
-					setItems(itemsWithClick);
+					setPlaces(itemsWithClick);
 				}
 			} catch (err) {
 				console.error('Error loading list data:', err);
@@ -57,7 +58,7 @@ const List = () => {
 						<div className='nameDate'>
 							<h1>{list.title || 'Untitled List'}</h1>
 							<button className='edit-icon'>
-								<img src={editIcon} alt="Edit" />
+								<img src={editIcon} alt='Edit' />
 							</button>
 						</div>
 						<div className='trip-description'>
@@ -69,7 +70,24 @@ const List = () => {
 			</section>
 
 			<section className='section'>
-				<CardList title='Places' cardsData={places} variantColor='blue' />
+				<h2>Places</h2>
+				{places.length === 0 ? (
+					<p>No places added yet.</p>
+				) : (
+					<div className='places-list'>
+						{places.map((place) => (
+							<Card
+								key={place.id}
+								id={place.id}
+								name={place.name || 'Untitled Place'}
+								tripPic={place.tripPic} 
+								description={place.address || ''}
+								onClick={place.onClick}
+								variant='saved'
+							/>
+						))}
+					</div>
+				)}
 			</section>
 		</div>
 	);

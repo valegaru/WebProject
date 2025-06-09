@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { addPlace, createList, getSavedLists } from "../../../utils/firebaseUtils";
-import { useSelector } from "react-redux";
-import "./MapForm.css";
 import SavedListsDropdown from "../../SavedListsDropdown/SavedListsDropdown";
+import "./MapForm.css";
 
 const MapForm = ({ 
     uid, 
@@ -20,10 +19,7 @@ const MapForm = ({
     const [showCreateListForm, setShowCreateListForm] = useState(false);
     const [savedLists, setSavedLists] = useState([]);
     const [loadingLists, setLoadingLists] = useState(false);
-    const [newListForm, setNewListForm] = useState({
-        name: "",
-        description: ""
-    });
+    const [newListForm, setNewListForm] = useState({ name: "", description: "" });
 
     useEffect(() => {
         const fetchSavedLists = async () => {
@@ -31,7 +27,6 @@ const MapForm = ({
                 setSavedLists([]);
                 return;
             }
-
             setLoadingLists(true);
             try {
                 const lists = await getSavedLists(uid);
@@ -43,7 +38,6 @@ const MapForm = ({
                 setLoadingLists(false);
             }
         };
-
         fetchSavedLists();
     }, [uid]);
 
@@ -58,106 +52,90 @@ const MapForm = ({
     };
 
     const handleNewListFormChange = (field, value) => {
-        setNewListForm(prev => ({
-            ...prev,
-            [field]: value
-        }));
+        setNewListForm(prev => ({ ...prev, [field]: value }));
     };
 
     const onCreateList = async () => {
-        if (!uid) {
-            console.error("User ID is required to create a list");
-            alert("Please log in to create a list");
-            return;
-        }
-
-        if (!newListForm.name.trim()) {
-            alert("Please enter a list name");
-            return;
-        }
-
-        setIsCreatingList(true);
-
-        try {
-            const listId = await createList(uid, newListForm.name.trim(), newListForm.description.trim());
-
-            if (listId) {
-                console.log("List created successfully with ID:", listId);
-                
-                const placeId = await addPlace(
+    if (!uid) {
+        alert("Please log in to create a list");
+        return;
+    }
+    if (!newListForm.name.trim()) {
+        alert("Please enter a list name");
+        return;
+    }
+    setIsCreatingList(true);
+    try {
+        const listId = await createList(uid, newListForm.name.trim(), newListForm.description.trim());
+        if (listId) {
+            // Pass name and address from placeDetails along with tripPic, coordinates
+            const placeId = await addPlace(
                 listId,
                 dialogLocation.lat,
                 dialogLocation.lng,
                 tripPic,
-                description
+                placeDetails?.name || 'Untitled Place',
+                placeDetails?.address || ''
             );
-                
-                if (placeId) {
-                    alert("List created and location added successfully!");
-                    setNewListForm({ name: "", description: "" });
-                    setShowCreateListForm(false);
-                    
-                    const updatedLists = await getSavedLists(uid);
-                    setSavedLists(updatedLists);
-                    
-                    onLocationAdded(listId, placeId);
-                } else {
-                    alert("List created but failed to add location. Please try again.");
-                }
-            } else {
-                alert("Failed to create list. Please try again.");
-            }
-        } catch (error) {
-            console.error("Error creating list:", error);
-            alert("Error creating list. Please try again.");
-        } finally {
-            setIsCreatingList(false);
-        }
-    };
-
-    const onAddLocation = async () => {
-        if (!uid) {
-            console.error("User ID is required to add a location");
-            alert("Please log in to add a location");
-            return;
-        }
-
-        if (!selectedList) {
-            alert("Please select a list to add the location to");
-            return;
-        }
-
-        if (!dialogLocation || !dialogLocation.lat || !dialogLocation.lng) {
-            alert("Location data is not available");
-            return;
-        }
-
-        setIsAddingLocation(true);
-
-        try {
-            const placeId = await addPlace(
-                selectedList.id,
-                dialogLocation.lat,
-                dialogLocation.lng,
-                tripPic,
-                description
-            );
-
             if (placeId) {
-                console.log("Location added successfully with ID:", placeId);
-                alert("Location added to list successfully!");
-                setSelectedList(null);
-                onLocationAdded(selectedList.id, placeId);
+                alert("List created and location added successfully!");
+                setNewListForm({ name: "", description: "" });
+                setShowCreateListForm(false);
+                const updatedLists = await getSavedLists(uid);
+                setSavedLists(updatedLists);
+                onLocationAdded(listId, placeId);
             } else {
-                alert("Failed to add location. Please try again.");
+                alert("List created but failed to add location. Please try again.");
             }
-        } catch (error) {
-            console.error("Error adding location:", error);
-            alert("Error adding location. Please try again.");
-        } finally {
-            setIsAddingLocation(false);
+        } else {
+            alert("Failed to create list. Please try again.");
         }
-    };
+    } catch (error) {
+        console.error("Error creating list:", error);
+        alert("Error creating list. Please try again.");
+    } finally {
+        setIsCreatingList(false);
+    }
+};
+
+const onAddLocation = async () => {
+    if (!uid) {
+        alert("Please log in to add a location");
+        return;
+    }
+    if (!selectedList) {
+        alert("Please select a list to add the location to");
+        return;
+    }
+    if (!dialogLocation || !dialogLocation.lat || !dialogLocation.lng) {
+        alert("Location data is not available");
+        return;
+    }
+    setIsAddingLocation(true);
+    try {
+        // Pass name and address from placeDetails here as well
+        const placeId = await addPlace(
+            selectedList.id,
+            dialogLocation.lat,
+            dialogLocation.lng,
+            tripPic,
+            placeDetails?.name || 'Untitled Place',
+            placeDetails?.address || ''
+        );
+        if (placeId) {
+            alert("Location added to list successfully!");
+            setSelectedList(null);
+            onLocationAdded(selectedList.id, placeId);
+        } else {
+            alert("Failed to add location. Please try again.");
+        }
+    } catch (error) {
+        console.error("Error adding location:", error);
+        alert("Error adding location. Please try again.");
+    } finally {
+        setIsAddingLocation(false);
+    }
+};
 
     const handleCancelCreateList = () => {
         setShowCreateListForm(false);
@@ -176,11 +154,7 @@ const MapForm = ({
                     <div className="place-details">
                         {tripPic && (
                             <div className="location-photo-container">
-                                <img 
-                                    src={tripPic} 
-                                    alt="Location" 
-                                    className="location-photo"
-                                />
+                                <img src={tripPic} alt="Location" className="location-photo" />
                             </div>
                         )}
                         <h5 className="place-name">{placeDetails.name}</h5>
@@ -189,8 +163,10 @@ const MapForm = ({
                                 Rating: {placeDetails.rating}/5 ⭐
                             </p>
                         )}
-                        <p className="place-address">
-                            {placeDetails.address}
+                        <p className="place-address">{placeDetails.address}</p>
+                        {/* Show coordinates */}
+                        <p className="place-coordinates">
+                            Lat: {dialogLocation?.lat?.toFixed(5)}, Lng: {dialogLocation?.lng?.toFixed(5)}
                         </p>
                     </div>
                 )
@@ -226,7 +202,7 @@ const MapForm = ({
                         >
                             {isCreatingList ? 'Creating List...' : 'Create List & Add Location'}
                         </button>
-                        <button 
+                        <button
                             onClick={handleCancelCreateList}
                             disabled={isCreatingList || loadingLocationData}
                             className={`cancel-button ${(isCreatingList || loadingLocationData) ? 'disabled' : ''}`}
@@ -244,7 +220,7 @@ const MapForm = ({
                                 <p>Loading lists...</p>
                             </div>
                         ) : (
-                            <SavedListsDropdown 
+                            <SavedListsDropdown
                                 savedLists={savedLists}
                                 onCreateNewList={handleCreateNewList}
                                 onSelectList={handleSelectList}
@@ -261,9 +237,9 @@ const MapForm = ({
                         >
                             {isAddingLocation ? 'Adding Location...' : 'Add Location'}
                         </button>
-                        
+
                         {onCancel && (
-                            <button 
+                            <button
                                 onClick={onCancel}
                                 disabled={isAddingLocation || loadingLocationData || loadingLists}
                                 className={`cancel-button ${(isAddingLocation || loadingLocationData || loadingLists) ? 'disabled' : ''}`}

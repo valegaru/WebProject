@@ -151,7 +151,7 @@ const MapComponent = () => {
             <MapForm
               uid={uid}
               placeDetails={placeDetails}
-              locationPhoto={locationPhoto}
+              tripPic={locationPhoto}
               loadingLocationData={loadingPhotos}
               dialogLocation={dialogLocation}
               onLocationAdded={handleTripAdded}
