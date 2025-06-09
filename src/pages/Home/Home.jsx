@@ -52,7 +52,7 @@ const Home = () => {
 			id: list.id,
 			tripPic: list.image || destinations, 
 			name: list.name || 'Untitled List',
-			onClick: () => console.log(`Navigate to saved list ${list.id}`)
+			onClick: () => navigate(`/List/${list.id}`)
 		}));
 		setSavedList(formattedSavedLists);
 	};

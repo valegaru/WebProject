@@ -21,6 +21,8 @@ import { auth } from '../services/firebase';
 import { clearUserId, setUserId } from '../store/auth/AuthSlice';
 import { useEffect } from 'react';
 import { getUserNameById } from '../utils/firebaseUtils';
+import SavedLists from '../pages/SavedLists/SavedLists';
+import List from '../pages/List/List';
 
 const Router = () => {
 	const dispatch = useDispatch();
@@ -132,6 +134,22 @@ const Router = () => {
 					element={
 						<PrivateRoute>
 							<Itinerary />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path='/savedLists'
+					element={
+						<PrivateRoute>
+							<SavedLists />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path='/list/:listId'
+					element={
+						<PrivateRoute>
+							<List />
 						</PrivateRoute>
 					}
 				/>

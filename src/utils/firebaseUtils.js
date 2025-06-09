@@ -283,22 +283,63 @@ export const getSavedLists = async (userId) => {
     }
 };
 
-export const addPlace = async (listId, lat, lng) => {
+export const addPlace = async (listId, lat, lng, tripPic = null, description = null) => {
+  try {
+    const placeRef = doc(collection(db, `savedLists/${listId}/places`));
+
+    await setDoc(placeRef, {
+      coordinates: {
+        lat,
+        lng,
+      },
+      tripPic,
+      description,
+    });
+
+    return placeRef.id;
+  } catch (error) {
+    console.error('Error adding place:', error);
+    return null;
+  }
+};
+
+
+export const fetchSavedListById = async (listId) => {
 	try {
-		const placeRef = doc(collection(db, `savedLists/${listId}/places`));
+		const listRef = doc(db, 'savedLists', listId);
+		const listSnap = await getDoc(listRef);
 
-		await setDoc(placeRef, {
-			lat,
-			lng,
-		});
-
-		return placeRef.id;
+		if (listSnap.exists()) {
+			return { id: listSnap.id, ...listSnap.data() };
+		} else {
+			console.warn('No such saved list:', listId);
+			return null;
+		}
 	} catch (error) {
-		console.error('Error adding place:', error);
+		console.error('Error fetching saved list:', error);
 		return null;
 	}
 };
-//test
+
+export const fetchItemsForSavedList = async (listId) => {
+	try {
+		const placesRef = collection(db, `savedLists/${listId}/places`);
+		const placesSnap = await getDocs(placesRef);
+
+		if (placesSnap.empty) return [];
+
+		const places = placesSnap.docs.map(doc => ({
+			id: doc.id,
+			...doc.data(),
+		}));
+
+		return places;
+	} catch (error) {
+		console.error('Error fetching places for saved list:', error);
+		return [];
+	}
+};
+
 export const updateExpenseEvent = async (tripID, expenseID, eventID, eventData) => {
 	try {
 		const tripRef = doc(db, 'trips', tripID);

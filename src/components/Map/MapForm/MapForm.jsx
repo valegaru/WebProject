@@ -8,7 +8,8 @@ const MapForm = ({
     uid, 
     dialogLocation, 
     placeDetails,
-    locationPhoto,
+    tripPic, 
+    description,          
     loadingLocationData,
     onLocationAdded, 
     onCancel
@@ -83,7 +84,13 @@ const MapForm = ({
             if (listId) {
                 console.log("List created successfully with ID:", listId);
                 
-                const placeId = await addPlace(listId, dialogLocation.lat, dialogLocation.lng);
+                const placeId = await addPlace(
+                listId,
+                dialogLocation.lat,
+                dialogLocation.lng,
+                tripPic,
+                description
+            );
                 
                 if (placeId) {
                     alert("List created and location added successfully!");
@@ -128,7 +135,13 @@ const MapForm = ({
         setIsAddingLocation(true);
 
         try {
-            const placeId = await addPlace(selectedList.id, dialogLocation.lat, dialogLocation.lng);
+            const placeId = await addPlace(
+                selectedList.id,
+                dialogLocation.lat,
+                dialogLocation.lng,
+                tripPic,
+                description
+            );
 
             if (placeId) {
                 console.log("Location added successfully with ID:", placeId);
