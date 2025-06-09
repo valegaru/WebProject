@@ -97,12 +97,14 @@ const EditExpenseModal = ({ event, onClose, onEventUpdated, onEventDeleted }) =>
 	};
 
 	const createDateTime = (dateString, timeString) => {
-		if (!timeString) return null;
-		const [hours, minutes] = timeString.split(':');
-		const dt = new Date(dateString);
-		dt.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-		return dt;
-	};
+	if (!timeString) return null;
+	
+	const [hours, minutes] = timeString.split(':');
+	const [year, month, day] = dateString.split('-').map(Number);
+	const dt = new Date(year, month - 1, day, parseInt(hours), parseInt(minutes), 0, 0);
+	
+	return dt;
+};
 
 	const validateForm = () => {
 		if (!title.trim()) {
