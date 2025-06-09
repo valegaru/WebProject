@@ -14,7 +14,7 @@ import newYork from '../../assets/newYork.png';
 import thailand from '../../assets/thailand.png';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchTripsFromUser } from '../../utils/firebaseUtils';
+import { fetchTripsFromUser, getSavedLists } from '../../utils/firebaseUtils';
 import { useNavigate } from 'react-router-dom';
 import MapComponent from '../../components/Map/MapComponent/MapComponent';
 import CardList from '../../components/CardList/CardList';
@@ -27,35 +27,38 @@ const Home = () => {
 	const name = useSelector((state) => state.auth.username);
 	const dispatch = useDispatch();
 	console.log(reduxState, "redux")
-
+	const [savedList, setSavedList] = useState([]);
 	const [trips, setTrips] = useState([]);
 
 	useEffect(() => {
-		const loadTrips = async () => {
-			if (!uid) return;
-			const fetchedTrips = await fetchTripsFromUser(uid);
-			const formattedTrips = fetchedTrips.map(trip => ({
-				id: trip.id,
-				tripPic: trip.tripPic || destinations,
-				name: trip.name || 'Unnamed Trip',
-				startDate: trip.startDate,
-				endDate: trip.endDate,
-				description: trip.description || '',
-				participants: trip.participants || [],
-				onClick: () => navigate(`/TripPlanner/${trip.id}`)
-			}));
-			setTrips(formattedTrips);
-		};
+	const loadData = async () => {
+		if (!uid) return;
 
-		loadTrips();
-	}, [uid]);
+		const fetchedTrips = await fetchTripsFromUser(uid);
+		const formattedTrips = fetchedTrips.map(trip => ({
+			id: trip.id,
+			tripPic: trip.tripPic || destinations,
+			name: trip.name || 'Unnamed Trip',
+			startDate: trip.startDate,
+			endDate: trip.endDate,
+			description: trip.description || '',
+			participants: trip.participants || [],
+			onClick: () => navigate(`/TripPlanner/${trip.id}`)
+		}));
+		setTrips(formattedTrips);
 
-	const savedList = [
-		{ tripPic: restaurants, name: 'Restaurants' },
-		{ tripPic: activities, name: 'Activities' },
-		{ tripPic: destinations, name: 'Destinations' },
-		{ tripPic: citiesEurope, name: 'Cities of Europe' },
-	];
+		const fetchedSavedLists = await getSavedLists(uid);
+		const formattedSavedLists = fetchedSavedLists.map(list => ({
+			id: list.id,
+			tripPic: list.image || destinations, 
+			name: list.name || 'Untitled List',
+			onClick: () => console.log(`Navigate to saved list ${list.id}`)
+		}));
+		setSavedList(formattedSavedLists);
+	};
+
+	loadData();
+}, [uid]);
 
 	const matches = [
 		{ tripPic: thailand, name: 'Thailand' },
