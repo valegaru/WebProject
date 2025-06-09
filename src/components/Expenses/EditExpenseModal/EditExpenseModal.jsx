@@ -14,7 +14,6 @@ const EditExpenseModal = ({ event, onClose, onEventUpdated, onEventDeleted }) =>
 	});
 
 	const [title, setTitle] = useState(event.title || '');
-	const [description, setDescription] = useState(event.description || '');
 	const [amount, setAmount] = useState(event.amount?.toString() || '');
 	const [category, setCategory] = useState(event.category || '');
 	const [date, setDate] = useState(() => {
@@ -39,8 +38,6 @@ const EditExpenseModal = ({ event, onClose, onEventUpdated, onEventDeleted }) =>
 		return '';
 	});
 	const [location, setLocation] = useState(event.location || '');
-	const [paymentMethod, setPaymentMethod] = useState(event.paymentMethod || '');
-	const [notes, setNotes] = useState(event.notes || '');
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
 	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -59,8 +56,6 @@ const EditExpenseModal = ({ event, onClose, onEventUpdated, onEventDeleted }) =>
 		'Utilities',
 		'Other',
 	];
-
-	const paymentMethods = ['Cash', 'Credit Card', 'Debit Card', 'Bank Transfer', 'Digital Wallet', 'Other'];
 
 	useEffect(() => {
 		// Initialize participants from event data
@@ -150,15 +145,12 @@ const EditExpenseModal = ({ event, onClose, onEventUpdated, onEventDeleted }) =>
 
 			const eventData = {
 				title: title.trim(),
-				description: description.trim(),
 				amount: parseFloat(amount),
 				category,
 				start: startDateTime,
 				end: endDateTime,
 				location: location.trim(),
 				coordinates,
-				paymentMethod,
-				notes: notes.trim(),
 				participants,
 				date,
 			};
@@ -253,24 +245,6 @@ const EditExpenseModal = ({ event, onClose, onEventUpdated, onEventDeleted }) =>
 					</div>
 
 					<div className='form-row'>
-						<select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
-							<option value=''>Payment Method</option>
-							{paymentMethods.map((m) => (
-								<option key={m} value={m}>
-									{m}
-								</option>
-							))}
-						</select>
-					</div>
-
-					<textarea
-						value={description}
-						onChange={(e) => setDescription(e.target.value)}
-						placeholder='Description'
-						rows='3'
-					/>
-
-					<div className='form-row'>
 						<SearchBar
 							googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
 							onLocationSelect={(loc) => {
@@ -305,13 +279,6 @@ const EditExpenseModal = ({ event, onClose, onEventUpdated, onEventDeleted }) =>
 							))}
 						</div>
 					)}
-
-					<textarea
-						value={notes}
-						onChange={(e) => setNotes(e.target.value)}
-						placeholder='Additional notes...'
-						rows='3'
-					/>
 
 					<div className='modal-buttons'>
 						<button type='submit' disabled={loading}>
