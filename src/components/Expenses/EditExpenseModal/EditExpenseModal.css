@@ -1,0 +1,310 @@
+.modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background: rgba(0, 0, 0, 0.4);
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	padding-top: 70px;
+	z-index: 1000;
+	overflow-y: auto;
+}
+
+/* Contenedor principal */
+.edit-expense-modal {
+	background-color: #ffffff;
+	padding: 2rem;
+	border-radius: 16px;
+	width: 90%;
+	max-width: 600px;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+	font-family: 'Inter', sans-serif;
+	margin-top: 80px;
+	max-height: calc(100vh - 100px);
+	overflow-y: auto;
+}
+
+/* Título */
+.edit-expense-modal h3 {
+	margin-top: 0;
+	margin-bottom: 1rem;
+	font-size: 1.5rem;
+	color: #1a1a1a;
+}
+
+/* Filas */
+.edit-expense-modal .form-row {
+	display: flex;
+	gap: 0.75rem;
+	margin-bottom: 1rem;
+}
+
+.edit-expense-modal .form-row input,
+.edit-expense-modal .form-row select {
+	flex: 1;
+	padding: 0.75rem 1rem;
+	font-size: 1rem;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	box-sizing: border-box;
+}
+
+.edit-expense-modal textarea {
+	width: 100%;
+	padding: 0.75rem 1rem;
+	font-size: 1rem;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	resize: vertical;
+	margin-bottom: 1rem;
+}
+
+/* Participantes */
+.edit-expense-modal .contributions-section {
+	margin-top: 1.5rem;
+}
+
+.edit-expense-modal .participant-contribution-row {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin-bottom: 0.75rem;
+}
+
+.edit-expense-modal .participant-name {
+	flex: 1;
+	font-weight: 500;
+	color: #333;
+}
+
+.edit-expense-modal .contribution-input {
+	width: 100px;
+	padding: 0.5rem;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+}
+
+/* Botones */
+.edit-expense-modal .modal-buttons {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.75rem;
+	margin-top: 1.5rem;
+}
+
+.edit-expense-modal .modal-buttons button {
+	padding: 0.75rem 1.25rem;
+	font-size: 1rem;
+	border-radius: 8px;
+	border: none;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.edit-expense-modal .modal-buttons button[type='submit'] {
+	background-color: #4a7c2f;
+	color: #fff;
+}
+
+.edit-expense-modal .modal-buttons button[type='submit']:hover {
+	background-color: #3a6628;
+}
+
+.edit-expense-modal .modal-buttons button[type='button'] {
+	background-color: #e5e7eb;
+	color: #374151;
+}
+
+.edit-expense-modal .modal-buttons button[type='button']:hover {
+	background-color: #d1d5db;
+}
+
+/* Botón de eliminar específico */
+.edit-expense-modal .delete-button {
+	background-color: #dc2626 !important;
+	color: #fff !important;
+}
+
+.edit-expense-modal .delete-button:hover {
+	background-color: #b91c1c !important;
+}
+
+/* Banner de error */
+.edit-expense-modal .error-banner {
+	background-color: #fee2e2;
+	color: #b91c1c;
+	padding: 0.75rem 1rem;
+	border-radius: 6px;
+	margin-bottom: 1rem;
+	border: 1px solid #fecaca;
+	font-size: 0.95rem;
+}
+
+/* Modal de confirmación de eliminación */
+.delete-confirm-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background: rgba(0, 0, 0, 0.6);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1100;
+}
+
+.delete-confirm-modal {
+	background-color: #ffffff;
+	padding: 2rem;
+	border-radius: 12px;
+	width: 90%;
+	max-width: 400px;
+	box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+	font-family: 'Inter', sans-serif;
+}
+
+.delete-confirm-modal h4 {
+	margin-top: 0;
+	margin-bottom: 1rem;
+	font-size: 1.25rem;
+	color: #1a1a1a;
+}
+
+.delete-confirm-modal p {
+	margin-bottom: 1.5rem;
+	color: #374151;
+	line-height: 1.5;
+}
+
+.confirm-buttons {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.75rem;
+}
+
+.confirm-buttons button {
+	padding: 0.75rem 1.25rem;
+	font-size: 1rem;
+	border-radius: 8px;
+	border: none;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.confirm-delete {
+	background-color: #dc2626;
+	color: #fff;
+}
+
+.confirm-delete:hover {
+	background-color: #b91c1c;
+}
+
+.confirm-buttons button:not(.confirm-delete) {
+	background-color: #e5e7eb;
+	color: #374151;
+}
+
+.confirm-buttons button:not(.confirm-delete):hover {
+	background-color: #d1d5db;
+}
+
+/* 🔸 Responsive para pantallas < 600px */
+@media (max-width: 600px) {
+	.edit-expense-modal {
+		width: 95%;
+		padding: 1.5rem 1rem;
+		margin-top: 90px;
+		max-height: calc(100vh - 90px);
+	}
+
+	.edit-expense-modal .form-row {
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.edit-expense-modal .participant-contribution-row {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.edit-expense-modal .modal-buttons {
+		flex-direction: column;
+	}
+
+	.delete-confirm-modal {
+		width: 95%;
+		padding: 1.5rem;
+	}
+
+	.confirm-buttons {
+		flex-direction: column;
+	}
+}
+
+/* Ajustes específicos para dispositivos muy angostos como iPhone 12 Pro */
+@media (max-width: 400px) {
+	.edit-expense-modal {
+		width: 92%;
+		padding: 1.2rem 0.8rem;
+		margin-top: 85px;
+		border-radius: 12px;
+		max-height: calc(100vh - 90px);
+	}
+
+	.edit-expense-modal .form-row {
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+
+	.edit-expense-modal .modal-buttons {
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.edit-expense-modal .modal-buttons button {
+		width: 100%;
+	}
+
+	.edit-expense-modal textarea,
+	.edit-expense-modal select,
+	.edit-expense-modal input {
+		font-size: 0.95rem;
+	}
+
+	.edit-expense-modal h3 {
+		font-size: 1.25rem;
+		margin-bottom: 1rem;
+	}
+
+	.edit-expense-modal .participant-contribution-row {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.edit-expense-modal .contribution-input {
+		width: 100%;
+	}
+
+	.delete-confirm-modal {
+		width: 92%;
+		padding: 1.2rem 0.8rem;
+	}
+
+	.delete-confirm-modal h4 {
+		font-size: 1.1rem;
+	}
+
+	.confirm-buttons {
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.confirm-buttons button {
+		width: 100%;
+	}
+}

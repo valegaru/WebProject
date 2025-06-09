@@ -2,11 +2,15 @@ import React, { useEffect, useState, useMemo } from 'react';
 import '../ExpenseCard/ExpenseCard.css';
 import { useSelector } from 'react-redux';
 import ProfileInfo from '../ProfileInfo/ProfileInfo';
-import { getUserNameById, getUserProfilePicture } from '../../../utils/firebaseUtils';
+import EditExpenseModal from './../EditExpenseModal/EditExpenseModal';
+import { getUserProfilePicture } from '../../../utils/firebaseUtils';
+import { getUserNameById } from './../../../utils/firebaseUtils';
+
 
 const ExpenseCard = ({ event, view }) => {
 	const [participantProfiles, setParticipantProfiles] = useState({});
 	const [loadingProfiles, setLoadingProfiles] = useState(false);
+	const [showEditModal, setShowEditModal] = useState(false);
 	const currencySelect = useSelector((state) => state.currency.currency);
 
 	if (!event) {
@@ -146,14 +150,24 @@ const ExpenseCard = ({ event, view }) => {
 		e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.2)';
 	};
 
+	const handleCardClick = () => {
+		setShowEditModal(true);
+	};
+
+	const handleCloseModal = () => {
+		setShowEditModal(false);
+	};
+
 	return (
-		<div
-			className={`expense-card expense-card--${computedStatus}`}
-			style={cardStyle}
-			onMouseEnter={handleMouseEnter}
-			onMouseLeave={handleMouseLeave}
-			title={`${title} - ${formatAmount(amount)} - ${participantList.length} participant(s)`}
-		>
+		<>
+			<div
+				className={`expense-card expense-card--${computedStatus}`}
+				style={cardStyle}
+				onMouseEnter={handleMouseEnter}
+				onMouseLeave={handleMouseLeave}
+				onClick={handleCardClick}
+				title={`${title} - ${formatAmount(amount)} - ${participantList.length} participant(s)`}
+			>
 			<div className='expense-card__content'>
 				<div className='expense-card__row'>
 					<div className='expense-card__title'>{title}</div>
@@ -195,6 +209,20 @@ const ExpenseCard = ({ event, view }) => {
 				</div>
 			)}
 		</div>
+
+		{showEditModal && (
+			<EditExpenseModal
+				event={event}
+				onClose={handleCloseModal}
+				onEventUpdated={() => {
+					handleCloseModal();
+				}}
+				onEventDeleted={() => {
+					handleCloseModal();
+				}}
+			/>
+		)}
+	</>
 	);
 };
 
