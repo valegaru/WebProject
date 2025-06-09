@@ -1,7 +1,7 @@
 .calendar-rework {
 	padding: 20px;
 	font-family: 'Inter', sans-serif;
-	background-color: #fefaf4;
+	background-color: #f4e4c5;
 }
 
 .calendar-rework__header {
@@ -15,12 +15,12 @@
 }
 
 .calendar-rework__error {
-	background-color: #fee2e2;
+	background-color: #f4e4c5;
 	color: #b91c1c;
 	padding: 0.75rem 1rem;
 	border-radius: 6px;
 	margin-bottom: 1rem;
-	border: 1px solid #fecaca;
+	border: 1px solid #f4e4c5;
 }
 
 .calendar-rework__calendar-wrap {
@@ -49,8 +49,7 @@
 }
 
 .rbc-btn-group button {
-	background-color: #4a7c2f;
-	color: white;
+	background-color: #f4e4c5;
 	border: none;
 	padding: 0.5rem 1rem;
 	margin: 0 2px;
@@ -62,10 +61,12 @@
 
 .rbc-btn-group button:hover {
 	background-color: #3a6628;
+	color: white;
 }
 
 .rbc-btn-group button.rbc-active {
-	background-color: #1a63c3;
+	background-color: #4a7c2f;
+	color: white;
 }
 
 /* 📱 Extra para iPhone 12 Pro (~390px) */
