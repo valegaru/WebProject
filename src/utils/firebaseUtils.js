@@ -259,7 +259,7 @@ export const addPlace = async (listId, lat, lng) => {
 		return null;
 	}
 };
-
+//test
 export const updateExpenseEvent = async (tripID, expenseID, eventID, eventData) => {
 	try {
 		const tripRef = doc(db, 'trips', tripID);
