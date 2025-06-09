@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import '../ExpenseCard/ExpenseCard.css';
 import { useSelector } from 'react-redux';
-import ProfileInfo from '../ProfileInfo/ProfileInfo'; // Add this import
+import ProfileInfo from '../ProfileInfo/ProfileInfo';
+import { getUserNameById, getUserProfilePicture } from '../../../utils/firebaseUtils';
 
 const ExpenseCard = ({ event, view }) => {
-	const [profilePics, setProfilePics] = useState({});
+	const [participantProfiles, setParticipantProfiles] = useState({});
+	const [loadingProfiles, setLoadingProfiles] = useState(false);
 	const currencySelect = useSelector((state) => state.currency.currency);
 
 	if (!event) {
@@ -33,21 +35,39 @@ const ExpenseCard = ({ event, view }) => {
 	const isDetailedView = view === 'agenda';
 
 	useEffect(() => {
-		const generateProfilePics = async () => {
-			const picMap = {};
-			participantList.forEach((participant) => {
-				if (participant?.name && participant?.userID) {
-					picMap[participant.userID] = `https://ui-avatars.com/api/?name=${encodeURIComponent(
-						participant.name
-					)}&size=24&background=random`;
-				}
-			});
-			setProfilePics(picMap);
+		const fetchParticipantProfiles = async () => {
+			if (participantList.length === 0) return;
+			
+			setLoadingProfiles(true);
+			const profileMap = {};
+
+			try {
+				await Promise.all(
+					participantList.map(async (participant) => {
+						if (participant?.userID) {
+							const [profilePicture, username] = await Promise.all([
+								getUserProfilePicture(participant.userID),
+								getUserNameById(participant.userID)
+							]);
+							
+							profileMap[participant.userID] = {
+								name: username || 'Unknown User',
+								imgUrl: profilePicture || '',
+								contribution: Number(participant.contribution) || 0
+							};
+						}
+					})
+				);
+				
+				setParticipantProfiles(profileMap);
+			} catch (error) {
+				console.error('Error fetching participant profiles:', error);
+			} finally {
+				setLoadingProfiles(false);
+			}
 		};
 
-		if (participantList.length > 0) {
-			generateProfilePics();
-		}
+		fetchParticipantProfiles();
 	}, [participantList]);
 
 	const formatAmount = (amount) => {
@@ -147,18 +167,29 @@ const ExpenseCard = ({ event, view }) => {
 				<div className='expense-card__footer'>
 					<span className='expense-card__participant-count'>👥 {participantList.length}</span>
 					<div className='expense-card__participants'>
-						{participantList.slice(0, 3).map((participant, index) => (
-							<ProfileInfo
-								key={participant.userID || index}
-								name={participant.name || 'Unknown'}
-								imgUrl={profilePics[participant.userID]}
-								contribution={Number(participant.contribution) || 0}
-							/>
-						))}
-						{participantList.length > 3 && (
-							<div className='expense-card__participants-overflow'>
-								+{participantList.length - 3} more
-							</div>
+						{loadingProfiles ? (
+							<div className='expense-card__loading'>Loading participants...</div>
+						) : (
+							<>
+								{participantList.slice(0, 3).map((participant, index) => {
+									const profile = participantProfiles[participant.userID];
+									if (!profile) return null;
+									
+									return (
+										<ProfileInfo
+											key={participant.userID || index}
+											name={profile.name}
+											imgUrl={profile.imgUrl}
+											contribution={profile.contribution}
+										/>
+									);
+								})}
+								{participantList.length > 3 && (
+									<div className='expense-card__participants-overflow'>
+										+{participantList.length - 3} more
+									</div>
+								)}
+							</>
 						)}
 					</div>
 				</div>
