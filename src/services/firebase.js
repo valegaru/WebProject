@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+
 
 const firebaseConfig = {
 	apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -24,3 +25,16 @@ onAuthStateChanged(auth, (user) => {
 		// ...
 	}
 });
+
+export const logoutFirebaseUser = async () => {
+  const auth = getAuth();
+  try {
+    await signOut(auth);
+    console.log('Firebase user signed out.');
+  } catch (error) {
+    console.error('Firebase sign out error:', error);
+    throw error;
+  }
+};
+
+
