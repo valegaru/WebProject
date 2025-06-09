@@ -1,114 +1,202 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 import CardCity from '../../components/CardCity/CardCity';
-import "./MatchmakerSelection.css";
+import { db } from '../../services/firebase';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+import './MatchmakerSelection.css';
 
 function MatchmakerSelection() {
+	const { roomId } = useParams(); // Este es el ID de la sala
 	const navigate = useNavigate();
-
-	const cities = [
-		{
-			name: 'Barcelona',
-			image:
-				'https://www.spain.info/export/sites/segtur/.content/imagenes/cabeceras-grandes/cataluna/park-guell-barcelona-s-305364611.jpg',
-			aesthetic: 'Stunning architecture.',
-			vibe: 'Beachside relaxation and nightlife.',
-			gastronomy: 'Tapas, paella, and fresh seafood.',
-			renowned: 'Football, art, history, and Mediterranean sunsets.',
-			activities: [
-				{
-					image:
-						'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1c/d7/0b/9c/salon-principal.jpg?w=900&h=500&s=1',
-					label: '7 Portes',
-				},
-				{
-					image:
-						'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/06/e6/28/1a/opium-mar-club.jpg?w=1200&h=-1&s=1',
-					label: 'Opium',
-				},
-				{
-					image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFhHLNIJtwWE48GdslCOHhkmqikXHQrJLf2g&s',
-					label: 'National Art Museum of Catalonia',
-				},
-			],
-			attractions: [
-				{
-					image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRX1Aljp-xBwkgIDW5LKS336X9OMYzp5xAjA&s',
-					label: 'La Sagrada Familia',
-				},
-				{
-					image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz2SqFo8Z2vNKfmqSi4uxzWJkNa65DcGD5fQ&s',
-					label: 'Park Güell',
-				},
-				{
-					image: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Casa_Mil%C3%A0%2C_general_view.jpg',
-					label: 'Casa Milà',
-				},
-			],
-		},
-		{
-			name: 'Kyoto',
-			image: 'https://boutiquejapan.com/wp-content/uploads/2019/07/yasaka-pagoda-higashiyama-kyoto-japan-1140x761.jpg',
-			aesthetic: 'Traditional temples and cherry blossoms.',
-			vibe: 'Tranquil, historic, and spiritual.',
-			gastronomy: 'Kaiseki, matcha, and ramen.',
-			renowned: 'Geishas, bamboo forests, and Zen gardens.',
-			activities: [
-				{
-					image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2RigRZJ4XGSGf_dAyzvYTabTvDWljhNNZlg&s',
-					label: 'Kaiseki Dinner',
-				},
-				{
-					image: 'https://d2j57bp7wdztc7.cloudfront.net/pages/images/tea-ceremony/tea-ceremony-gion-01.jpg',
-					label: 'Tea Ceremony',
-				},
-				{ image: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/13/bc/d4/bc.jpg', label: 'Geisha Show' },
-			],
-			attractions: [
-				{
-					image:
-						'https://res.cloudinary.com/jnto/image/upload/w_750,h_503,fl_lossy,f_auto/v1648523563/kyoto/20201026_fushimi_inari_taisha_shrine_01',
-					label: 'Fushimi Inari Shrine',
-				},
-				{
-					image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGS3pzLfCXr0di0Mrgd_R56tYy4DrwNF-Blw&s',
-					label: 'Arashiyama Bamboo Grove',
-				},
-				{
-					image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp9j4jI_NuLic6fnjcEPZZ-kMzORfL9m9v7A&s',
-					label: 'Kinkaku-ji (Golden Pavilion)',
-				},
-			],
-		},
-	];
-
+	const [cities, setCities] = useState([]);
 	const [currentIndex, setCurrentIndex] = useState(0);
+	const [votes, setVotes] = useState({});
+	const [loading, setLoading] = useState(true);
 
-	const handleLike = () => {
-		console.log('Liked:', cities[currentIndex].name);
-		goToNextCity();
-	};
+	useEffect(() => {
+		const fetchDestinations = async () => {
+			try {
+				const roomRef = doc(db, 'matchLists', roomId);
+				const roomSnap = await getDoc(roomRef);
 
-	const handleDislike = () => {
-		console.log('Disliked:', cities[currentIndex].name);
-		goToNextCity();
-	};
+				if (roomSnap.exists()) {
+					const data = roomSnap.data();
+					setCities(data.destinations || []);
+				} else {
+					alert('Sala no encontrada');
+					navigate('/');
+				}
+			} catch (error) {
+				console.error('Error al cargar los destinos:', error);
+				alert('Error al conectar con la sala.');
+				navigate('/');
+			} finally {
+				setLoading(false);
+			}
+		};
 
-	const goToNextCity = () => {
+		fetchDestinations();
+	}, [roomId, navigate]);
+
+	const handleVote = (type) => {
+		const cityName = cities[currentIndex].name || cities[currentIndex];
+		const updatedVotes = { ...votes, [cityName]: type };
+		setVotes(updatedVotes);
+
 		if (currentIndex < cities.length - 1) {
 			setCurrentIndex(currentIndex + 1);
 		} else {
-			navigate('/results'); // 👈 cambiar a la ruta que vos quieras
+			handleSubmitVotes(updatedVotes); // 👈 aseguramos que se guarde el último voto
 		}
 	};
+
+	const handleLike = () => handleVote('like');
+	const handleDislike = () => handleVote('dislike');
+
+	const handleSubmitVotes = async (finalVotes = votes) => {
+		const auth = getAuth();
+		const user = auth.currentUser;
+		const userId = user?.uid;
+
+		if (!userId) {
+			alert('Debes iniciar sesión para votar.');
+			navigate('/login');
+			return;
+		}
+
+		const matchRef = doc(db, 'matchLists', roomId);
+
+		try {
+			await updateDoc(matchRef, {
+				[`votes.${userId}`]: finalVotes,
+			});
+			navigate(`/results/${roomId}`);
+		} catch (error) {
+			console.error('Error guardando los votos:', error);
+			alert('Hubo un error al guardar tus votos. Intenta de nuevo.');
+		}
+	};
+
+	const city = cities[currentIndex];
 
 	return (
 		<>
 			<Navbar />
-			<CardCity city={cities[currentIndex]} onLike={handleLike} onDislike={handleDislike} />
+			{loading ? (
+				<p className='loading-message'>Cargando destinos...</p>
+			) : cities.length > 0 && city ? (
+				<CardCity city={city} onLike={handleLike} onDislike={handleDislike} />
+			) : (
+				<p className='error-message'>No se encontraron destinos para esta sala.</p>
+			)}
 		</>
 	);
 }
 
 export default MatchmakerSelection;
+
+// import React, { useState, useEffect } from 'react';
+// import { useNavigate, useParams } from 'react-router-dom';
+// import Navbar from '../../components/Navbar/Navbar';
+// import CardCity from '../../components/CardCity/CardCity';
+// import { db } from '../../services/firebase';
+// import { doc, getDoc, updateDoc } from 'firebase/firestore';
+// import { getAuth } from 'firebase/auth';
+// import './MatchmakerSelection.css';
+
+// function MatchmakerSelection() {
+// 	const { roomId } = useParams(); // Este es el ID de la sala
+// 	const navigate = useNavigate();
+// 	const [cities, setCities] = useState([]);
+// 	const [currentIndex, setCurrentIndex] = useState(0);
+// 	const [votes, setVotes] = useState({});
+// 	const [loading, setLoading] = useState(true);
+
+// 	useEffect(() => {
+// 		const fetchDestinations = async () => {
+// 			try {
+// 				const roomRef = doc(db, 'matchLists', roomId);
+// 				const roomSnap = await getDoc(roomRef);
+
+// 				if (roomSnap.exists()) {
+// 					const data = roomSnap.data();
+// 					setCities(data.destinations || []);
+// 				} else {
+// 					alert('Sala no encontrada');
+// 					navigate('/');
+// 				}
+// 			} catch (error) {
+// 				console.error('Error al cargar los destinos:', error);
+// 				alert('Error al conectar con la sala.');
+// 				navigate('/');
+// 			} finally {
+// 				setLoading(false);
+// 			}
+// 		};
+
+// 		fetchDestinations();
+// 	}, [roomId, navigate]);
+
+// 	const goToNextCity = () => {
+// 		if (currentIndex < cities.length - 1) {
+// 			setCurrentIndex(currentIndex + 1);
+// 		} else {
+// 			handleSubmitVotes();
+// 		}
+// 	};
+
+// 	const handleLike = () => {
+// 		const cityName = cities[currentIndex].name || cities[currentIndex];
+// 		setVotes((prev) => ({ ...prev, [cityName]: 'like' }));
+// 		goToNextCity();
+// 	};
+
+// 	const handleDislike = () => {
+// 		const cityName = cities[currentIndex].name || cities[currentIndex];
+// 		setVotes((prev) => ({ ...prev, [cityName]: 'dislike' }));
+// 		goToNextCity();
+// 	};
+
+// 	const handleSubmitVotes = async () => {
+// 		const auth = getAuth();
+// 		const user = auth.currentUser;
+// 		const userId = user?.uid;
+
+// 		if (!userId) {
+// 			alert('Debes iniciar sesión para votar.');
+// 			navigate('/login');
+// 			return;
+// 		}
+
+// 		const matchRef = doc(db, 'matchLists', roomId);
+
+// 		try {
+// 			await updateDoc(matchRef, {
+// 				[`votes.${userId}`]: votes,
+// 			});
+// 			navigate(`/results/${roomId}`);
+// 		} catch (error) {
+// 			console.error('Error guardando los votos:', error);
+// 			alert('Hubo un error al guardar tus votos. Intenta de nuevo.');
+// 		}
+// 	};
+
+// 	const city = cities[currentIndex];
+
+// 	return (
+// 		<>
+// 			<Navbar />
+// 			{loading ? (
+// 				<p className='loading-message'>Cargando destinos...</p>
+// 			) : cities.length > 0 && city ? (
+// 				<CardCity city={city} onLike={handleLike} onDislike={handleDislike} />
+// 			) : (
+// 				<p className='error-message'>No se encontraron destinos para esta sala.</p>
+// 			)}
+// 		</>
+// 	);
+// }
+
+// export default MatchmakerSelection;

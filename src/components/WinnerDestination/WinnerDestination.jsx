@@ -6,7 +6,11 @@ const WinnerDestination = ({ city }) => {
 	const navigate = useNavigate();
 
 	const handleCreateTrip = () => {
-		navigate('/landing'); // Reemplazar ruta
+		navigate('/tripcreation');
+	};
+
+	const handleBackHome = () => {
+		navigate('/home');
 	};
 
 	return (
@@ -22,6 +26,9 @@ const WinnerDestination = ({ city }) => {
 			<div className='card-city-content winner-content'>
 				<button className='banner-button' onClick={handleCreateTrip}>
 					Create a trip <strong>group</strong>
+				</button>
+				<button className='banner-button' onClick={handleBackHome}>
+					Go to Home
 				</button>
 			</div>
 		</div>

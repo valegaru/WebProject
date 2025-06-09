@@ -1,6 +1,8 @@
+//, arrayUnion
+
 import { db } from '../services/firebase';
 import { collection } from 'firebase/firestore';
-import { doc, getDoc, getDocs, addDoc, updateDoc, arrayUnion, query, where, setDoc } from 'firebase/firestore';
+import { doc, getDoc, getDocs, addDoc, updateDoc, query, where, setDoc } from 'firebase/firestore';
 import { orderBy, startAt, endAt } from 'firebase/firestore';
 export const addNewExpense = async ({ uidUser, name, price }) => {
 	const docRef = await addDoc(collection(db, 'expense'), {
