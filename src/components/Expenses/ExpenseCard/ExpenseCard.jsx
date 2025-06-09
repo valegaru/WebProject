@@ -24,7 +24,7 @@ const ExpenseCard = ({ event, view }) => {
 	} = event;
 
 	const participantList = useMemo(() => Object.values(participants), [participants]);
-	const isDetailedView = view === 'agenda' || view === 'day';
+	const isDetailedView = view === 'agenda';
 
 	useEffect(() => {
 		const generateProfilePics = async () => {
@@ -55,7 +55,6 @@ const ExpenseCard = ({ event, view }) => {
 
 	const formatTimeRange = () => {
 		if (!start && !originalStart) return '';
-
 		const startTime = originalStart || start;
 		const endTime = originalEnd || end;
 
@@ -91,7 +90,6 @@ const ExpenseCard = ({ event, view }) => {
 				borderLeft: '4px solid #1976D2',
 			},
 		};
-
 		return statusStyles[status] || statusStyles.pending;
 	};
 
@@ -139,8 +137,11 @@ const ExpenseCard = ({ event, view }) => {
 			title={`${title} - ${formatAmount(amount)} - ${participantList.length} participant(s)`}
 		>
 			<div className='expense-card__content'>
-				<div className='expense-card__title'>{title}</div>
-				<div className='expense-card__amount'>{formatAmount(amount)}</div>
+				<div className='expense-card__row'>
+					<div className='expense-card__title'>{title}</div>
+					<div className='expense-card__amount'>{formatAmount(amount)}</div>
+				</div>
+
 				{isDetailedView && formatTimeRange() && <div className='expense-card__time'>⏰ {formatTimeRange()}</div>}
 			</div>
 
