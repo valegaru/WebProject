@@ -66,9 +66,13 @@ const MapForm = ({
     }
     setIsCreatingList(true);
     try {
-        const listId = await createList(uid, newListForm.name.trim(), newListForm.description.trim());
+        const listId = await createList(
+            uid,
+            newListForm.name.trim(),
+            newListForm.description.trim(),
+            tripPic 
+        );
         if (listId) {
-            // Pass name and address from placeDetails along with tripPic, coordinates
             const placeId = await addPlace(
                 listId,
                 dialogLocation.lat,
@@ -113,7 +117,6 @@ const onAddLocation = async () => {
     }
     setIsAddingLocation(true);
     try {
-        // Pass name and address from placeDetails here as well
         const placeId = await addPlace(
             selectedList.id,
             dialogLocation.lat,

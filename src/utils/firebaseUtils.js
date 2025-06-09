@@ -218,7 +218,7 @@ export const addExpenseEvent = async (tripID, expenseID, eventData) => {
 };
 
 
-export const createList = async (userId, name, description) => {
+export const createList = async (userId, name, description, tripPic = "") => {
 	try {
 		const listRef = doc(collection(db, 'savedLists'));
 
@@ -226,10 +226,8 @@ export const createList = async (userId, name, description) => {
 			userId,
 			name,
 			description,
+			tripPic,
 		});
-
-		const placesRef = doc(collection(listRef, 'places'));
-		await setDoc(placesRef, {});
 
 		const userListIDRef = doc(db, `users/${userId}/savedLists/${listRef.id}`);
 		await setDoc(userListIDRef, {

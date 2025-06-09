@@ -53,7 +53,7 @@ const Home = () => {
 		const fetchedSavedLists = await getSavedLists(uid);
 		const formattedSavedLists = fetchedSavedLists.map(list => ({
 			id: list.id,
-			tripPic: list.image || destinations, 
+			tripPic: list.tripPic || destinations, 
 			name: list.name || 'Untitled List',
 			onClick: () => navigate(`/List/${list.id}`)
 		}));
