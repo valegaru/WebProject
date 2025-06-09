@@ -9,6 +9,7 @@ import { setError, setEvents, setLoading } from '../../store/eventSlice/EventSli
 import { fetchExpenseEvents } from '../../utils/firebaseUtils';
 import { useParams } from 'react-router-dom';
 import './CalendarRework.css';
+import { setMapMarkers, setMapType } from '../../store/mapInfo/MapInfo';
 
 const localizer = momentLocalizer(moment);
 
@@ -31,6 +32,7 @@ const roundToHourBoundaries = (events) =>
 	});
 
 const CalendarRework = () => {
+
 	const { tripId, expenseId } = useParams();
 	const dispatch = useDispatch();
 	const { events, loading, error } = useSelector((state) => state.events);
@@ -38,28 +40,67 @@ const CalendarRework = () => {
 	const [date, setDate] = useState(new Date());
 
 	useEffect(() => {
-		const loadEvents = async () => {
-			if (!tripId || !expenseId) return;
-			dispatch(setLoading(true));
-			dispatch(setError(null));
-			try {
-				const fetched = await fetchExpenseEvents(tripId, expenseId);
-				const mapped = fetched.map((evt) => ({
-					...evt,
-					start: evt.start ? new Date(evt.start) : new Date(),
-					end: evt.end ? new Date(evt.end) : new Date(),
-					title: evt.title || evt.name || 'Expense Event',
-				}));
-				dispatch(setEvents(mapped));
-			} catch (err) {
-				console.error(err);
-				dispatch(setError('Failed to load events'));
-			} finally {
-				dispatch(setLoading(false));
-			}
-		};
-		loadEvents();
-	}, [tripId, expenseId, dispatch]);
+	const loadEvents = async () => {
+		if (!tripId || !expenseId) return;
+		dispatch(setLoading(true));
+		dispatch(setError(null));
+		try {
+			const fetched = await fetchExpenseEvents(tripId, expenseId);
+			const mapped = fetched.map((evt) => ({
+				...evt,
+				start: evt.start ? new Date(evt.start) : new Date(),
+				end: evt.end ? new Date(evt.end) : new Date(),
+				title: evt.title || evt.name || 'Expense Event',
+			}));
+
+			dispatch(setEvents(mapped));
+
+			const validMarkers = mapped
+  			.filter((evt) => evt.coordinates?.lat && evt.coordinates?.lng)
+  			.map((evt) => ({
+    		id: evt.id,
+    		title: evt.title,
+    		position: {
+      			lat: evt.coordinates.lat,
+      			lng: evt.coordinates.lng,
+    		},
+    		type: "event", 
+ 			 }));
+
+			dispatch(setMapMarkers(validMarkers));
+
+
+			dispatch(setMapMarkers(validMarkers));
+			dispatch(setMapType("trips"));
+
+		} catch (err) {
+			console.error(err);
+			dispatch(setError('Failed to load events'));
+		} finally {
+			dispatch(setLoading(false));
+		}
+	};
+
+	loadEvents();
+	}, [tripId, expenseId, dispatch,]);
+
+	useEffect(() => {
+	if (!events || events.length === 0) return;
+
+	const validMarkers = events
+		.filter((evt) => evt.coordinates?.lat && evt.coordinates?.lng)
+		.map((evt) => ({
+			id: evt.id,
+			title: evt.title,
+			position: {
+				lat: evt.coordinates.lat,
+				lng: evt.coordinates.lng,
+			},
+			type: "event",
+		}));
+
+	dispatch(setMapMarkers(validMarkers));
+}, [events, dispatch]);
 
 	const hourBoundaryEvents = useMemo(() => roundToHourBoundaries(events), [events]);
 
