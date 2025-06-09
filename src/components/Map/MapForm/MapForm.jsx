@@ -174,10 +174,10 @@ const MapForm = ({
             ) : (
                 placeDetails && (
                     <div className="place-details">
-                        {locationPhoto && (
+                        {tripPic && (
                             <div className="location-photo-container">
                                 <img 
-                                    src={locationPhoto} 
+                                    src={tripPic} 
                                     alt="Location" 
                                     className="location-photo"
                                 />
