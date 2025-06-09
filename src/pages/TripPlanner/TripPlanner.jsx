@@ -5,16 +5,13 @@ import './tripPlanner.css';
 import Navbar from '../../components/Navbar/Navbar';
 import CardList from '../../components/CardList/CardList';
 
-import expenseImg from '../../assets/expense.png';
-import itineraryImg from '../../assets/itinerary.png';
-import paris2 from '../../assets/paris2.png';
 import user1 from '../../assets/user1.png';
 import user2 from '../../assets/user2.png';
 import user3 from '../../assets/user3.png';
 import user4 from '../../assets/user4.png';
 import user5 from '../../assets/user5.png';
 import editIcon from '../../assets/editIcon.png';
-import { fetchExpenses, fetchItineraries, fetchTripById } from '../../utils/firebaseUtils';
+import { fetchExpenses, fetchTripById } from '../../utils/firebaseUtils';
 
 
 const Trip = () => {
@@ -37,7 +34,6 @@ const Trip = () => {
 	const fetchData = async () => {
 		const tripDoc = await fetchTripById(tripId);
 		const expensesData = await fetchExpenses(tripId);
-		const itinerariesData = await fetchItineraries(tripId)
 
 		if (tripDoc) {
 			setTrip(tripDoc.data());
@@ -53,15 +49,6 @@ const Trip = () => {
 			console.log(expensesWithClick);
 		}
 
-		if (itinerariesData) {
-			const itineraries = itinerariesData.map((itinerary) => ({
-				...itinerary,
-				onClick: () => handleItineraryClick(itinerary), 
-			}));
-
-			setItineraries(itineraries);
-			console.log(itineraries);
-		}
 	};
 
 	if (tripId) {
@@ -105,10 +92,6 @@ const Trip = () => {
 						</div>
 					</div>
 				</div>
-			</section>
-
-			<section className='section'>
-				<CardList title='Itineraries' cardsData={itineraries} variantColor='green' onClick={handleItineraryClick}/>
 			</section>
 
 			<section className='section'>
