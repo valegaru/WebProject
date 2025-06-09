@@ -70,19 +70,20 @@ const ExpenseTracker = () => {
             <CurrencyToggleButton/>
           </div>
 
-          <div className="budget-section">
-            <BudgetRange label="individual" />
-            <BudgetRange label="group" />
+          <div className="carousel-and-button">
+                <CustomButton label="ADD EXPENSE" onClick={() => {setShowModal(true)}}/>
+                <div className="budget-section">
+                  <BudgetRange label="individual" />
+                  <BudgetRange label="group" />
+                </div>
 
           </div>
 
+          
       </div>
       
 
-      <div className="carousel-and-button">
-        <CustomButton label="ADD EXPENSE" onClick={() => {setShowModal(true)}}/>
-      </div>
-
+      
       <CalendarRework></CalendarRework></>)}
       
 

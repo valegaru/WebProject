@@ -126,10 +126,6 @@ const CalendarRework = () => {
 		<div className='calendar-rework'>
 			<div className='calendar-rework__header'>
 				{error && <div className='calendar-rework__error'>{error}</div>}
-				<div className='calendar-rework__summary'>
-					Showing {hourBoundaryEvents.length} event{hourBoundaryEvents.length !== 1 ? 's' : ''}
-					{hourBoundaryEvents.length > 0 && ' (rounded to hour boundaries)'}
-				</div>
 			</div>
 			<div className='calendar-rework__calendar-wrap'>
 				{loading && events.length === 0 ? (

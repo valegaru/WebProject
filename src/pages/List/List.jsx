@@ -19,8 +19,6 @@ const List = () => {
 
 	const handleItemClick = (placeId) => {
 		console.log('Clicked on place id:', placeId);
-		// Optionally navigate somewhere on click:
-		// navigate(`/savedList/${listId}/place/${placeId}`);
 	};
 
 	useEffect(() => {
