@@ -1,3 +1,4 @@
+// ✅ CalendarRework.jsx corregido (funcional y estilizado con CSS externo)
 import React, { useState, useMemo, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
@@ -89,7 +90,6 @@ const CalendarRework = () => {
 					{hourBoundaryEvents.length > 0 && ' (rounded to hour boundaries)'}
 				</div>
 			</div>
-
 			<div className='calendar-rework__calendar-wrap'>
 				{loading && events.length === 0 ? (
 					<div className='calendar-rework__loading'>Loading events...</div>
