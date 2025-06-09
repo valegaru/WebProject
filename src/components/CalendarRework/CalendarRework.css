@@ -1,52 +1,26 @@
 .calendar-rework {
 	padding: 20px;
 	font-family: 'Inter', sans-serif;
-	background-color: #fefaf4;
+	background-color: #fdf7ed;
 }
 
 .calendar-rework__header {
 	margin-bottom: 1.5rem;
 }
 
-.calendar-rework__view-controls {
-	display: flex;
-	gap: 10px;
-	margin-bottom: 1rem;
-}
-
-.calendar-rework__view-btn {
-	padding: 0.5rem 1.25rem;
-	font-size: 1rem;
-	border-radius: 8px;
-	border: none;
-	background-color: #4a7c2f;
-	color: #fff;
-	font-weight: 600;
-	cursor: pointer;
-	transition: background-color 0.2s ease;
-}
-
-.calendar-rework__view-btn.active {
-	background-color: #1a63c3;
-	color: #fff;
-}
-
-.calendar-rework__view-btn:not(.active):hover {
-	background-color: #3f8d2f;
-}
-
 .calendar-rework__summary {
 	font-size: 0.95rem;
 	color: #444;
+	margin-top: 1rem;
 }
 
 .calendar-rework__error {
-	background-color: #fee2e2;
+	background-color: #fdf7ed;
 	color: #b91c1c;
 	padding: 0.75rem 1rem;
 	border-radius: 6px;
 	margin-bottom: 1rem;
-	border: 1px solid #fecaca;
+	border: 1px solid #f4e4c5;
 }
 
 .calendar-rework__calendar-wrap {
@@ -54,7 +28,7 @@
 	overflow-x: auto;
 }
 
-/* Loading */
+/* Loading state */
 .calendar-rework__loading {
 	display: flex;
 	justify-content: center;
@@ -64,27 +38,39 @@
 	color: #666;
 }
 
-/* 📱 Responsive para móvil */
-@media (max-width: 600px) {
-	.calendar-rework {
-		padding: 0.5rem 0.2rem;
-	}
+/* Estilo para toolbar nativa */
+.rbc-toolbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+	font-family: 'Inter', sans-serif;
+	flex-wrap: wrap;
+}
 
-	.calendar-rework__calendar-wrap {
-		min-width: 600px;
-	}
+.rbc-btn-group button {
+	background-color: #f4e4c5;
+	border: none;
+	padding: 0.5rem 1rem;
+	margin: 0 2px;
+	border-radius: 8px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
 
-	.calendar-rework__view-controls {
-		flex-direction: column;
-	}
+.rbc-btn-group button:hover {
+	background-color: #3a6628;
+	color: white;
+}
 
-	.calendar-rework__view-btn {
-		width: 100%;
-	}
+.rbc-btn-group button.rbc-active {
+	background-color: #4a7c2f;
+	color: white;
 }
 
 /* 📱 Extra para iPhone 12 Pro (~390px) */
-@media (max-width: 420px) {
+@media (max-width: 391px) {
 	.calendar-rework {
 		padding: 0.5rem 0.2rem;
 	}
@@ -96,5 +82,23 @@
 	.calendar-rework__view-btn {
 		font-size: 0.95rem;
 		padding: 0.5rem;
+	}
+	.rbc-toolbar {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 0.5rem;
+	}
+
+	.rbc-btn-group {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 4px;
+	}
+
+	.rbc-toolbar-label {
+		text-align: center;
+		font-size: 1rem;
+		font-weight: 500;
 	}
 }

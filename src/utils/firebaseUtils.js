@@ -1,6 +1,8 @@
+//, arrayUnion
+
 import { db } from '../services/firebase';
 import { collection } from 'firebase/firestore';
-import { doc, getDoc, getDocs, addDoc, updateDoc, arrayUnion, query, where, setDoc } from 'firebase/firestore';
+import { doc, getDoc, getDocs, addDoc, updateDoc, query, where, setDoc } from 'firebase/firestore';
 import { orderBy, startAt, endAt } from 'firebase/firestore';
 export const addNewExpense = async ({ uidUser, name, price }) => {
 	const docRef = await addDoc(collection(db, 'expense'), {
@@ -243,6 +245,43 @@ export const createList = async (userId, name, description) => {
 	}
 };
 
+export const getSavedLists = async (userId) => {
+    try {
+        if (!userId) {
+            console.error('User ID is required to fetch lists');
+            return [];
+        }
+
+        const userListsRef = collection(db, `users/${userId}/savedLists`);
+        const userListsSnapshot = await getDocs(userListsRef);
+        
+        if (userListsSnapshot.empty) {
+            return [];
+        }
+
+        const listPromises = userListsSnapshot.docs.map(async (listDoc) => {
+            const listId = listDoc.data().id;
+            const savedListRef = doc(db, 'savedLists', listId);
+            const savedListSnapshot = await getDoc(savedListRef);
+            
+            if (savedListSnapshot.exists()) {
+                return {
+                    id: listId,
+                    ...savedListSnapshot.data()
+                };
+            }
+            return null;
+        });
+
+        const lists = await Promise.all(listPromises);
+        
+        return lists.filter(list => list !== null);
+        
+    } catch (error) {
+        console.error('Error fetching user lists:', error);
+        return [];
+    }
+};
 
 export const addPlace = async (listId, lat, lng) => {
 	try {

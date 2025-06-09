@@ -2,11 +2,14 @@ import { APIProvider, InfoWindow, Map } from '@vis.gl/react-google-maps';
 import PoiMarkers from '../PoiMarker/PoiMarkers';
 import MapForm from '../MapForm/MapForm';
 import SearchBar from '../SearchBar/SearchBar';
-import { useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useState, useRef, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { fetchLocationData } from '../../../utils/googleMapsUtils';
+import { clearMapMarkers, setMapType } from '../../../store/mapInfo/MapInfo';
 
 const MapComponent = () => {
+  
+  const dispatch = useDispatch()
   const uid = useSelector((state) => state.auth.userId);
   const name = useSelector((state) => state.auth.username);
   const mapType = useSelector((state) => state.mapInfo.type)
@@ -109,6 +112,11 @@ const MapComponent = () => {
     setInitialTripName("");
   };
 
+  useEffect(()=>{
+    dispatch(clearMapMarkers())
+    dispatch(setMapType("places"))
+  },[dispatch])
+
   return (
     <div style={{ position: 'relative', width: '100%', height: '50vh', display: 'flex' }}>
       {showPanel && (
@@ -139,52 +147,14 @@ const MapComponent = () => {
               </button>
             </div>
 
-            {placeDetails && (
-              <div className="place-details" style={{
-                marginBottom: '20px',
-                padding: '15px',
-                backgroundColor: '#f8f9fa',
-                borderRadius: '8px'
-              }}>
-                <h4 className="place-name" style={{ margin: '0 0 8px 0' }}>{placeDetails.name}</h4>
-                {placeDetails.rating && (
-                  <p className="place-rating" style={{ margin: '0 0 8px 0', fontSize: '14px' }}>
-                    Rating: {placeDetails.rating}/5 ⭐
-                  </p>
-                )}
-                <p className="place-address" style={{ margin: '0', fontSize: '14px', color: '#666' }}>
-                  {placeDetails.address}
-                </p>
-              </div>
-            )}
-
-            {loadingPhotos ? (
-              <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-                <p>Loading photos...</p>
-              </div>
-            ) : (
-              locationPhoto && (
-                <div style={{ marginBottom: '20px' }}>
-                  <img
-                    src={locationPhoto}
-                    alt="Location"
-                    style={{
-                      width: '100%',
-                      height: '200px',
-                      objectFit: 'cover',
-                      borderRadius: '8px'
-                    }}
-                  />
-                </div>
-              )
-            )}
             {mapType == "places" &&
             <MapForm
               uid={uid}
               placeDetails={placeDetails}
-              dialogLocation={dialogLocation}
               locationPhoto={locationPhoto}
-              onTripAdded={handleTripAdded}
+              loadingLocationData={loadingPhotos}
+              dialogLocation={dialogLocation}
+              onLocationAdded={handleTripAdded}
               onCancel={handleCancelTrip}
               initialTripName={initialTripName}
             />}
