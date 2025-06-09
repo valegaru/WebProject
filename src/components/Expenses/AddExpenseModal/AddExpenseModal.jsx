@@ -13,16 +13,16 @@ const AddExpenseModal = ({ tripID, expenseID, onClose, onEventAdded }) => {
 	const [coordinates, setCoordinates] = useState({ lat: null, lng: null });
 
 	const [date, setDate] = useState(() => {
-		if (selectedDate) {
-			if (selectedDate instanceof Date) {
-				return selectedDate.toISOString().split('T')[0];
-			}
-			if (typeof selectedDate === 'string' && selectedDate.includes('-')) {
-				return selectedDate;
-			}
+	if (selectedDate) {
+		if (selectedDate instanceof Date) {
+			return selectedDate.toISOString().split('T')[0];
 		}
-		return new Date().toISOString().split('T')[0];
-	});
+		if (typeof selectedDate === 'string' && selectedDate.includes('-')) {
+			return selectedDate;
+		}
+	}
+	return new Date().toISOString().split('T')[0];
+});
 
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
@@ -74,10 +74,9 @@ const AddExpenseModal = ({ tripID, expenseID, onClose, onEventAdded }) => {
 
 	const createDateTime = (dateString, timeString) => {
 		if (!timeString) return null;
-		const [hours, minutes] = timeString.split(':');
-		const dt = new Date(dateString);
-		dt.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-		return dt;
+		const [year, month, day] = dateString.split('-').map(Number);
+		const [hours, minutes] = timeString.split(':').map(Number);
+		return new Date(year, month - 1, day, hours, minutes, 0); // month is 0-based
 	};
 
 	const validateForm = () => {

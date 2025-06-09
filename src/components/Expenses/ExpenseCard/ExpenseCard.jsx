@@ -104,11 +104,11 @@ const ExpenseCard = ({ event, view }) => {
 	const getStatusStyles = () => {
 	const statusStyles = {
 		pending: {
-			background: 'linear-gradient(135deg, #ff9a56 0%, #ff6b35 100%)',
+			background: ' #ff6b35',
 			borderLeft: '4px solid #ff6b35',
 		},
 		paid: {
-			background: 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)',
+			background: ' #45a049',
 			borderLeft: '4px solid #45a049',
 		},
 	};
