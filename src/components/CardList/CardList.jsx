@@ -5,7 +5,7 @@ import arrowBlue from '../../assets/arrow-watchMore-blue.svg';
 import arrowYellow from '../../assets/arrow-watchMore-yellow.svg';
 import arrowTerra from '../../assets/arrow-watchMore-red.svg';
 import arrowGreen from '../../assets/arrow-watchMore-green.png';
-import { createExpense, createItinerary, sharedIdGenerator } from '../../utils/firebaseUtils';
+import { createExpense, sharedIdGenerator } from '../../utils/firebaseUtils';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { doc } from 'firebase/firestore';
@@ -21,7 +21,6 @@ const CardList = ({ title, cardsData, variantColor = 'default' }) => {
 	const tripRef = doc(db, 'trips', tripId); 
 	const sharedId = sharedIdGenerator(tripRef);
 	createExpense(tripRef, [], date, sharedId); 
-	createItinerary(tripRef, [], date, sharedId);
 };
 	let arrowIcon;
 

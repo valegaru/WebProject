@@ -1,60 +1,50 @@
 import { useState, useEffect } from "react";
-import { addPlace, createList } from "../../../utils/firebaseUtils";
+import { addPlace, createList, getSavedLists } from "../../../utils/firebaseUtils";
 import { useSelector } from "react-redux";
-import { fetchLocationData } from "../../../utils/googleMapsUtils";
 import "./MapForm.css";
 import SavedListsDropdown from "../../SavedListsDropdown/SavedListsDropdown";
 
-const LocationForm = ({ 
+const MapForm = ({ 
     uid, 
     dialogLocation, 
+    placeDetails,
+    locationPhoto,
+    loadingLocationData,
     onLocationAdded, 
-    onCancel,
-    savedLists = []
+    onCancel
 }) => {
     const [isAddingLocation, setIsAddingLocation] = useState(false);
     const [isCreatingList, setIsCreatingList] = useState(false);
-    const [loadingLocationData, setLoadingLocationData] = useState(false);
-    const [placeDetails, setPlaceDetails] = useState(null);
-    const [locationPhoto, setLocationPhoto] = useState(null);
     const [selectedList, setSelectedList] = useState(null);
     const [showCreateListForm, setShowCreateListForm] = useState(false);
+    const [savedLists, setSavedLists] = useState([]);
+    const [loadingLists, setLoadingLists] = useState(false);
     const [newListForm, setNewListForm] = useState({
         name: "",
         description: ""
     });
 
     useEffect(() => {
-        if (dialogLocation && dialogLocation.lat && dialogLocation.lng) {
-            fetchLocationInfo(dialogLocation.lat, dialogLocation.lng);
-        }
-    }, [dialogLocation]);
-
-    const fetchLocationInfo = async (lat, lng) => {
-        setLoadingLocationData(true);
-        setLocationPhoto(null);
-        setPlaceDetails(null);
-
-        try {
-            const { placeDetails: fetchedPlaceDetails, photoUrl, error } = await fetchLocationData(lat, lng);
-
-            if (error) {
-                console.error('Error fetching location data:', error);
+        const fetchSavedLists = async () => {
+            if (!uid) {
+                setSavedLists([]);
+                return;
             }
 
-            if (fetchedPlaceDetails) {
-                setPlaceDetails(fetchedPlaceDetails);
+            setLoadingLists(true);
+            try {
+                const lists = await getSavedLists(uid);
+                setSavedLists(lists);
+            } catch (error) {
+                console.error("Error fetching saved lists:", error);
+                setSavedLists([]);
+            } finally {
+                setLoadingLists(false);
             }
+        };
 
-            if (photoUrl) {
-                setLocationPhoto(photoUrl);
-            }
-        } catch (error) {
-            console.error('Error fetching location info:', error);
-        } finally {
-            setLoadingLocationData(false);
-        }
-    };
+        fetchSavedLists();
+    }, [uid]);
 
     const handleCreateNewList = () => {
         setShowCreateListForm(true);
@@ -99,6 +89,10 @@ const LocationForm = ({
                     alert("List created and location added successfully!");
                     setNewListForm({ name: "", description: "" });
                     setShowCreateListForm(false);
+                    
+                    const updatedLists = await getSavedLists(uid);
+                    setSavedLists(updatedLists);
+                    
                     onLocationAdded(listId, placeId);
                 } else {
                     alert("List created but failed to add location. Please try again.");
@@ -160,8 +154,6 @@ const LocationForm = ({
 
     return (
         <div className="trip-form">
-            <h4 className="form-title">Add Location to List</h4>
-            
             {loadingLocationData ? (
                 <div className="loading-container">
                     <p>Loading location data...</p>
@@ -169,15 +161,6 @@ const LocationForm = ({
             ) : (
                 placeDetails && (
                     <div className="place-details">
-                        <h5 className="place-name">{placeDetails.name}</h5>
-                        {placeDetails.rating && (
-                            <p className="place-rating">
-                                Rating: {placeDetails.rating}/5 ⭐
-                            </p>
-                        )}
-                        <p className="place-address">
-                            {placeDetails.address}
-                        </p>
                         {locationPhoto && (
                             <div className="location-photo-container">
                                 <img 
@@ -187,6 +170,15 @@ const LocationForm = ({
                                 />
                             </div>
                         )}
+                        <h5 className="place-name">{placeDetails.name}</h5>
+                        {placeDetails.rating && (
+                            <p className="place-rating">
+                                Rating: {placeDetails.rating}/5 ⭐
+                            </p>
+                        )}
+                        <p className="place-address">
+                            {placeDetails.address}
+                        </p>
                     </div>
                 )
             )}
@@ -234,19 +226,25 @@ const LocationForm = ({
                 <>
                     <div className="form-field">
                         <label>Select List *</label>
-                        <SavedListsDropdown 
-                            savedLists={savedLists}
-                            onCreateNewList={handleCreateNewList}
-                            onSelectList={handleSelectList}
-                            placeholder="Choose a list to add location to..."
-                        />
+                        {loadingLists ? (
+                            <div className="loading-dropdown">
+                                <p>Loading lists...</p>
+                            </div>
+                        ) : (
+                            <SavedListsDropdown 
+                                savedLists={savedLists}
+                                onCreateNewList={handleCreateNewList}
+                                onSelectList={handleSelectList}
+                                placeholder="Choose a list to add location to..."
+                            />
+                        )}
                     </div>
 
                     <div className="button-group">
                         <button
-                            className={`app-button add-trip-button ${(isAddingLocation || loadingLocationData || !selectedList) ? 'disabled' : ''}`}
+                            className={`app-button add-trip-button ${(isAddingLocation || loadingLocationData || loadingLists || !selectedList) ? 'disabled' : ''}`}
                             onClick={onAddLocation}
-                            disabled={isAddingLocation || loadingLocationData || !selectedList}
+                            disabled={isAddingLocation || loadingLocationData || loadingLists || !selectedList}
                         >
                             {isAddingLocation ? 'Adding Location...' : 'Add Location'}
                         </button>
@@ -254,8 +252,8 @@ const LocationForm = ({
                         {onCancel && (
                             <button 
                                 onClick={onCancel}
-                                disabled={isAddingLocation || loadingLocationData}
-                                className={`cancel-button ${(isAddingLocation || loadingLocationData) ? 'disabled' : ''}`}
+                                disabled={isAddingLocation || loadingLocationData || loadingLists}
+                                className={`cancel-button ${(isAddingLocation || loadingLocationData || loadingLists) ? 'disabled' : ''}`}
                             >
                                 Cancel
                             </button>
@@ -267,4 +265,4 @@ const LocationForm = ({
     );
 };
 
-export default LocationForm;
+export default MapForm;

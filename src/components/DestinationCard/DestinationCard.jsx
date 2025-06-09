@@ -1,24 +1,22 @@
 import React from 'react';
-import '../ParticipantCard/ParticipantCard.css'; // reuse styles
 
-const DestinationCard = ({ name, flagUrl, onRemove }) => {
+const DestinationCard = ({ name, coordinates, flagUrl, onRemove }) => {
   return (
-    <div className="participant-card destination-card">
-      {flagUrl && (
-        <img
-          className="avatar"
-          src={flagUrl}
-          alt={`${name} flag`}
-        />
-      )}
-      <div className="info">
-        <span className="name">{name}</span>
+    <div className="destination-card">
+      <div className="destination-info">
+        {flagUrl && (
+          <img src={flagUrl} alt={`${name} flag`} className="destination-flag" />
+        )}
+        <div className="destination-details">
+          <h3 className="destination-name">{name}</h3>
+        </div>
       </div>
-      <button
-        className="remove-button"
+      <button 
         onClick={() => onRemove(name)}
+        className="remove-button"
+        aria-label={`Remove ${name}`}
       >
-        ✖
+        ✕
       </button>
     </div>
   );
