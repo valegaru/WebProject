@@ -1,62 +1,27 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { addPlace, createList } from "../../../utils/firebaseUtils";
 import { useSelector } from "react-redux";
-import { fetchLocationData } from "../../../utils/googleMapsUtils";
 import "./MapForm.css";
 import SavedListsDropdown from "../../SavedListsDropdown/SavedListsDropdown";
 
-const LocationForm = ({ 
+const MapForm = ({ 
     uid, 
     dialogLocation, 
+    placeDetails,
+    locationPhoto,
+    loadingLocationData,
     onLocationAdded, 
     onCancel,
     savedLists = []
 }) => {
     const [isAddingLocation, setIsAddingLocation] = useState(false);
     const [isCreatingList, setIsCreatingList] = useState(false);
-    const [loadingLocationData, setLoadingLocationData] = useState(false);
-    const [placeDetails, setPlaceDetails] = useState(null);
-    const [locationPhoto, setLocationPhoto] = useState(null);
     const [selectedList, setSelectedList] = useState(null);
     const [showCreateListForm, setShowCreateListForm] = useState(false);
     const [newListForm, setNewListForm] = useState({
         name: "",
         description: ""
     });
-
-    useEffect(() => {
-        if (dialogLocation && dialogLocation.lat && dialogLocation.lng) {
-            fetchLocationInfo(dialogLocation.lat, dialogLocation.lng);
-        }
-
-        
-    }, [dialogLocation]);
-
-    const fetchLocationInfo = async (lat, lng) => {
-        setLoadingLocationData(true);
-        setLocationPhoto(null);
-        setPlaceDetails(null);
-
-        try {
-            const { placeDetails: fetchedPlaceDetails, photoUrl, error } = await fetchLocationData(lat, lng);
-
-            if (error) {
-                console.error('Error fetching location data:', error);
-            }
-
-            if (fetchedPlaceDetails) {
-                setPlaceDetails(fetchedPlaceDetails);
-            }
-
-            if (photoUrl) {
-                setLocationPhoto(photoUrl);
-            }
-        } catch (error) {
-            console.error('Error fetching location info:', error);
-        } finally {
-            setLoadingLocationData(false);
-        }
-    };
 
     const handleCreateNewList = () => {
         setShowCreateListForm(true);
@@ -169,7 +134,6 @@ const LocationForm = ({
             ) : (
                 placeDetails && (
                     <div className="place-details">
-                        
                         {locationPhoto && (
                             <div className="location-photo-container">
                                 <img 
@@ -268,4 +232,4 @@ const LocationForm = ({
     );
 };
 
-export default LocationForm;
+export default MapForm;
