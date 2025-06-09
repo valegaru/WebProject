@@ -9,11 +9,6 @@ const DestinationCard = ({ name, coordinates, flagUrl, onRemove }) => {
         )}
         <div className="destination-details">
           <h3 className="destination-name">{name}</h3>
-          {coordinates && (
-            <p className="destination-coords">
-              📍 {coordinates.lat.toFixed(4)}, {coordinates.lng.toFixed(4)}
-            </p>
-          )}
         </div>
       </div>
       <button 
