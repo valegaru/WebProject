@@ -64,27 +64,8 @@
 	color: #666;
 }
 
-/* 📱 Responsive para móvil */
-@media (max-width: 600px) {
-	.calendar-rework {
-		padding: 0.5rem 0.2rem;
-	}
-
-	.calendar-rework__calendar-wrap {
-		min-width: 600px;
-	}
-
-	.calendar-rework__view-controls {
-		flex-direction: column;
-	}
-
-	.calendar-rework__view-btn {
-		width: 100%;
-	}
-}
-
 /* 📱 Extra para iPhone 12 Pro (~390px) */
-@media (max-width: 420px) {
+@media (max-width: 391px) {
 	.calendar-rework {
 		padding: 0.5rem 0.2rem;
 	}
