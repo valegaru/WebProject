@@ -139,7 +139,6 @@ const AddExpenseModal = ({ tripID, expenseID, onClose, onEventAdded }) => {
 					: [],
 				currency,
 				paymentMethod,
-				status,
 				notes: notes.trim(),
 				participants,
 				tripID,
@@ -157,7 +156,6 @@ const AddExpenseModal = ({ tripID, expenseID, onClose, onEventAdded }) => {
 				end: endDateTime,
 				amount: parseFloat(amount),
 				category,
-				status,
 				participants,
 				location,
 				coordinates,
@@ -260,12 +258,6 @@ const AddExpenseModal = ({ tripID, expenseID, onClose, onEventAdded }) => {
 						<input value={tags} onChange={(e) => setTags(e.target.value)} placeholder='Tags (comma-separated)' />
 					</div>
 
-					<select value={status} onChange={(e) => setStatus(e.target.value)}>
-						<option value='incomplete'>Incomplete</option>
-						<option value='complete'>Complete</option>
-						<option value='pending'>Pending</option>
-						<option value='cancelled'>Cancelled</option>
-					</select>
 
 					<ParticipantManager participants={selectedParticipants} onParticipantsChange={handleParticipantsChange} />
 
