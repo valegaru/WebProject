@@ -46,6 +46,12 @@
 	flex-wrap: wrap;
 }
 
+.expense-card__participants{
+	display: flex;
+	flex-direction: row;
+	gap: 1vw;
+}
+
 .expense-card__title {
 	font-weight: 700;
 	font-size: 1rem;
@@ -54,6 +60,11 @@
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+.expense-card__content{
+	display: flex;
+	flex-direction: row;
 }
 
 .expense-card__amount {

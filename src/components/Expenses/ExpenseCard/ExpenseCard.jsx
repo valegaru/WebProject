@@ -172,15 +172,11 @@ const ExpenseCard = ({ event, view }) => {
 				<div className='expense-card__row'>
 					<div className='expense-card__title'>{title}</div>
 					<div className='expense-card__amount'>{formatAmount(amount)}</div>
+					{isDetailedView && formatTimeRange() && <div className='expense-card__time'>{formatTimeRange()}</div>}
 				</div>
 
-				{isDetailedView && formatTimeRange() && <div className='expense-card__time'>⏰ {formatTimeRange()}</div>}
-			</div>
-
-			{isDetailedView && participantList.length > 0 && (
-				<div className='expense-card__footer'>
-					<span className='expense-card__participant-count'>👥 {participantList.length}</span>
-					<div className='expense-card__participants'>
+				{isDetailedView && participantList.length > 0 && (
+				<div className='expense-card__participants'>
 						{loadingProfiles ? (
 							<div className='expense-card__loading'>Loading participants...</div>
 						) : (
@@ -206,8 +202,11 @@ const ExpenseCard = ({ event, view }) => {
 							</>
 						)}
 					</div>
-				</div>
 			)}
+
+			</div>
+
+			
 		</div>
 
 		{showEditModal && (
