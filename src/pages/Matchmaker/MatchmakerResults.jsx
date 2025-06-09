@@ -82,21 +82,21 @@ function MatchmakerResults() {
 		<>
 			<Navbar />
 			<div className='matchmaker-results'>
-				<h1 className='winner-title'>🌍 Resultado del Match</h1>
+				<h1 className='winner-title'>Match Results</h1>
 
 				{loading ? (
-					<p>Cargando resultados...</p>
+					<p>loading...</p>
 				) : errorMsg ? (
 					<p>{errorMsg}</p>
 				) : winnerCity ? (
 					<>
 						<WinnerDestination city={winnerCity} />
 						<button className='create-trip-btn' onClick={handleCreateTripFromWinner}>
-							Crea un viaje con este destino
+							Create a trip with this destination
 						</button>
 					</>
 				) : (
-					<p>No se encontró un destino ganador.</p>
+					<p>No winner selected</p>
 				)}
 			</div>
 		</>

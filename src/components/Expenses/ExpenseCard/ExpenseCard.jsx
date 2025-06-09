@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import '../ExpenseCard/ExpenseCard.css';
 import { useSelector } from 'react-redux';
+import ProfileInfo from '../ProfileInfo/ProfileInfo'; // Add this import
 
 const ExpenseCard = ({ event, view }) => {
 	const [profilePics, setProfilePics] = useState({});
@@ -90,8 +91,6 @@ const ExpenseCard = ({ event, view }) => {
 	return statusStyles[computedStatus] || statusStyles.pending;
 };
 
-
-
 	const cardStyle = {
 		...getStatusStyles(computedStatus),
 		color: 'white',
@@ -147,19 +146,19 @@ const ExpenseCard = ({ event, view }) => {
 			{isDetailedView && participantList.length > 0 && (
 				<div className='expense-card__footer'>
 					<span className='expense-card__participant-count'>👥 {participantList.length}</span>
-					<div className='expense-card__avatars'>
+					<div className='expense-card__participants'>
 						{participantList.slice(0, 3).map((participant, index) => (
-							<div
+							<ProfileInfo
 								key={participant.userID || index}
-								className='expense-card__avatar'
-								style={{
-									backgroundImage: `url(${profilePics[participant.userID]})`,
-								}}
-								title={participant.name || 'Unknown'}
+								name={participant.name || 'Unknown'}
+								imgUrl={profilePics[participant.userID]}
+								contribution={Number(participant.contribution) || 0}
 							/>
 						))}
 						{participantList.length > 3 && (
-							<div className='expense-card__avatar-overflow'>+{participantList.length - 3}</div>
+							<div className='expense-card__participants-overflow'>
+								+{participantList.length - 3} more
+							</div>
 						)}
 					</div>
 				</div>
