@@ -250,7 +250,7 @@ export const getSavedLists = async (userId) => {
 
         const userListsRef = collection(db, `users/${userId}/savedLists`);
         const userListsSnapshot = await getDocs(userListsRef);
-        
+
         if (userListsSnapshot.empty) {
             return [];
         }
@@ -259,7 +259,7 @@ export const getSavedLists = async (userId) => {
             const listId = listDoc.data().id;
             const savedListRef = doc(db, 'savedLists', listId);
             const savedListSnapshot = await getDoc(savedListRef);
-            
+
             if (savedListSnapshot.exists()) {
                 return {
                     id: listId,
@@ -270,9 +270,9 @@ export const getSavedLists = async (userId) => {
         });
 
         const lists = await Promise.all(listPromises);
-        
+
         return lists.filter(list => list !== null);
-        
+
     } catch (error) {
         console.error('Error fetching user lists:', error);
         return [];
@@ -534,7 +534,7 @@ export const searchUsersByName = async (nameToSearch) => {
 	const usersRef = collection(db, 'users');
 	const q = query(
 		usersRef,
-		orderBy('username'), 
+		orderBy('username'),
 		startAt(nameToSearch),
 		endAt(nameToSearch + '\uf8ff')
 	);

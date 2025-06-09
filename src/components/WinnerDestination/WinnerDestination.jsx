@@ -2,11 +2,11 @@ import React from 'react';
 import './WinnerDestination.css';
 import { useNavigate } from 'react-router-dom';
 
-const WinnerDestination = ({ city }) => {
+const WinnerDestination = ({ city, roomId }) => {
 	const navigate = useNavigate();
 
 	const handleCreateTrip = () => {
-		navigate('/tripcreation');
+		navigate(`/tripcreation?roomId=${roomId}`);
 	};
 
 	const handleBackHome = () => {
