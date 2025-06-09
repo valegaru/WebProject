@@ -274,12 +274,12 @@ function MatchmakerRoom() {
 
 	return (
 		<div className='room-container'>
-			<h2>🧩 Crea tu Sala de Matchmaker</h2>
-			<button onClick={handleCreateRoom}>Crear Sala</button>
+			<h2>Create your Matchmaker room </h2>
+			<button onClick={handleCreateRoom}>Create Room</button>
 
 			{roomId && (
 				<div className='qr-wrapper'>
-					<h2>Comparte este QR o el link con tus amigos:</h2>
+					<h2>Share this QR or link with your friends:</h2>
 					<QRCode value={roomLink} size={256} />
 
 					<h3>
@@ -287,7 +287,7 @@ function MatchmakerRoom() {
 							{roomLink}
 						</a>
 					</h3>
-					<h3>Despues de compartir, da click al link para empezar</h3>
+					<h3> and then, click on the link to start </h3>
 				</div>
 			)}
 		</div>

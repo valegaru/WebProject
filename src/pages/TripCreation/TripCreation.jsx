@@ -1,17 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { addTrip } from '../../utils/firebaseUtils';
-import LogoutButton from '../../components/LogoutButton/LogoutButton';
+import { addTrip, fetchUserData } from '../../utils/firebaseUtils';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Navbar from '../../components/Navbar/Navbar';
 import ParticipantManager from '../../components/ParticipantManager/ParticipantManager';
-import './TripCreation.css';
 import DestinationSearch from '../../components/DestinationSearch/DestinationSearch';
 import DestinationCard from '../../components/DestinationCard/DestinationCard';
 import MapComponent from './../../components/Map/MapComponent/MapComponent';
 import { setMapType, setMapMarkers } from '../../store/mapInfo/MapInfo';
+import './TripCreation.css';
 
 const TripCreation = () => {
 	const dispatch = useDispatch();
@@ -155,19 +154,32 @@ const TripCreation = () => {
 		updateMapMarkers(tripData.destination);
 	}, [tripData.destination]);
 
+	// Matchmaker integration
 	useEffect(() => {
 		const params = new URLSearchParams(location.search);
 		const name = params.get('name');
 		const destination = params.get('destination');
-		const participants = params.get('participants');
+		const participantsParam = params.get('participants');
 
-		if (name || destination || participants) {
-			setTripData((prev) => ({
-				...prev,
-				name: name || prev.name,
-				destination: destination ? [destination] : prev.destination,
-				participants: participants ? JSON.parse(participants).map((id) => ({ id })) : prev.participants,
-			}));
+		if (destination && participantsParam) {
+			const ids = JSON.parse(participantsParam);
+			const fetchAll = async () => {
+				const users = await Promise.all(
+					ids.map(async (uid) => {
+						const user = await fetchUserData(uid);
+						return user ? { id: uid, username: user.username || '', email: user.email || '' } : { id: uid };
+					})
+				);
+
+				setTripData((prev) => ({
+					...prev,
+					name: name || destination,
+					destination: [destination],
+					participants: users,
+				}));
+			};
+
+			fetchAll();
 		}
 	}, [location.search]);
 

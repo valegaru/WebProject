@@ -92,7 +92,7 @@ function MatchmakerResults() {
 					<>
 						<WinnerDestination city={winnerCity} />
 						<button className='create-trip-btn' onClick={handleCreateTripFromWinner}>
-							Crea un viaje con este destino
+							Create a trip group with this destination
 						</button>
 					</>
 				) : (

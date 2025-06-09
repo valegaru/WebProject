@@ -19,3 +19,9 @@ body {
 	margin: 0;
 	padding: 0;
 }
+
+.create-trip-btn {
+	color: white;
+	background-color: #41542f;
+	margin-top: -20px;
+}

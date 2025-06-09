@@ -2,12 +2,11 @@ import React from 'react';
 import './WinnerDestination.css';
 import { useNavigate } from 'react-router-dom';
 
-const WinnerDestination = ({ city, roomId }) => {
+const WinnerDestination = ({ city }) => {
 	const navigate = useNavigate();
 
-	const handleCreateTrip = () => {
-		navigate(`/tripcreation?roomId=${roomId}`);
-	};
+	// const handleCreateTrip = () => {
+	// 	navigate(`/tripcreation?roomId=${roomId}`);
 
 	const handleBackHome = () => {
 		navigate('/home');
@@ -24,9 +23,12 @@ const WinnerDestination = ({ city, roomId }) => {
 			</div>
 
 			<div className='card-city-content winner-content'>
-				<button className='banner-button' onClick={handleCreateTrip}>
+				{/* <button className='banner-button' onClick={handleCreateTrip}>
 					Create a trip <strong>group</strong>
-				</button>
+				</button> */}
+				{/* <button className='create-trip-btn' onClick={handleCreateTripFromWinner}>
+							Crea un viaje con este destino
+						</button> */}
 				<button className='banner-button' onClick={handleBackHome}>
 					Go to Home
 				</button>
