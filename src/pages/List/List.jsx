@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import './List.css'
+import './List.css';
 import Navbar from '../../components/Navbar/Navbar';
-import Card from '../../components/Card/Card'; // your Card component
+import Card from '../../components/Card/Card';
 import editIcon from '../../assets/editIcon.png';
 import { fetchSavedListById, fetchItemsForSavedList } from '../../utils/firebaseUtils';
+import { useDispatch } from 'react-redux';
+import { setMapMarkers, setMapType } from '../../store/mapInfo/MapInfo';
+import MapComponent from '../../components/Map/MapComponent/MapComponent';
+
 
 const List = () => {
 	const { listId } = useParams();
 	const [list, setList] = useState(null);
 	const [places, setPlaces] = useState([]);
-
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
 	const handleItemClick = (placeId) => {
@@ -20,6 +24,8 @@ const List = () => {
 	};
 
 	useEffect(() => {
+		dispatch(setMapType("trips"))
+
 		const fetchData = async () => {
 			try {
 				const listDoc = await fetchSavedListById(listId);
@@ -35,6 +41,20 @@ const List = () => {
 						onClick: () => handleItemClick(item.id),
 					}));
 					setPlaces(itemsWithClick);
+
+					// Set map markers from items with coordinates
+					const validMarkers = listItems
+						.filter(item => item.coordinates?.lat && item.coordinates?.lng)
+						.map(item => ({
+							id: item.id,
+							position: {
+								lat: item.coordinates.lat,
+								lng: item.coordinates.lng,
+							},
+							title: item.name || 'Unnamed Place',
+						}));
+
+					dispatch(setMapMarkers(validMarkers));
 				}
 			} catch (err) {
 				console.error('Error loading list data:', err);
@@ -44,31 +64,14 @@ const List = () => {
 		if (listId) {
 			fetchData();
 		}
-	}, [listId]);
+	}, [listId, dispatch]);
 
 	if (!list) return <p>Loading list data...</p>;
 
 	return (
 		<div className='trip-planner-container'>
 			<Navbar />
-			<section className='trip-header'>
-				<img src={list.coverImage || '/default-banner.jpg'} alt='List Banner' className='trip-banner' />
-				<div className='container'>
-					<div className='textContent'>
-						<div className='nameDate'>
-							<h1>{list.title || 'Untitled List'}</h1>
-							<button className='edit-icon'>
-								<img src={editIcon} alt='Edit' />
-							</button>
-						</div>
-						<div className='trip-description'>
-							<h3>Description:</h3>
-							<p>{list.description || 'No description provided.'}</p>
-						</div>
-					</div>
-				</div>
-			</section>
-
+			<MapComponent></MapComponent>
 			<section className='section'>
 				<h2>Places</h2>
 				{places.length === 0 ? (
@@ -80,7 +83,7 @@ const List = () => {
 								key={place.id}
 								id={place.id}
 								name={place.name || 'Untitled Place'}
-								tripPic={place.tripPic} 
+								tripPic={place.tripPic}
 								description={place.address || ''}
 								onClick={place.onClick}
 								variant='saved'

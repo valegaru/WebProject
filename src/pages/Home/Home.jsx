@@ -18,6 +18,7 @@ import { fetchTripsFromUser, getSavedLists } from '../../utils/firebaseUtils';
 import { useNavigate } from 'react-router-dom';
 import MapComponent from '../../components/Map/MapComponent/MapComponent';
 import CardList from '../../components/CardList/CardList';
+import { clearMapMarkers, setMapType } from '../../store/mapInfo/MapInfo';
 
 
 const Home = () => {
@@ -31,6 +32,8 @@ const Home = () => {
 	const [trips, setTrips] = useState([]);
 
 	useEffect(() => {
+	dispatch(clearMapMarkers())
+	dispatch(setMapType("places"))
 	const loadData = async () => {
 		if (!uid) return;
 
