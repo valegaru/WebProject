@@ -14,7 +14,7 @@ import { db } from '../../services/firebase';
 
 const CardList = ({ title, cardsData, variantColor = 'default' }) => {
 
-	const date = useSelector((state)=> state.date.selectedDate)
+	const date = new Date();
 	const {tripId} = useParams()
 
 	const handleClickPlus = () => {
