@@ -1,136 +1,100 @@
-/* CalendarRework.css */
-
 .calendar-rework {
-	padding: 2rem;
+	padding: 20px;
 	font-family: 'Inter', sans-serif;
+	background-color: #fefaf4;
 }
 
-/* Header section: error banner + view controls + stats */
 .calendar-rework__header {
-	margin-bottom: 1.25rem;
-}
-
-.calendar-rework__error {
-	padding: 0.75rem 1rem;
-	background-color: #fee2e2;
-	color: #b91c1c;
-	border-radius: 6px;
-	border: 1px solid #fecaca;
-	margin-bottom: 1rem;
-	font-size: 0.95rem;
-}
-
-.calendar-rework__controls {
-	display: flex;
-	gap: 0.5rem;
-	margin-bottom: 0.75rem;
-	flex-wrap: wrap;
-}
-
-.calendar-rework__button {
-	flex: none;
-	padding: 0.6rem 1.2rem;
-	font-size: 1rem;
-	border: none;
-	border-radius: 8px;
-	cursor: pointer;
-	transition: background-color 0.2s ease, color 0.2s ease;
-	background-color: #f0f0f0;
-	color: #374151;
-}
-
-.calendar-rework__button--active {
-	background-color: #4a7c2f;
-	color: #ffffff;
-}
-
-.calendar-rework__stats {
-	font-size: 0.875rem;
-	color: #666;
 	margin-bottom: 1.5rem;
 }
 
-/* Calendar container */
-.calendar-rework__view {
-	height: 500px;
+.calendar-rework__view-controls {
+	display: flex;
+	gap: 10px;
+	margin-bottom: 1rem;
 }
 
-/* Loading state */
+.calendar-rework__view-btn {
+	padding: 0.5rem 1.25rem;
+	font-size: 1rem;
+	border-radius: 8px;
+	border: none;
+	background-color: #4a7c2f;
+	color: #fff;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.calendar-rework__view-btn.active {
+	background-color: #1a63c3;
+	color: #fff;
+}
+
+.calendar-rework__view-btn:not(.active):hover {
+	background-color: #3f8d2f;
+}
+
+.calendar-rework__summary {
+	font-size: 0.95rem;
+	color: #444;
+}
+
+.calendar-rework__error {
+	background-color: #fee2e2;
+	color: #b91c1c;
+	padding: 0.75rem 1rem;
+	border-radius: 6px;
+	margin-bottom: 1rem;
+	border: 1px solid #fecaca;
+}
+
+.calendar-rework__calendar-wrap {
+	border-radius: 12px;
+	overflow-x: auto;
+}
+
+/* Loading */
 .calendar-rework__loading {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	height: 500px;
-	font-size: 1rem;
+	font-size: 16px;
 	color: #666;
 }
 
-/* --------------------------------------------------
-   RESPONSIVE BREAKPOINTS
-   Mirror AddExpenseModal.css behavior
--------------------------------------------------- */
-
-/* < 600px */
+/* 📱 Responsive para móvil */
 @media (max-width: 600px) {
 	.calendar-rework {
-		padding: 1.5rem;
+		padding: 0.5rem 0.2rem;
 	}
-	.calendar-rework__header {
-		margin-bottom: 1rem;
-	}
-	.calendar-rework__controls {
-		gap: 0.25rem;
-	}
-	.calendar-rework__button {
-		flex: 1;
-		padding: 0.5rem;
-		font-size: 0.875rem;
-	}
-	.calendar-rework__stats {
-		font-size: 0.75rem;
-		margin-bottom: 1rem;
-	}
-	.calendar-rework__view,
-	.calendar-rework__loading {
-		height: 400px;
-	}
-}
 
-/* < 400px (e.g. iPhone 12 Pro width) */
-@media (max-width: 400px) {
-	.calendar-rework {
-		padding: 1rem;
+	.calendar-rework__calendar-wrap {
+		min-width: 600px;
 	}
-	.calendar-rework__header h1,
-	.calendar-rework__header h2,
-	.calendar-rework__header h3 {
-		font-size: 1.25rem;
-	}
-	.calendar-rework__controls {
+
+	.calendar-rework__view-controls {
 		flex-direction: column;
 	}
-	.calendar-rework__button {
+
+	.calendar-rework__view-btn {
 		width: 100%;
-		padding: 0.5rem;
-		font-size: 0.75rem;
-	}
-	.calendar-rework__view,
-	.calendar-rework__loading {
-		height: 300px;
 	}
 }
 
-@media (max-width: 500px) {
+/* 📱 Extra para iPhone 12 Pro (~390px) */
+@media (max-width: 420px) {
 	.calendar-rework {
-		padding: 1rem 0.5rem;
-		overflow-x: auto;
+		padding: 0.5rem 0.2rem;
 	}
 
-	.calendar-rework__view {
-		min-width: 600px; /* Esto evita que el calendario se comprima demasiado */
+	.calendar-rework__calendar-wrap {
+		min-width: 360px;
 	}
 
-	.rbc-calendar {
-		width: 100%;
+	.calendar-rework__view-btn {
+		font-size: 0.95rem;
+		padding: 0.5rem;
 	}
 }

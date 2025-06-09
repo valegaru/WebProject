@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { clearEvents, setError, setEvents, setLoading } from '../../store/eventSlice/EventSlice';
 import { fetchExpenseEvents } from '../../utils/firebaseUtils';
 import { useParams } from 'react-router-dom';
-import './CalendarRework.css'; // Importa los estilos nuevos
+import './CalendarRework.css';
 
 const localizer = momentLocalizer(moment);
 
@@ -41,7 +41,6 @@ const roundToHourBoundaries = (events) => {
 
 const CalendarRework = () => {
 	const { tripId, expenseId } = useParams();
-	const reduxState = useSelector((state) => state);
 	const dispatch = useDispatch();
 	const { events, loading, error } = useSelector((state) => state.events);
 	const [view, setView] = useState('month');
@@ -56,7 +55,6 @@ const CalendarRework = () => {
 
 			try {
 				const fetchedEvents = await fetchExpenseEvents(tripId, expenseId);
-
 				const calendarEvents = fetchedEvents.map((event) => ({
 					...event,
 					start: event.start ? new Date(event.start) : new Date(),
@@ -82,16 +80,14 @@ const CalendarRework = () => {
 
 	const EventComponent = ({ event }) => <ExpenseCard event={event} />;
 
-	const eventStyleGetter = (event, start, end, isSelected) => {
-		return {
-			style: {
-				backgroundColor: 'transparent',
-				border: 'none',
-				borderRadius: '4px',
-				padding: '1px',
-			},
-		};
-	};
+	const eventStyleGetter = () => ({
+		style: {
+			backgroundColor: 'transparent',
+			border: 'none',
+			borderRadius: '4px',
+			padding: '1px',
+		},
+	});
 
 	const formats = useMemo(
 		() => ({
@@ -109,36 +105,38 @@ const CalendarRework = () => {
 		<div className='calendar-rework'>
 			<div className='calendar-rework__header'>
 				{error && <div className='calendar-rework__error'>{error}</div>}
-				<div className='calendar-rework__controls'>
+
+				<div className='calendar-rework__view-controls'>
 					<button
-						className={`calendar-rework__button ${view === 'month' ? 'calendar-rework__button--active' : ''}`}
+						className={`calendar-rework__view-btn${view === 'month' ? ' active' : ''}`}
 						onClick={() => setView('month')}
 					>
 						Month
 					</button>
 					<button
-						className={`calendar-rework__button ${view === 'week' ? 'calendar-rework__button--active' : ''}`}
+						className={`calendar-rework__view-btn${view === 'week' ? ' active' : ''}`}
 						onClick={() => setView('week')}
 					>
 						Week
 					</button>
 					<button
-						className={`calendar-rework__button ${view === 'day' ? 'calendar-rework__button--active' : ''}`}
+						className={`calendar-rework__view-btn${view === 'day' ? ' active' : ''}`}
 						onClick={() => setView('day')}
 					>
 						Day
 					</button>
 				</div>
-				<div className='calendar-rework__stats'>
+
+				<div className='calendar-rework__summary'>
 					Showing {hourBoundaryEvents.length} event{hourBoundaryEvents.length !== 1 ? 's' : ''}
 					{hourBoundaryEvents.length > 0 && ' (rounded to hour boundaries)'}
 				</div>
 			</div>
 
-			{loading && events.length === 0 ? (
-				<div className='calendar-rework__loading'>Loading events...</div>
-			) : (
-				<div className='calendar-rework__view'>
+			<div className='calendar-rework__calendar-wrap'>
+				{loading && events.length === 0 ? (
+					<div className='calendar-rework__loading'>Loading events...</div>
+				) : (
 					<Calendar
 						localizer={localizer}
 						events={hourBoundaryEvents}
@@ -148,20 +146,18 @@ const CalendarRework = () => {
 						onView={setView}
 						date={date}
 						onNavigate={setDate}
-						components={{
-							event: EventComponent,
-						}}
+						components={{ event: EventComponent }}
 						eventPropGetter={eventStyleGetter}
 						formats={formats}
-						style={{ height: '100%' }}
+						style={{ height: '500px' }}
 						step={30}
 						timeslots={2}
 						min={new Date(2025, 0, 1, 6, 0)}
 						max={new Date(2025, 0, 1, 23, 0)}
 						dayLayoutAlgorithm='no-overlap'
 					/>
-				</div>
-			)}
+				)}
+			</div>
 		</div>
 	);
 };
