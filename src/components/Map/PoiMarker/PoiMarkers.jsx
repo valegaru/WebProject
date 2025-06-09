@@ -6,7 +6,7 @@ const PoiMarkers = ({ locationInfo }) => {
     
     return (
         <AdvancedMarker position={locationInfo}>
-            <Pin background={'#FBBC04'} glyphColor={'#000'} borderColor={'#000'} />
+            <Pin background={'#c34040'} glyphColor={'#000'} borderColor={'#000'} />
         </AdvancedMarker>
     );
 };

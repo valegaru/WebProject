@@ -1,0 +1,174 @@
+.trip-form {
+    margin-bottom: 15px;
+}
+
+.form-title {
+    margin: 0 0 15px 0;
+}
+
+.loading-container {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.place-details {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.place-name {
+    margin: 0 0 5px 0;
+}
+
+.place-rating {
+    margin: 0 0 5px 0;
+    font-size: 14px;
+}
+
+.place-address {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.location-photo-container {
+    margin-top: 10px;
+}
+
+.location-photo {
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    border-radius: 4px;
+}
+
+.form-field {
+    margin-bottom: 10px;
+}
+
+.form-field label {
+    display: block;
+    margin-bottom: 3px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.form-textarea {
+    width: 100%;
+    padding: 5px;
+    min-height: 60px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    resize: vertical;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.form-textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.date-fields {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.date-field {
+    flex: 1;
+}
+
+.date-field label {
+    display: block;
+    margin-bottom: 3px;
+}
+
+.participants-field {
+    margin-bottom: 15px;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.app-button,
+.add-trip-button {
+    flex: 1;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+}
+
+.app-button:hover,
+.add-trip-button:hover {
+    background-color: #0056b3;
+}
+
+.cancel-button {
+    flex: 1;
+    padding: 10px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+}
+
+.cancel-button:hover {
+    background-color: #545b62;
+}
+
+.app-button.disabled,
+.add-trip-button.disabled,
+.cancel-button.disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.app-button.disabled:hover,
+.add-trip-button.disabled:hover,
+.cancel-button.disabled:hover {
+    background-color: #ccc;
+}
+
+@media (max-width: 480px) {
+    .date-fields {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .button-group {
+        flex-direction: column;
+    }
+    
+    .location-photo {
+        max-width: 100%;
+    }
+}
