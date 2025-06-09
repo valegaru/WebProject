@@ -160,8 +160,6 @@ const LocationForm = ({
 
     return (
         <div className="trip-form">
-            <h4 className="form-title">Add Location to List</h4>
-            
             {loadingLocationData ? (
                 <div className="loading-container">
                     <p>Loading location data...</p>
@@ -169,15 +167,7 @@ const LocationForm = ({
             ) : (
                 placeDetails && (
                     <div className="place-details">
-                        <h5 className="place-name">{placeDetails.name}</h5>
-                        {placeDetails.rating && (
-                            <p className="place-rating">
-                                Rating: {placeDetails.rating}/5 ⭐
-                            </p>
-                        )}
-                        <p className="place-address">
-                            {placeDetails.address}
-                        </p>
+                        
                         {locationPhoto && (
                             <div className="location-photo-container">
                                 <img 
@@ -187,6 +177,15 @@ const LocationForm = ({
                                 />
                             </div>
                         )}
+                        <h5 className="place-name">{placeDetails.name}</h5>
+                        {placeDetails.rating && (
+                            <p className="place-rating">
+                                Rating: {placeDetails.rating}/5 ⭐
+                            </p>
+                        )}
+                        <p className="place-address">
+                            {placeDetails.address}
+                        </p>
                     </div>
                 )
             )}

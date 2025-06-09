@@ -13,7 +13,7 @@ import paris from '../../assets/paris.png';
 import newYork from '../../assets/newYork.png';
 import thailand from '../../assets/thailand.png';
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { fetchTripsFromUser } from '../../utils/firebaseUtils';
 import { useNavigate } from 'react-router-dom';
 import MapComponent from '../../components/Map/MapComponent/MapComponent';
@@ -25,6 +25,7 @@ const Home = () => {
 	const reduxState = useSelector((state) => state)
 	const uid = useSelector((state) => state.auth.userId);
 	const name = useSelector((state) => state.auth.username);
+	const dispatch = useDispatch();
 	console.log(reduxState, "redux")
 
 	const [trips, setTrips] = useState([]);
