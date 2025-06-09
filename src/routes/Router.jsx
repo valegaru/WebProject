@@ -14,6 +14,7 @@ import Profile from '../pages/Profile/Profile';
 import TripCreation from '../pages/TripCreation/TripCreation';
 import Trips from '../pages/Trips/Trips';
 import Itinerary from '../pages/Itinerary/Itinerary';
+import DestinationDetail from '../pages/DestinationDetail/DestinationDetail';
 
 import { onAuthStateChanged } from 'firebase/auth';
 import { useDispatch } from 'react-redux';
@@ -45,7 +46,6 @@ const Router = () => {
 				<Route path='/' element={<Landing />} />
 				<Route path='/login' element={<Login />} />
 				<Route path='/register' element={<Register />} />
-
 				{/* Privadas */}
 				<Route
 					path='/home'
@@ -119,6 +119,15 @@ const Router = () => {
 						</PrivateRoute>
 					}
 				/>
+				<Route
+					path='/destination/:destinationId'
+					element={
+						<PrivateRoute>
+							<DestinationDetail />
+						</PrivateRoute>
+					}
+				/>
+
 				<Route
 					path='/trips'
 					element={
