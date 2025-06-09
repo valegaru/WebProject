@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { addPlace, createList, getSavedLists } from "../../../utils/firebaseUtils";
 import SavedListsDropdown from "../../SavedListsDropdown/SavedListsDropdown";
 import "./MapForm.css";
+import { setSavedLists } from "../../../store/mapInfo/MapInfo";
+import { useDispatch } from "react-redux";
 
 const MapForm = ({ 
     uid, 
@@ -13,27 +15,28 @@ const MapForm = ({
     onLocationAdded, 
     onCancel
 }) => {
+    const dispatch = useDispatch(); 
     const [isAddingLocation, setIsAddingLocation] = useState(false);
     const [isCreatingList, setIsCreatingList] = useState(false);
     const [selectedList, setSelectedList] = useState(null);
     const [showCreateListForm, setShowCreateListForm] = useState(false);
-    const [savedLists, setSavedLists] = useState([]);
+    const [savedLists, setLocalSavedLists] = useState([]); 
     const [loadingLists, setLoadingLists] = useState(false);
     const [newListForm, setNewListForm] = useState({ name: "", description: "" });
 
     useEffect(() => {
         const fetchSavedLists = async () => {
             if (!uid) {
-                setSavedLists([]);
+                setLocalSavedLists([]);
                 return;
             }
             setLoadingLists(true);
             try {
                 const lists = await getSavedLists(uid);
-                setSavedLists(lists);
+                setLocalSavedLists(lists); 
             } catch (error) {
                 console.error("Error fetching saved lists:", error);
-                setSavedLists([]);
+                setLocalSavedLists([]);
             } finally {
                 setLoadingLists(false);
             }
@@ -56,25 +59,81 @@ const MapForm = ({
     };
 
     const onCreateList = async () => {
-    if (!uid) {
-        alert("Please log in to create a list");
-        return;
-    }
-    if (!newListForm.name.trim()) {
-        alert("Please enter a list name");
-        return;
-    }
-    setIsCreatingList(true);
-    try {
-        const listId = await createList(
-            uid,
-            newListForm.name.trim(),
-            newListForm.description.trim(),
-            tripPic 
-        );
-        if (listId) {
+        if (!uid) {
+            alert("Please log in to create a list");
+            return;
+        }
+        if (!newListForm.name.trim()) {
+            alert("Please enter a list name");
+            return;
+        }
+        setIsCreatingList(true);
+        try {
+            const listId = await createList(
+                uid,
+                newListForm.name.trim(),
+                newListForm.description.trim(),
+                tripPic 
+            );
+            if (listId) {
+                const placeId = await addPlace(
+                    listId,
+                    dialogLocation.lat,
+                    dialogLocation.lng,
+                    tripPic,
+                    placeDetails?.name || 'Untitled Place',
+                    placeDetails?.address || ''
+                );
+                if (placeId) {
+                    alert("List created and location added successfully!");
+                    setNewListForm({ name: "", description: "" });
+                    setShowCreateListForm(false);
+                    
+                    const updatedLists = await getSavedLists(uid);
+                    
+                    setLocalSavedLists(updatedLists);
+                    
+                    const formattedLists = updatedLists.map(list => ({
+                        id: list.id,
+                        tripPic: list.tripPic,
+                        name: list.name || 'Untitled List',
+                        onClick: () => {
+                        }
+                    }));
+                    dispatch(setSavedLists(formattedLists)); 
+                    
+                    onLocationAdded(listId, placeId);
+                } else {
+                    alert("List created but failed to add location. Please try again.");
+                }
+            } else {
+                alert("Failed to create list. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error creating list:", error);
+            alert("Error creating list. Please try again.");
+        } finally {
+            setIsCreatingList(false);
+        }
+    };
+
+    const onAddLocation = async () => {
+        if (!uid) {
+            alert("Please log in to add a location");
+            return;
+        }
+        if (!selectedList) {
+            alert("Please select a list to add the location to");
+            return;
+        }
+        if (!dialogLocation || !dialogLocation.lat || !dialogLocation.lng) {
+            alert("Location data is not available");
+            return;
+        }
+        setIsAddingLocation(true);
+        try {
             const placeId = await addPlace(
-                listId,
+                selectedList.id,
                 dialogLocation.lat,
                 dialogLocation.lng,
                 tripPic,
@@ -82,63 +141,19 @@ const MapForm = ({
                 placeDetails?.address || ''
             );
             if (placeId) {
-                alert("List created and location added successfully!");
-                setNewListForm({ name: "", description: "" });
-                setShowCreateListForm(false);
-                const updatedLists = await getSavedLists(uid);
-                setSavedLists(updatedLists);
-                onLocationAdded(listId, placeId);
+                alert("Location added to list successfully!");
+                setSelectedList(null);
+                onLocationAdded(selectedList.id, placeId);
             } else {
-                alert("List created but failed to add location. Please try again.");
+                alert("Failed to add location. Please try again.");
             }
-        } else {
-            alert("Failed to create list. Please try again.");
+        } catch (error) {
+            console.error("Error adding location:", error);
+            alert("Error adding location. Please try again.");
+        } finally {
+            setIsAddingLocation(false);
         }
-    } catch (error) {
-        console.error("Error creating list:", error);
-        alert("Error creating list. Please try again.");
-    } finally {
-        setIsCreatingList(false);
-    }
-};
-
-const onAddLocation = async () => {
-    if (!uid) {
-        alert("Please log in to add a location");
-        return;
-    }
-    if (!selectedList) {
-        alert("Please select a list to add the location to");
-        return;
-    }
-    if (!dialogLocation || !dialogLocation.lat || !dialogLocation.lng) {
-        alert("Location data is not available");
-        return;
-    }
-    setIsAddingLocation(true);
-    try {
-        const placeId = await addPlace(
-            selectedList.id,
-            dialogLocation.lat,
-            dialogLocation.lng,
-            tripPic,
-            placeDetails?.name || 'Untitled Place',
-            placeDetails?.address || ''
-        );
-        if (placeId) {
-            alert("Location added to list successfully!");
-            setSelectedList(null);
-            onLocationAdded(selectedList.id, placeId);
-        } else {
-            alert("Failed to add location. Please try again.");
-        }
-    } catch (error) {
-        console.error("Error adding location:", error);
-        alert("Error adding location. Please try again.");
-    } finally {
-        setIsAddingLocation(false);
-    }
-};
+    };
 
     const handleCancelCreateList = () => {
         setShowCreateListForm(false);
@@ -167,10 +182,6 @@ const onAddLocation = async () => {
                             </p>
                         )}
                         <p className="place-address">{placeDetails.address}</p>
-                        {/* Show coordinates */}
-                        <p className="place-coordinates">
-                            Lat: {dialogLocation?.lat?.toFixed(5)}, Lng: {dialogLocation?.lng?.toFixed(5)}
-                        </p>
                     </div>
                 )
             )}
