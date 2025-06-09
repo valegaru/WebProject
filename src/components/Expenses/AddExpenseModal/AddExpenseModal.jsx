@@ -25,17 +25,13 @@ const AddExpenseModal = ({ tripID, expenseID, onClose, onEventAdded }) => {
 });
 
 	const [title, setTitle] = useState('');
-	const [description, setDescription] = useState('');
 	const [amount, setAmount] = useState('');
 	const [category, setCategory] = useState('');
 	const [startTime, setStartTime] = useState('');
 	const [endTime, setEndTime] = useState('');
 	const [location, setLocation] = useState('');
-	const [tags, setTags] = useState('');
 	const currency = useSelector((state) => state.currency.currency);
-	const [paymentMethod, setPaymentMethod] = useState('');
 	const [status, setStatus] = useState('incomplete');
-	const [notes, setNotes] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
 
@@ -53,8 +49,6 @@ const AddExpenseModal = ({ tripID, expenseID, onClose, onEventAdded }) => {
 		'Utilities',
 		'Other',
 	];
-
-	const paymentMethods = ['Cash', 'Credit Card', 'Debit Card', 'Bank Transfer', 'Digital Wallet', 'Other'];
 
 	const handleParticipantsChange = (newParticipants) => {
 		setSelectedParticipants(newParticipants);
@@ -123,22 +117,13 @@ const AddExpenseModal = ({ tripID, expenseID, onClose, onEventAdded }) => {
 
 			const eventData = {
 				title: title.trim(),
-				description: description.trim(),
 				amount: parseFloat(amount),
 				category,
 				start: startDateTime,
 				end: endDateTime,
 				location: location.trim(),
                 coordinates, 
-				tags: tags
-					? tags
-							.split(',')
-							.map((t) => t.trim())
-							.filter(Boolean)
-					: [],
 				currency,
-				paymentMethod,
-				notes: notes.trim(),
 				participants,
 				tripID,
 				expenseID,
@@ -158,11 +143,7 @@ const AddExpenseModal = ({ tripID, expenseID, onClose, onEventAdded }) => {
 				participants,
 				location,
 				coordinates,
-				description,
-				tags: eventData.tags,
 				currency,
-				paymentMethod,
-				notes,
 				tripID,
 				expenseID,
 				createdAt: new Date(),
@@ -219,44 +200,14 @@ const AddExpenseModal = ({ tripID, expenseID, onClose, onEventAdded }) => {
 					</div>
 
 					<div className='form-row'>
-						<select
-							value={currency}
-							onChange={(e) => {
-								/* no-op: currency viene de Redux */
-							}}
-							disabled
-						>
-							<option value={currency}>{currency}</option>
-						</select>
-						<select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
-							<option value=''>Payment Method</option>
-							{paymentMethods.map((m) => (
-								<option key={m} value={m}>
-									{m}
-								</option>
-							))}
-						</select>
-					</div>
-
-					<textarea
-						value={description}
-						onChange={(e) => setDescription(e.target.value)}
-						placeholder='Description'
-						rows='3'
-					/>
-
-					<div className='form-row'>
 						<SearchBar
  							googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} 
   							onLocationSelect={(loc) => {
     						setLocation(loc.placeDetails.name); 
-    						setCoordinates({ lat: loc.lat, lng: loc.lng });
+    						setCoordinates({ lat: loc.lat, lng: lng });
   							}}
 						/>
-
-						<input value={tags} onChange={(e) => setTags(e.target.value)} placeholder='Tags (comma-separated)' />
 					</div>
-
 
 					<ParticipantManager participants={selectedParticipants} onParticipantsChange={handleParticipantsChange} />
 
@@ -279,13 +230,6 @@ const AddExpenseModal = ({ tripID, expenseID, onClose, onEventAdded }) => {
 							))}
 						</div>
 					)}
-
-					<textarea
-						value={notes}
-						onChange={(e) => setNotes(e.target.value)}
-						placeholder='Additional notes...'
-						rows='3'
-					/>
 
 					<div className='modal-buttons'>
 						<button type='submit' disabled={loading}>
