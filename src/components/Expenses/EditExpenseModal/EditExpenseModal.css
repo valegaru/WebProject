@@ -9,7 +9,7 @@
 	justify-content: center;
 	align-items: flex-start;
 	padding-top: 70px;
-	z-index: 1000;
+	z-index: 99999; 
 	overflow-y: auto;
 }
 
@@ -25,6 +25,7 @@
 	margin-top: 80px;
 	max-height: calc(100vh - 100px);
 	overflow-y: auto;
+    z-index: 9999; 
 }
 
 /* Título */
