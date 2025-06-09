@@ -63,7 +63,7 @@ const CalendarRework = () => {
 
 	const hourBoundaryEvents = useMemo(() => roundToHourBoundaries(events), [events]);
 
-	const EventComponent = ({ event }) => <ExpenseCard event={event} />;
+	const EventComponent = ({ event }) => <ExpenseCard event={event} view={view} />;
 
 	const formats = useMemo(
 		() => ({
