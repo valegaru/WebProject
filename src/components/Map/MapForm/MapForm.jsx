@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { addPlace, createList } from "../../../utils/firebaseUtils";
+import { useState, useEffect } from "react";
+import { addPlace, createList, getSavedLists } from "../../../utils/firebaseUtils";
 import { useSelector } from "react-redux";
 import "./MapForm.css";
 import SavedListsDropdown from "../../SavedListsDropdown/SavedListsDropdown";
@@ -11,17 +11,40 @@ const MapForm = ({
     locationPhoto,
     loadingLocationData,
     onLocationAdded, 
-    onCancel,
-    savedLists = []
+    onCancel
 }) => {
     const [isAddingLocation, setIsAddingLocation] = useState(false);
     const [isCreatingList, setIsCreatingList] = useState(false);
     const [selectedList, setSelectedList] = useState(null);
     const [showCreateListForm, setShowCreateListForm] = useState(false);
+    const [savedLists, setSavedLists] = useState([]);
+    const [loadingLists, setLoadingLists] = useState(false);
     const [newListForm, setNewListForm] = useState({
         name: "",
         description: ""
     });
+
+    useEffect(() => {
+        const fetchSavedLists = async () => {
+            if (!uid) {
+                setSavedLists([]);
+                return;
+            }
+
+            setLoadingLists(true);
+            try {
+                const lists = await getSavedLists(uid);
+                setSavedLists(lists);
+            } catch (error) {
+                console.error("Error fetching saved lists:", error);
+                setSavedLists([]);
+            } finally {
+                setLoadingLists(false);
+            }
+        };
+
+        fetchSavedLists();
+    }, [uid]);
 
     const handleCreateNewList = () => {
         setShowCreateListForm(true);
@@ -66,6 +89,10 @@ const MapForm = ({
                     alert("List created and location added successfully!");
                     setNewListForm({ name: "", description: "" });
                     setShowCreateListForm(false);
+                    
+                    const updatedLists = await getSavedLists(uid);
+                    setSavedLists(updatedLists);
+                    
                     onLocationAdded(listId, placeId);
                 } else {
                     alert("List created but failed to add location. Please try again.");
@@ -199,19 +226,25 @@ const MapForm = ({
                 <>
                     <div className="form-field">
                         <label>Select List *</label>
-                        <SavedListsDropdown 
-                            savedLists={savedLists}
-                            onCreateNewList={handleCreateNewList}
-                            onSelectList={handleSelectList}
-                            placeholder="Choose a list to add location to..."
-                        />
+                        {loadingLists ? (
+                            <div className="loading-dropdown">
+                                <p>Loading lists...</p>
+                            </div>
+                        ) : (
+                            <SavedListsDropdown 
+                                savedLists={savedLists}
+                                onCreateNewList={handleCreateNewList}
+                                onSelectList={handleSelectList}
+                                placeholder="Choose a list to add location to..."
+                            />
+                        )}
                     </div>
 
                     <div className="button-group">
                         <button
-                            className={`app-button add-trip-button ${(isAddingLocation || loadingLocationData || !selectedList) ? 'disabled' : ''}`}
+                            className={`app-button add-trip-button ${(isAddingLocation || loadingLocationData || loadingLists || !selectedList) ? 'disabled' : ''}`}
                             onClick={onAddLocation}
-                            disabled={isAddingLocation || loadingLocationData || !selectedList}
+                            disabled={isAddingLocation || loadingLocationData || loadingLists || !selectedList}
                         >
                             {isAddingLocation ? 'Adding Location...' : 'Add Location'}
                         </button>
@@ -219,8 +252,8 @@ const MapForm = ({
                         {onCancel && (
                             <button 
                                 onClick={onCancel}
-                                disabled={isAddingLocation || loadingLocationData}
-                                className={`cancel-button ${(isAddingLocation || loadingLocationData) ? 'disabled' : ''}`}
+                                disabled={isAddingLocation || loadingLocationData || loadingLists}
+                                className={`cancel-button ${(isAddingLocation || loadingLocationData || loadingLists) ? 'disabled' : ''}`}
                             >
                                 Cancel
                             </button>
