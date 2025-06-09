@@ -2,11 +2,14 @@ import { APIProvider, InfoWindow, Map } from '@vis.gl/react-google-maps';
 import PoiMarkers from '../PoiMarker/PoiMarkers';
 import MapForm from '../MapForm/MapForm';
 import SearchBar from '../SearchBar/SearchBar';
-import { useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useState, useRef, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { fetchLocationData } from '../../../utils/googleMapsUtils';
+import { clearMapMarkers, setMapType } from '../../../store/mapInfo/MapInfo';
 
 const MapComponent = () => {
+  
+  const dispatch = useDispatch()
   const uid = useSelector((state) => state.auth.userId);
   const name = useSelector((state) => state.auth.username);
   const mapType = useSelector((state) => state.mapInfo.type)
@@ -108,6 +111,11 @@ const MapComponent = () => {
     setLocationPhoto(null);
     setInitialTripName("");
   };
+
+  useEffect(()=>{
+    dispatch(clearMapMarkers())
+    dispatch(setMapType("places"))
+  },[dispatch])
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '50vh', display: 'flex' }}>
