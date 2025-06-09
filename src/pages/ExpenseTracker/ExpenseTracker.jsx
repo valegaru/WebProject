@@ -14,6 +14,7 @@ import { addEvent } from "../../store/eventSlice/EventSlice";
 import AddEventModal from "../../components/Expenses/AddExpenseModal/AddExpenseModal";
 import { useParams } from 'react-router-dom';
 import CalendarRework from "../../components/CalendarRework/CalendarRework";
+import MapComponent from './../../components/Map/MapComponent/MapComponent';
 
 
 
@@ -52,6 +53,8 @@ const ExpenseTracker = () => {
       <Navbar />
       {loading ? (<Typography>Loading...</Typography>):(<>
       
+        <MapComponent></MapComponent>
+
       <div className="upper-expense">
 
         <div className="trip-name-and-toggle">
@@ -67,20 +70,20 @@ const ExpenseTracker = () => {
             <CurrencyToggleButton/>
           </div>
 
-          <div className="budget-section">
-            <BudgetRange label="individual" />
-            <BudgetRange label="group" />
+          <div className="carousel-and-button">
+                <CustomButton label="ADD EXPENSE" onClick={() => {setShowModal(true)}}/>
+                <div className="budget-section">
+                  <BudgetRange label="individual" />
+                  <BudgetRange label="group" />
+                </div>
 
           </div>
 
+          
       </div>
       
 
-      <div className="carousel-and-button">
-        <DateCarousel/>
-        <CustomButton label="ADD EXPENSE" onClick={() => {setShowModal(true)}}/>
-      </div>
-
+      
       <CalendarRework></CalendarRework></>)}
       
 

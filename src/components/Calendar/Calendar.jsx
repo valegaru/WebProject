@@ -77,6 +77,7 @@ const Calendar = () => {
                   amount={event.amount}
                   status={event.status}
                   participants={event.participants || []}
+                  coordinates={event.coordinates}
                 />
               )}
             </Box>

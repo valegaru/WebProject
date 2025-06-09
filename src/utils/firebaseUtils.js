@@ -1,4 +1,3 @@
-
 import { db } from '../services/firebase';
 import { collection } from 'firebase/firestore';
 import { doc, getDoc, getDocs, addDoc, updateDoc, query, where, setDoc } from 'firebase/firestore';
@@ -219,7 +218,7 @@ export const addExpenseEvent = async (tripID, expenseID, eventData) => {
 };
 
 
-export const createList = async (userId, name, description) => {
+export const createList = async (userId, name, description, tripPic = "") => {
 	try {
 		const listRef = doc(collection(db, 'savedLists'));
 
@@ -227,10 +226,8 @@ export const createList = async (userId, name, description) => {
 			userId,
 			name,
 			description,
+			tripPic,
 		});
-
-		const placesRef = doc(collection(listRef, 'places'));
-		await setDoc(placesRef, {});
 
 		const userListIDRef = doc(db, `users/${userId}/savedLists/${listRef.id}`);
 		await setDoc(userListIDRef, {
@@ -282,19 +279,68 @@ export const getSavedLists = async (userId) => {
     }
 };
 
-export const addPlace = async (listId, lat, lng) => {
+export const addPlace = async (
+  listId,
+  lat,
+  lng,
+  tripPic = null,
+  name = 'Untitled Place',
+  address = ''
+) => {
+  try {
+    const placeRef = doc(collection(db, `savedLists/${listId}/places`));
+
+    await setDoc(placeRef, {
+      name,
+      address,
+      coordinates: {
+        lat,
+        lng,
+      },
+      tripPic,
+    });
+
+    return placeRef.id;
+  } catch (error) {
+    console.error('Error adding place:', error);
+    return null;
+  }
+};
+
+
+export const fetchSavedListById = async (listId) => {
 	try {
-		const placeRef = doc(collection(db, `savedLists/${listId}/places`));
+		const listRef = doc(db, 'savedLists', listId);
+		const listSnap = await getDoc(listRef);
 
-		await setDoc(placeRef, {
-			lat,
-			lng,
-		});
-
-		return placeRef.id;
+		if (listSnap.exists()) {
+			return { id: listSnap.id, ...listSnap.data() };
+		} else {
+			console.warn('No such saved list:', listId);
+			return null;
+		}
 	} catch (error) {
-		console.error('Error adding place:', error);
+		console.error('Error fetching saved list:', error);
 		return null;
+	}
+};
+
+export const fetchItemsForSavedList = async (listId) => {
+	try {
+		const placesRef = collection(db, `savedLists/${listId}/places`);
+		const placesSnap = await getDocs(placesRef);
+
+		if (placesSnap.empty) return [];
+
+		const places = placesSnap.docs.map(doc => ({
+			id: doc.id,
+			...doc.data(),
+		}));
+
+		return places;
+	} catch (error) {
+		console.error('Error fetching places for saved list:', error);
+		return [];
 	}
 };
 

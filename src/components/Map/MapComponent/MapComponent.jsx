@@ -112,10 +112,6 @@ const MapComponent = () => {
     setInitialTripName("");
   };
 
-  useEffect(()=>{
-    dispatch(clearMapMarkers())
-    dispatch(setMapType("places"))
-  },[dispatch])
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '50vh', display: 'flex' }}>
@@ -151,7 +147,7 @@ const MapComponent = () => {
             <MapForm
               uid={uid}
               placeDetails={placeDetails}
-              locationPhoto={locationPhoto}
+              tripPic={locationPhoto}
               loadingLocationData={loadingPhotos}
               dialogLocation={dialogLocation}
               onLocationAdded={handleTripAdded}

@@ -4,10 +4,13 @@ import './AddExpenseModal.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { addEvent } from '../../../store/eventSlice/EventSlice';
 import ParticipantManager from '../../ParticipantManager/ParticipantManager';
+import SearchBar from '../../Map/SearchBar/SearchBar';
+
 
 const AddExpenseModal = ({ tripID, expenseID, onClose, onEventAdded }) => {
 	const dispatch = useDispatch();
 	const selectedDate = useSelector((state) => state.date.selectedDate);
+	const [coordinates, setCoordinates] = useState({ lat: null, lng: null });
 
 	const [date, setDate] = useState(() => {
 		if (selectedDate) {
@@ -127,6 +130,7 @@ const AddExpenseModal = ({ tripID, expenseID, onClose, onEventAdded }) => {
 				start: startDateTime,
 				end: endDateTime,
 				location: location.trim(),
+                coordinates, 
 				tags: tags
 					? tags
 							.split(',')
@@ -135,7 +139,6 @@ const AddExpenseModal = ({ tripID, expenseID, onClose, onEventAdded }) => {
 					: [],
 				currency,
 				paymentMethod,
-				status,
 				notes: notes.trim(),
 				participants,
 				tripID,
@@ -153,9 +156,9 @@ const AddExpenseModal = ({ tripID, expenseID, onClose, onEventAdded }) => {
 				end: endDateTime,
 				amount: parseFloat(amount),
 				category,
-				status,
 				participants,
 				location,
+				coordinates,
 				description,
 				tags: eventData.tags,
 				currency,
@@ -244,16 +247,17 @@ const AddExpenseModal = ({ tripID, expenseID, onClose, onEventAdded }) => {
 					/>
 
 					<div className='form-row'>
-						<input value={location} onChange={(e) => setLocation(e.target.value)} placeholder='Location' />
+						<SearchBar
+ 							googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} 
+  							onLocationSelect={(loc) => {
+    						setLocation(loc.placeDetails.name); 
+    						setCoordinates({ lat: loc.lat, lng: loc.lng });
+  							}}
+						/>
+
 						<input value={tags} onChange={(e) => setTags(e.target.value)} placeholder='Tags (comma-separated)' />
 					</div>
 
-					<select value={status} onChange={(e) => setStatus(e.target.value)}>
-						<option value='incomplete'>Incomplete</option>
-						<option value='complete'>Complete</option>
-						<option value='pending'>Pending</option>
-						<option value='cancelled'>Cancelled</option>
-					</select>
 
 					<ParticipantManager participants={selectedParticipants} onParticipantsChange={handleParticipantsChange} />
 

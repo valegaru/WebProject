@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     type: "places",
-    markers: []
+    markers: [],
+    savedLists: [], 
 }
 
 export const MapInfo = createSlice({
@@ -27,9 +28,12 @@ export const MapInfo = createSlice({
         clearMapMarkers: (state) => {
             state.markers = [];
             console.log("markersss", state.markers)
+        },
+        setSavedLists: (state, action) => {
+            state.savedLists = action.payload;
         }
     }
 })
 
-export const { setMapType, addMapMarkers, removeMapMarkers, setMapMarkers, clearMapMarkers } = MapInfo.actions;
+export const { setSavedLists, setMapType, addMapMarkers, removeMapMarkers, setMapMarkers, clearMapMarkers } = MapInfo.actions;
 export default MapInfo.reducer;

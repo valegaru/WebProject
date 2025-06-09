@@ -8,7 +8,7 @@ import destinations from '../../assets/destinations.png';
 import citiesEurope from '../../assets/citiesEurope.png';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchTripsFromUser } from '../../utils/firebaseUtils';
+import { fetchTripsFromUser, getSavedLists } from '../../utils/firebaseUtils';
 import { useNavigate } from 'react-router-dom';
 import MapComponent from '../../components/Map/MapComponent/MapComponent';
 import CardList from '../../components/CardList/CardList';
@@ -82,7 +82,7 @@ const Home = () => {
 			<h2 className='home-title'>Hi, {name}</h2>
 
 			<div className='section'>
-				<CardList title='Saved list' cardsData={savedList} variantColor='saved' />
+				<CardList title='Saved list' cardsData={savedLists} variantColor='saved' />
 			</div>
 
 			<div className='section'>

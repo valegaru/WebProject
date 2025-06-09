@@ -18,12 +18,17 @@ const ExpenseCard = ({ event, view }) => {
 		end,
 		originalStart,
 		originalEnd,
-		participants = {},
-		status = 'pending',
+		participants = [],
 		currency = currencySelect,
 	} = event;
 
 	const participantList = useMemo(() => Object.values(participants), [participants]);
+	const totalContributed = participants.reduce((sum, p) => {
+		return sum + (Number(p.contribution) || 0);
+		}, 0);
+	const isFullyPaid = Number(totalContributed.toFixed(2)) === Number(Number(amount).toFixed(2));
+	const computedStatus = isFullyPaid ? 'paid' : 'pending';
+
 	const isDetailedView = view === 'agenda';
 
 	useEffect(() => {
@@ -72,29 +77,23 @@ const ExpenseCard = ({ event, view }) => {
 	};
 
 	const getStatusStyles = () => {
-		const statusStyles = {
-			pending: {
-				background: 'linear-gradient(135deg, #ff9a56 0%, #ff6b35 100%)',
-				borderLeft: '4px solid #ff6b35',
-			},
-			paid: {
-				background: 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)',
-				borderLeft: '4px solid #45a049',
-			},
-			overdue: {
-				background: 'linear-gradient(135deg, #f44336 0%, #d32f2f 100%)',
-				borderLeft: '4px solid #d32f2f',
-			},
-			approved: {
-				background: 'linear-gradient(135deg, #2196F3 0%, #1976D2 100%)',
-				borderLeft: '4px solid #1976D2',
-			},
-		};
-		return statusStyles[status] || statusStyles.pending;
+	const statusStyles = {
+		pending: {
+			background: 'linear-gradient(135deg, #ff9a56 0%, #ff6b35 100%)',
+			borderLeft: '4px solid #ff6b35',
+		},
+		paid: {
+			background: 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)',
+			borderLeft: '4px solid #45a049',
+		},
 	};
+	return statusStyles[computedStatus] || statusStyles.pending;
+};
+
+
 
 	const cardStyle = {
-		...getStatusStyles(),
+		...getStatusStyles(computedStatus),
 		color: 'white',
 		padding: '8px',
 		borderRadius: '6px',
@@ -130,7 +129,7 @@ const ExpenseCard = ({ event, view }) => {
 
 	return (
 		<div
-			className={`expense-card expense-card--${status}`}
+			className={`expense-card expense-card--${computedStatus}`}
 			style={cardStyle}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
